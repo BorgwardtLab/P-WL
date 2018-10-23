@@ -1,3 +1,4 @@
+import collections
 import igraph as ig
 
 
@@ -8,12 +9,29 @@ class WeightAssigner:
     the weighted graph.
     '''
 
-    def __init__(self, ignore_label_order=False, similarity='jaccard'):
+    def __init__(self, ignore_label_order=False, similarity='hamming'):
         self._ignore_label_order = ignore_label_order
         self._similarity = similarity
 
     def fit_transform(self, graph):
         pass
+
+    def _hamming(A, B):
+        '''
+        Computes the (normalized) Hamming distance between two sets of
+        labels A and B. This amounts to counting how many overlaps are
+        present in the sequences.
+        '''
+
+        # Normalization factor so that the result always depends on the
+        # length of the larger string.
+        n = max(len(A), len(B))
+
+        counter = collections.Counter(A)
+        counter.subtract(B)
+
+        num_missing = sum([abs(c) for _, c in counter.most_common()])
+        return num_missing / n
 
     def _jaccard(A, B):
         '''
@@ -30,4 +48,5 @@ class WeightAssigner:
 
 # FIXME: remove after debug
 if __name__ == '__main__':
-    import sys
+    graph = ig.read('data/MUTAG/000.gml')
+    print(graph)
