@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-igraph = "*"
+pip = "==18.0"
 
 [dev-packages]
 

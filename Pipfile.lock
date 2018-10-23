@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7e7ef69da7248742e869378f8421880cf8f0017f96d94d086813baa518a65489"
+            "sha256": "2d4080cd95eeec3b73766f8166a2d2fbbd90ae47c6fb77d51ebef69aeaf0bdc9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,6 +15,14 @@
             }
         ]
     },
-    "default": {},
+    "default": {
+        "python-igraph": {
+            "hashes": [
+                "sha256:a5ea42790a077eadb3d1e8f82edc47516fea4a2b26bbf52bfc148370fe0fe676"
+            ],
+            "index": "pypi",
+            "version": "==0.7.1.post6"
+        }
+    },
     "develop": {}
 }
