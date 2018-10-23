@@ -17,6 +17,8 @@ class WeightAssigner:
         # function later on.
         if similarity == 'hamming':
             self._similarity = self._hamming
+        elif similarity == 'jaccard':
+            self._similarity = self._jaccard
 
         if not self._similarity:
             raise RuntimeError('Unknown similarity measure \"{}\" requested'.format(similarity))
@@ -70,4 +72,6 @@ class WeightAssigner:
 # FIXME: remove after debug
 if __name__ == '__main__':
     graph = ig.read('data/MUTAG/000.gml')
+    print('Before:', graph.es['weight'])
     WeightAssigner().fit_transform(graph)
+    print('After:', graph.es['weight'])
