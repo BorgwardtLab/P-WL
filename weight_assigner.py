@@ -11,21 +11,42 @@ class WeightAssigner:
 
     def __init__(self, ignore_label_order=False, similarity='hamming'):
         self._ignore_label_order = ignore_label_order
-        self._similarity = similarity
+        self._similarity = None
+
+        # Select similarity measure to use in the `fit_transform()`
+        # function later on.
+        if similarity == 'hamming':
+            self._similarity = self._hamming
+
+        if not self._similarity:
+            raise RuntimeError('Unknown similarity measure \"{}\" requested'.format(similarity))
 
     def fit_transform(self, graph):
-        pass
 
-    def _hamming(A, B):
+        for edge in graph.es:
+            source, target = edge.tuple
+
+            source_labels = graph.vs[source]['label']
+            target_labels = graph.vs[target]['label']
+
+            # FIXME: this does not yet take the original label of the
+            # node into account. For this, I would need to split this
+            # array or use the first entry.
+            weight = self._similarity(source_labels, target_labels)
+            weight = 1.0 - weight
+
+            edge['weight'] = weight
+
+        return graph
+
+    def _hamming(self, A, B):
         '''
         Computes the (normalized) Hamming distance between two sets of
         labels A and B. This amounts to counting how many overlaps are
         present in the sequences.
         '''
 
-        # Normalization factor so that the result always depends on the
-        # length of the larger string.
-        n = max(len(A), len(B))
+        n = len(A) + len(B)
 
         counter = collections.Counter(A)
         counter.subtract(B)
@@ -49,4 +70,4 @@ class WeightAssigner:
 # FIXME: remove after debug
 if __name__ == '__main__':
     graph = ig.read('data/MUTAG/000.gml')
-    print(graph)
+    WeightAssigner().fit_transform(graph)
