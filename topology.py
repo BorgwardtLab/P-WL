@@ -5,6 +5,9 @@ about a data set.
 
 import collections.abc
 
+import igraph as ig
+import numpy as np
+
 
 class PersistenceDiagram(collections.abc.Sequence):
     '''
@@ -81,3 +84,28 @@ class UnionFind:
 
         if u != v:
             self.parent[self.find(u)] = self.find(v)
+
+
+class PersistenceDiagramCalculator:
+    '''
+    Given a weighted graph, calculates a persistence diagram. The client
+    can modify the filtration order and the vertex weight assignment.
+    '''
+
+    def __init__(self, order='sublevel', fix_vertices=True):
+        self._order = order
+        self._fix_vertices = fix_vertices
+
+    def fit_transform(self, graph):
+        '''
+        Applies a filtration to a graph and calculates its persistence
+        diagram.
+        '''
+
+        print(graph.es['weight'])
+
+
+# FIXME: hard-coded debug code
+if __name__ == '__main__':
+    graph = ig.read('data/MUTAG/000.gml')
+    PersistenceDiagramCalculator().fit_transform(graph)
