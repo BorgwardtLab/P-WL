@@ -1,3 +1,6 @@
+import igraph as ig
+
+
 class WeightAssigner:
     '''
     Given a labelled graph, this class assigns weights based on
@@ -23,3 +26,8 @@ class WeightAssigner:
         B = set(B)
 
         return len(A.intersection(B)) / len(A.union(B))
+
+
+# FIXME: remove after debug
+if __name__ == '__main__':
+    import sys
