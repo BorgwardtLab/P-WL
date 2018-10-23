@@ -44,3 +44,40 @@ class PersistenceDiagram(collections.abc.Sequence):
         '''
 
         return sum([abs(x - y)**p for x, y in self._pairs])**(1.0 / p)
+
+
+class UnionFind:
+    '''
+    An implementation of a Union--Find class. The class performs path
+    compression by default. It uses integers for storing one disjoint
+    set, assuming that vertices are zero-indexed.
+    '''
+
+    def __init__(self, num_vertices):
+        '''
+        Initializes an empty Union--Find data structure for a given
+        number of vertices.
+        '''
+
+        self.parent = [x for x in range(num_vertices)]
+
+    def find(self, u):
+        '''
+        Finds and returns the parent of u with respect to the hierarchy.
+        '''
+
+        if self.parent[u] == u:
+            return u
+        else:
+            # Perform path collapse operation
+            self.parent[u] = self.find(self.parent[u])
+            return self.parent[u]
+
+    def merge(self, u, v):
+        '''
+        Merges vertex u into the component of vertex v. Note the
+        asymmetry of this operation.
+        '''
+
+        if u != v:
+            self.parent[self.find(u)] = self.find(v)
