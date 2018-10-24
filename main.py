@@ -70,15 +70,6 @@ if __name__ == '__main__':
             persistence_diagram = pdc.fit_transform(graph)
             X[index, iteration] = persistence_diagram.total_persistence()
 
-    #import matplotlib
-    #matplotlib.use('TkAgg')
-    #import matplotlib.pyplot as plt
-
-    #for label in set(labels):
-    #    plt.matshow(X[y == label], aspect='auto')
-    #plt.show()
-
-
     clf = LogisticRegression(solver='lbfgs')
     clf.fit(X, y)
     y_pred = clf.predict(X)
