@@ -96,16 +96,68 @@ class PersistenceDiagramCalculator:
         self._order = order
         self._fix_vertices = fix_vertices
 
+        if self._order not in ['sublevel', 'superlevel']:
+            raise RuntimeError('Unknown filtration order \"{}\"'.format(self._order))
+
     def fit_transform(self, graph):
         '''
         Applies a filtration to a graph and calculates its persistence
         diagram.
         '''
 
-        print(graph.es['weight'])
+        num_vertices = graph.vcount()
+        uf = UnionFind(num_vertices)
+
+        edge_weights = graph.es['weight']
+        edge_indices = None
+
+        if self._order == 'sublevel':
+            edge_indices = np.argsort(edge_weights, kind='stable')
+        elif self._order == 'superlevel':
+            edge_indices = np.argsort(-edge_weights, kind='stable')
+
+        assert edge_indices is not None
+
+        # Will be filled during the iteration below. This will become
+        # the return value of the function.
+        pd = PersistenceDiagram()
+
+        # Go over all edges and optionally create new points for the
+        # persistence diagram.
+        for edge_index, edge_weight in zip(edge_indices, edge_weights):
+            u, v = graph.es[edge_index].tuple
+
+            younger_component = uf.find(u)
+            older_component = uf.find(v)
+
+            # Nothing to do here: the two components are already the
+            # same
+            if younger_component == older_component:
+                continue
+
+            # Ensures that the older component precedes the younger one
+            # in terms of its vertex index
+            elif younger_component > older_component:
+                younger_component, older_component = older_component, younger_component
+
+            # TODO: this does not yet take into account any weights for
+            # the vertices themselves.
+            creation = 0.0              # x coordinate for persistence diagram
+            destruction = edge_weight   # y coordinate for persistence diagram
+
+            uf.merge(younger_component, older_component)
+            pd.append(creation, destruction)
+
+        return pd
 
 
 # FIXME: hard-coded debug code
 if __name__ == '__main__':
     graph = ig.read('data/MUTAG/000.gml')
-    PersistenceDiagramCalculator().fit_transform(graph)
+    pd = PersistenceDiagramCalculator().fit_transform(graph)
+
+    print(graph.ecount())
+    print(len(pd))
+
+    for x, y in pd:
+        print(x, y)
