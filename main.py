@@ -11,12 +11,8 @@ import argparse
 import collections
 import logging
 
-import matplotlib
-matplotlib.use('TkAgg')
-
-import matplotlib.pyplot as plt
-
-import seaborn as sns
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 from topology import PersistenceDiagramCalculator
 from weight_assigner import WeightAssigner  # FIXME: put this in a different module
@@ -53,9 +49,10 @@ if __name__ == '__main__':
     wa = WeightAssigner()
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
 
-    total_persistence_per_label = collections.defaultdict(list)
+    X = np.zeros((len(graphs), args.num_iterations + 1))
+    y = labels
 
-    for graph, label in zip(graphs, labels):
+    for index, (graph, label) in enumerate(zip(graphs, labels)):
         wl.fit_transform(graph, args.num_iterations)
 
         # Stores the new multi-labels that occur in every iteration,
@@ -69,17 +66,11 @@ if __name__ == '__main__':
             graph.vs['label'] = iteration_to_label[iteration]
             graph = wa.fit_transform(graph)
             persistence_diagram = pdc.fit_transform(graph)
+            X[index, iteration] = persistence_diagram.total_persistence()
 
-            total_persistence_values.append(persistence_diagram.total_persistence())
+    clf = LogisticRegression(solver='lbfgs')
+    clf.fit(X, y)
+    y_pred = clf.predict(X)
 
-        total_persistence_per_label[label].append(total_persistence_values)
 
-    for label in sorted(total_persistence_per_label.keys()):
-        total_persistence = total_persistence_per_label[label]
-        total_persistence = np.array(total_persistence).ravel()
-        print('Label:', label)
-        print('  - Mean:', np.mean(total_persistence))
-
-        sns.distplot(total_persistence)
-
-    plt.show()
+    print('Train accuracy: {:.2f}'.format(accuracy_score(y, y_pred)))
