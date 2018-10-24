@@ -31,12 +31,11 @@ class WeightAssigner:
             source_labels = self._ensure_list(graph.vs[source]['label'])
             target_labels = self._ensure_list(graph.vs[target]['label'])
 
-            print(source_labels, target_labels)
+            source_label = source_labels[0]
+            target_label = target_labels[0]
 
-            # FIXME: this does not yet take the original label of the
-            # node into account. For this, I would need to split this
-            # array or use the first entry.
-            weight = self._similarity(source_labels, target_labels)
+            weight = self._similarity(source_labels[1:], target_labels[1:])
+            weight = weight + (source_label != target_label)
             edge['weight'] = weight
 
         return graph
@@ -61,6 +60,10 @@ class WeightAssigner:
         '''
 
         n = len(A) + len(B)
+
+        # Empty lists are always treated as being equal
+        if n == 0:
+            return 0.0
 
         counter = collections.Counter(A)
         counter.subtract(B)
