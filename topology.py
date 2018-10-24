@@ -33,10 +33,10 @@ class PersistenceDiagram(collections.abc.Sequence):
 
         return self._pairs[index]
 
-    def add(self, x, y):
+    def append(self, x, y):
         '''
-        Adds a new persistence pair to the given diagram. Performs no other
-        validity checks.
+        Appends a new persistence pair to the given diagram. Performs no
+        other validity checks.
         '''
 
         self._pairs.append((x, y))
