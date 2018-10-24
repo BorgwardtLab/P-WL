@@ -62,19 +62,19 @@ class UnionFind:
         number of vertices.
         '''
 
-        self.parent = [x for x in range(num_vertices)]
+        self._parent = [x for x in range(num_vertices)]
 
     def find(self, u):
         '''
         Finds and returns the parent of u with respect to the hierarchy.
         '''
 
-        if self.parent[u] == u:
+        if self._parent[u] == u:
             return u
         else:
             # Perform path collapse operation
-            self.parent[u] = self.find(self.parent[u])
-            return self.parent[u]
+            self._parent[u] = self.find(self._parent[u])
+            return self._parent[u]
 
     def merge(self, u, v):
         '''
@@ -83,7 +83,7 @@ class UnionFind:
         '''
 
         if u != v:
-            self.parent[self.find(u)] = self.find(v)
+            self._parent[self.find(u)] = self.find(v)
 
 
 class PersistenceDiagramCalculator:
