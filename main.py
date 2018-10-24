@@ -9,6 +9,7 @@ import igraph as ig
 import argparse
 import logging
 
+from topology import PersistenceDiagramCalculator
 from weight_assigner import WeightAssigner  # FIXME: put this in a different module
 from WL import WL
 
@@ -25,13 +26,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     graphs = [ig.read(filename) for filename in args.FILES]
 
-    for graph in graphs:
-            print(graph.diameter())
-
     logger.debug('Read {} graphs'.format(len(graphs)))
 
     wl = WL()
     wa = WeightAssigner()
+    pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
 
     for graph in graphs:
         wl.fit_transform(graph, args.num_iterations)
@@ -41,10 +40,13 @@ if __name__ == '__main__':
         iteration_to_label = wl._multisets
         iteration_to_label[0] = wl._graphs[0].vs['label']
 
+        total_persistence_values = []
+
         for iteration in sorted(iteration_to_label.keys()):
             graph.vs['label'] = iteration_to_label[iteration]
             graph = wa.fit_transform(graph)
-            for edge in graph.es:
-                u, v = edge.tuple
-                print(graph.vs[u]['label'], graph.vs[v]['label'], edge['weight'])
-            print('')
+            persistence_diagram = pdc.fit_transform(graph)
+
+            total_persistence_values.append(persistence_diagram.total_persistence())
+
+        print(total_persistence_values)
