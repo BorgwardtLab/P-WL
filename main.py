@@ -12,7 +12,9 @@ import collections
 import logging
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
 
 from tqdm import tqdm
 
@@ -70,8 +72,18 @@ if __name__ == '__main__':
             persistence_diagram = pdc.fit_transform(graph)
             X[index, iteration] = persistence_diagram.total_persistence()
 
-    clf = LogisticRegression(solver='lbfgs')
-    clf.fit(X, y)
-    y_pred = clf.predict(X)
+    cv = StratifiedKFold(n_splits=10)
+    accuracy_scores = []
 
-    print('Train accuracy: {:.2f}'.format(accuracy_score(y, y_pred)))
+    for train_index, test_index in cv.split(X, y):
+        clf = SVC(gamma='scale')
+
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+
+        accuracy_scores.append(accuracy_score(y_test, y_pred))
+
+    print('Accuracy: {:.2f} +- {:.2f}'.format(np.mean(accuracy_scores), np.std(accuracy_scores)))
