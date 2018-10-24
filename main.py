@@ -11,6 +11,13 @@ import argparse
 import collections
 import logging
 
+import matplotlib
+matplotlib.use('TkAgg')
+
+import matplotlib.pyplot as plt
+
+import seaborn as sns
+
 from topology import PersistenceDiagramCalculator
 from weight_assigner import WeightAssigner  # FIXME: put this in a different module
 from WL import WL
@@ -72,3 +79,7 @@ if __name__ == '__main__':
         total_persistence = np.array(total_persistence).ravel()
         print('Label:', label)
         print('  - Mean:', np.mean(total_persistence))
+
+        sns.distplot(total_persistence)
+
+    plt.show()
