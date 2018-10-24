@@ -14,6 +14,8 @@ import logging
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
+from tqdm import tqdm
+
 from topology import PersistenceDiagramCalculator
 from weight_assigner import WeightAssigner  # FIXME: put this in a different module
 from WL import WL
@@ -50,9 +52,9 @@ if __name__ == '__main__':
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
 
     X = np.zeros((len(graphs), args.num_iterations + 1))
-    y = labels
+    y = np.array(labels)
 
-    for index, (graph, label) in enumerate(zip(graphs, labels)):
+    for index, (graph, label) in tqdm(enumerate(zip(graphs, labels))):
         wl.fit_transform(graph, args.num_iterations)
 
         # Stores the new multi-labels that occur in every iteration,
@@ -68,9 +70,17 @@ if __name__ == '__main__':
             persistence_diagram = pdc.fit_transform(graph)
             X[index, iteration] = persistence_diagram.total_persistence()
 
+    #import matplotlib
+    #matplotlib.use('TkAgg')
+    #import matplotlib.pyplot as plt
+
+    #for label in set(labels):
+    #    plt.matshow(X[y == label], aspect='auto')
+    #plt.show()
+
+
     clf = LogisticRegression(solver='lbfgs')
     clf.fit(X, y)
     y_pred = clf.predict(X)
-
 
     print('Train accuracy: {:.2f}'.format(accuracy_score(y, y_pred)))

@@ -8,6 +8,7 @@ python-igraph = "*"
 pip = "==18.0"
 sklearn = "*"
 numpy = "*"
+tqdm = "*"
 
 [dev-packages]
 matplotlib = "*"
