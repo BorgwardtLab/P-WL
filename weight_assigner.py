@@ -28,18 +28,30 @@ class WeightAssigner:
         for edge in graph.es:
             source, target = edge.tuple
 
-            source_labels = graph.vs[source]['label']
-            target_labels = graph.vs[target]['label']
+            source_labels = self._ensure_list(graph.vs[source]['label'])
+            target_labels = self._ensure_list(graph.vs[target]['label'])
+
+            print(source_labels, target_labels)
 
             # FIXME: this does not yet take the original label of the
             # node into account. For this, I would need to split this
             # array or use the first entry.
             weight = self._similarity(source_labels, target_labels)
-            weight = 1.0 - weight
-
             edge['weight'] = weight
 
         return graph
+
+    def _ensure_list(self, l):
+        '''
+        Ensures that the input data is a list. Thus, if the input data
+        is a single element, it will be converted to a list containing
+        a single element.
+        '''
+
+        if type(l) is not list:
+            return [l]
+        else:
+            return l
 
     def _hamming(self, A, B):
         '''
@@ -75,3 +87,6 @@ if __name__ == '__main__':
     print('Before:', graph.es['weight'])
     WeightAssigner().fit_transform(graph)
     print('After:', graph.es['weight'])
+    for edge in graph.es:
+        u, v = edge.tuple
+        print('{}--{}: {}'.format(graph.vs[u]['label'], graph.vs[v]['label'], edge['weight']))
