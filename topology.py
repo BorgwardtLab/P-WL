@@ -85,6 +85,16 @@ class UnionFind:
         if u != v:
             self._parent[self.find(u)] = self.find(v)
 
+    def roots(self):
+        '''
+        Generator expression for returning roots, i.e. components that
+        are their own parents.
+        '''
+
+        for vertex, parent in enumerate(self._parent):
+            if vertex == parent:
+                yield vertex
+
 
 class PersistenceDiagramCalculator:
     '''
@@ -92,9 +102,10 @@ class PersistenceDiagramCalculator:
     can modify the filtration order and the vertex weight assignment.
     '''
 
-    def __init__(self, order='sublevel', fix_vertices=True):
+    def __init__(self, order='sublevel', fix_vertices=True, unpaired_value=None):
         self._order = order
         self._fix_vertices = fix_vertices
+        self._unpaired_value = unpaired_value
 
         if self._order not in ['sublevel', 'superlevel']:
             raise RuntimeError('Unknown filtration order \"{}\"'.format(self._order))
@@ -138,14 +149,33 @@ class PersistenceDiagramCalculator:
             # Ensures that the older component precedes the younger one
             # in terms of its vertex index
             elif younger_component > older_component:
-                younger_component, older_component = older_component, younger_component
+                u, v = v, u
 
             # TODO: this does not yet take into account any weights for
             # the vertices themselves.
             creation = 0.0              # x coordinate for persistence diagram
             destruction = edge_weight   # y coordinate for persistence diagram
 
-            uf.merge(younger_component, older_component)
+            uf.merge(u, v)
+            pd.append(creation, destruction)
+
+        # By default, use the largest (sublevel set) or lowest
+        # (superlevel set) weight, unless the user specified a
+        # different one.
+        unpaired_value = edge_weights[edge_indices[-1]]
+        if self._unpaired_value:
+            unpaired_value = self._unpaired_value
+
+        # Add tuples for every root component in the Union--Find data
+        # structure. This ensures that multiple connected components
+        # are handled correctly.
+        for root in uf.roots():
+
+            # TODO: again, I am ignoring the weight of vertices and
+            # forcing them to start at zero.
+            creation = 0.0
+            destruction = unpaired_value
+
             pd.append(creation, destruction)
 
         return pd
