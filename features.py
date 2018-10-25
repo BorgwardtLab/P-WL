@@ -102,30 +102,35 @@ class PersistenceFeaturesGenerator:
     '''
 
     def __init__(self,
+                 use_infinity_norm=True,
                  use_total_persistence=True,
-                 use_label_persistence=True):
+                 use_label_persistence=True,
+                 p=1.0):
+        self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
+        self._p = 1.0
+
+        if p <= 0.0:
+            raise RuntimeError('Power parameter must be non-negative')
 
     def fit_transform(self, graph):
+        '''
+        Calculates the feature vector of a single graph. The graph is
+        already assumed to be weighted such that its persistence is a
+        suitable invariant.
+        '''
 
-        # Calculate the size of the feature vector before-hand such that
-        # it can be filled efficiently later on.
+        x_infinity_norm = None      # Optionally contains the infinity norm of the diagram
+        x_total_persistence = None  # Optionally contains the total persistence of the diagram
 
-        num_features = 0
-
-        if self._use_total_persistence:
-            num_features += 1
-
-        if self._use_label_persistence:
-            num_labels = len(set([tuple(x) for x in graph.vs['label']]))
-            num_features += num_labels
-
-        x = np.empty(num_features)
         pdc = PersistenceDiagramCalculator()
         persistence_diagram = pdc.fit_transform(graph)
 
-        if self._use_total_persistence:
-            x[0] = persistence_diagram.total_persistence()
+        if self._use_infinity_norm:
+            x_infinity_norm = persistence_diagram.infinity_norm(self._p)
 
-        return x
+        if self._use_total_persistence:
+            x_total_persistence = persistence_diagram.total_persistence(self._p)
+
+        return np.concatenate(([x_infinity_norm], [x_total_persistence]))
