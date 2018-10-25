@@ -33,27 +33,33 @@ class PersistenceDiagram(collections.abc.Sequence):
 
         return self._pairs[index]
 
-    def append(self, x, y):
+    def append(self, x, y, index=None):
         '''
         Appends a new persistence pair to the given diagram. Performs no
         other validity checks.
+
+        :param x: Creation value of the given persistence pair
+        :param y: Destruction value of the given persistence pair
+
+        :param index: Optional index that helps identify a persistence
+        pair using information stored *outside* the diagram.
         '''
 
-        self._pairs.append((x, y))
+        self._pairs.append((x, y, index))
 
     def total_persistence(self, p=1):
         '''
         Calculates the total persistence of the current pairing.
         '''
 
-        return sum([abs(x - y)**p for x, y in self._pairs])**(1.0 / p)
+        return sum([abs(x - y)**p for x, y, _ in self._pairs])**(1.0 / p)
 
     def infinity_norm(self, p=1):
         '''
         Calculates the infinity norm of the current pairing.
         '''
 
-        return max([abs(x - y)**p for x, y in self._pairs])
+        return max([abs(x - y)**p for x, y, _ in self._pairs])
 
 
 class UnionFind:
