@@ -89,18 +89,22 @@ if __name__ == '__main__':
     np.savetxt('/tmp/X.txt', X)
 
     for train_index, test_index in cv.split(X, y):
-        clf = SVC(kernel='precomputed')
+        clf = SVC(kernel='precomputed', C=1e6)
         scaler = StandardScaler()
-
-        K = pairwise_kernels(X, X, metric='linear')
-        K_train = K[train_index][:, train_index]
-        K_test = K[test_index][:, train_index]
 
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
+
+        # Calculate a kernel matrix on the original data; this means
+        # that the standardization is not used here.
+        K = pairwise_kernels(X, X, metric='linear')
+        K_train = K[train_index][:, train_index]
+        normalization = np.max(K_train)
+        K_train = K_train / normalization
+        K_test = K[test_index][:, train_index] / normalization
 
         clf.fit(K_train, y_train)
         y_pred = clf.predict(K_test)
