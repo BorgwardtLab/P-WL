@@ -18,6 +18,7 @@ from sklearn.model_selection import StratifiedKFold
 
 from tqdm import tqdm
 
+from features import PersistenceFeaturesGenerator
 from features import WeightAssigner
 from topology import PersistenceDiagramCalculator
 from weisfeiler_lehman import WL
@@ -52,6 +53,7 @@ if __name__ == '__main__':
     wl = WL()
     wa = WeightAssigner()
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
+    pfg = PersistenceFeaturesGenerator()
 
     X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)
@@ -69,6 +71,9 @@ if __name__ == '__main__':
         for iteration in sorted(iteration_to_label.keys()):
             graph.vs['label'] = iteration_to_label[iteration]
             graph = wa.fit_transform(graph)
+
+            x = pfg.fit_transform(graph)
+
             persistence_diagram = pdc.fit_transform(graph)
             X[index, iteration] = persistence_diagram.total_persistence()
 
