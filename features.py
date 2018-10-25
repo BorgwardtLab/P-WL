@@ -144,7 +144,7 @@ class PersistenceFeaturesGenerator:
             + self._use_total_persistence       \
             + self._use_label_persistence * num_labels
 
-        X = np.empty((num_rows, num_columns))
+        X = np.zeros((num_rows, num_columns))
 
         for index, graph in enumerate(graphs):
 
@@ -164,8 +164,8 @@ class PersistenceFeaturesGenerator:
             if self._use_label_persistence:
                 x_label_persistence = np.zeros(num_labels)
 
-                for x, y, index in persistence_diagram:
-                    label = graph.vs[index]['compressed_label']
+                for x, y, c in persistence_diagram:
+                    label = graph.vs[c]['compressed_label']
                     persistence = abs(x - y)**self._p
                     x_label_persistence[label] += persistence
 

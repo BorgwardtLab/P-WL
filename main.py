@@ -15,6 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import StandardScaler
 
 from tqdm import tqdm
 
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     wl = WL()
     wa = WeightAssigner()
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
-    pfg = PersistenceFeaturesGenerator()
+    pfg = PersistenceFeaturesGenerator(use_infinity_norm=False, use_total_persistence=False)
 
     X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)
@@ -81,11 +82,17 @@ if __name__ == '__main__':
     cv = StratifiedKFold(n_splits=10)
     accuracy_scores = []
 
+    np.savetxt('/tmp/X.txt', X)
+
     for train_index, test_index in cv.split(X, y):
         clf = SVC(gamma='scale')
+        scaler = StandardScaler()
 
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
+
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
 
         clf.fit(X_train, y_train)
         y_pred = clf.predict(X_test)
