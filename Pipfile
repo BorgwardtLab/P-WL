@@ -13,6 +13,7 @@ tqdm = "*"
 [dev-packages]
 matplotlib = "*"
 seaborn = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.7"
