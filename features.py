@@ -98,7 +98,7 @@ class WeightAssigner:
 
 class PersistenceFeaturesGenerator:
     '''
-    Creates persistence-based features of a weighted graph.
+    Creates persistence-based features of a sequence of weighted graphs.
     '''
 
     def __init__(self,
@@ -114,23 +114,47 @@ class PersistenceFeaturesGenerator:
         if p <= 0.0:
             raise RuntimeError('Power parameter must be non-negative')
 
-    def fit_transform(self, graph):
+    def fit_transform(self, graphs):
         '''
-        Calculates the feature vector of a single graph. The graph is
-        already assumed to be weighted such that its persistence is a
-        suitable invariant.
+        Calculates the feature vector of a sequence of graphs. The
+        graphs are assumed to be weighted such that persistence is
+        a suitable invariant.
         '''
 
-        x_infinity_norm = None      # Optionally contains the infinity norm of the diagram
-        x_total_persistence = None  # Optionally contains the total persistence of the diagram
+        num_labels = 0
 
-        pdc = PersistenceDiagramCalculator()
-        persistence_diagram = pdc.fit_transform(graph)
+        # Calculating label persistence requires us to know the number
+        # of distinct labels in the set of graphs as it determines the
+        # length of the created feature vector.
+        if self._use_label_persistence:
+            labels = set()
 
-        if self._use_infinity_norm:
-            x_infinity_norm = persistence_diagram.infinity_norm(self._p)
+            for graph in graphs:
+                labels.update(graph.vs['compressed_label'])
 
-        if self._use_total_persistence:
-            x_total_persistence = persistence_diagram.total_persistence(self._p)
+            num_labels = len(labels)
 
-        return np.concatenate(([x_infinity_norm], [x_total_persistence]))
+        num_rows = len(graphs)
+        num_columns = self._use_infinity_norm   \
+            + self._use_total_persistence       \
+            + self._use_label_persistence * num_labels
+
+        X = np.empty((num_rows, num_columns))
+
+        for index, graph in enumerate(graphs):
+
+            x_infinity_norm = None      # Optionally contains the infinity norm of the diagram
+            x_total_persistence = None  # Optionally contains the total persistence of the diagram
+
+            pdc = PersistenceDiagramCalculator()
+            persistence_diagram = pdc.fit_transform(graph)
+
+            if self._use_infinity_norm:
+                x_infinity_norm = persistence_diagram.infinity_norm(self._p)
+
+            if self._use_total_persistence:
+                x_total_persistence = persistence_diagram.total_persistence(self._p)
+
+            X[index, :] = np.concatenate(([x_infinity_norm], [x_total_persistence]))
+
+        return X
