@@ -1,31 +1,13 @@
-import copy
+from collections import defaultdict
 import numpy as np
 
 from sklearn.base import TransformerMixin
-from igraph import *
+import igraph as ig
 from LabelGenerator import LabelGenerator
 
 from typing import List
 
 import numpy as np
-
-class LabelGenerator():
-
-    def __init__(self, start, length):
-        self._current_label_index = 0
-        self._start = start
-        self._length = length
-        self._label_generator = np.nditer(np.arange(start, start+length, 1))
-
-    def get_next_label(self):
-        if self._current_label_index < self._length:
-            self._current_label_index += 1
-            return str(next(self._label_generator))
-        else:
-            print("reset")
-            self._label_generator = np.nditer(np.arange(self._start, self._start+self._length, 1)) 
-            self._current_label_index = 1
-            return str(next(self._label_generator))
             
 class WL(TransformerMixin):
     """
@@ -36,49 +18,77 @@ class WL(TransformerMixin):
     """
     
     def __init__(self):
-        self._multisets = {}
-        self._graphs = {}
+        self._relabel_steps = defaultdict(dict)
+        self._label_dict = {}
+        self._last_new_label = -1
+        self._preprocess_relabel_dict = {}
+        self._results = defaultdict(dict)
 
-    def fit(self):
-        pass
+    def _reset_label_generation(self):
+        self._last_new_label = -1
 
-    def fit_transform(self, X: Graph, num_iterations: int=5):
-        self._graphs[0] = X.copy()
-        X = X.copy()
+    def _get_next_label(self):
+        self._last_new_label += 1
+        return self._last_new_label
+
+    def _relabel_graphs(self, X: List[ig.Graph]):
+        num_unique_labels = 0
+        preprocessed_graphs = []
+        for g in X:
+            x = g.copy()
+            labels = x.vs['label']
+            
+            new_labels = []
+            for label in labels:
+                if label in self._preprocess_relabel_dict.keys():
+                    new_labels.append(self._preprocess_relabel_dict[label])
+                else:
+                    self._preprocess_relabel_dict[label] = self._get_next_label()
+                    new_labels.append(self._preprocess_relabel_dict[label])
+            x.vs['label'] = new_labels
+            preprocessed_graphs.append(x)
+        self._reset_label_generation()
+        return preprocessed_graphs
+    
+    def fit_transform(self, X: List[ig.Graph], num_iterations: int=5):
+        X = self._relabel_graphs(X)
         for it in np.arange(1, num_iterations+1, 1):
-            # Create a LabelGenerator object that can #nodes different labels
-            self.label_generator = LabelGenerator(len(X.vs), len(X.vs))
-            
-            # Get labels of current interation
-            current_labels = X.vs['label']
-           
-            # Get for each vertex the labels of its neighbors
-            neighbor_labels = self._get_neighbor_labels(X, sort=True)
-            
-            # Prepend the vertex label to the list of labels of its neighbors
-            merged_labels = [[b]+a for a,b in zip(neighbor_labels, current_labels)]
-            self._multisets[it] = merged_labels
-            
-            # Generate a label dictionary based on the merged labels
-            label_dict = self._generate_label_dict(merged_labels)
+            self._reset_label_generation()
+            self._label_dict = {}
+            for i, g in enumerate(X):
+                # Get labels of current interation
+                current_labels = g.vs['label']
+               
+                # Get for each vertex the labels of its neighbors
+                neighbor_labels = self._get_neighbor_labels(g, sort=True)
+                
+                # Prepend the vertex label to the list of labels of its neighbors
+                merged_labels = [[b]+a for a,b in zip(neighbor_labels, current_labels)]
+                
+                # Generate a label dictionary based on the merged labels
+                self._append_label_dict(merged_labels)
 
-            # Relabel the graph
-            self._relabel_graph(X, merged_labels, label_dict)
-            self._graphs[it] = X.copy()
-        return X
+                # Relabel the graph
+                new_labels = self._relabel_graph(g, merged_labels)
+                self._relabel_steps[i][it] = { idx: {old_label: new_labels[idx]} for idx, old_label in enumerate(current_labels) }
+                g.vs['label'] = new_labels
+            
+                self._results[i][it] = (current_labels, new_labels)
+        return self._results
 
-    def _relabel_graph(self, X: Graph, merged_labels: list, label_dict: dict):
-        new_labels = [label_dict[''.join(merged)] for merged in merged_labels]
-        X.vs['label'] = new_labels
+    def _relabel_graph(self, X: ig.Graph, merged_labels: list):
+        new_labels = []
+        for merged in merged_labels:
+            new_labels.append(self._label_dict['-'.join(map(str,merged))])
+        return new_labels
 
-    def _generate_label_dict(self, merged_labels: List[list]):
-        label_dict = {}
+    def _append_label_dict(self, merged_labels: List[list]):
         for merged_label in merged_labels:
-            label_dict[ ''.join(merged_label) ] = self.label_generator.get_next_label()
-        
-        return label_dict
+            dict_key = '-'.join(map(str,merged_label)) 
+            if dict_key not in self._label_dict.keys():
+                self._label_dict[ dict_key ] = self._get_next_label()
 
-    def _get_neighbor_labels(self, X: Graph, sort: bool=True):
+    def _get_neighbor_labels(self, X: ig.Graph, sort: bool=True):
             neighbor_indices = [[n_v.index for n_v in X.vs[X.neighbors(v.index)]] for v in X.vs]
             neighbor_labels = []
             for n_indices in neighbor_indices:
