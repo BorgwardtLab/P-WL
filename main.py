@@ -20,7 +20,7 @@ from tqdm import tqdm
 
 from topology import PersistenceDiagramCalculator
 from weight_assigner import WeightAssigner  # FIXME: put this in a different module
-from WL import WL
+from weisfeiler_lehman import WL
 
 def read_labels(filename):
     labels = []
