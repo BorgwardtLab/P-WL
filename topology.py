@@ -151,18 +151,22 @@ class PersistenceDiagramCalculator:
         for edge_index, edge_weight in zip(edge_indices, edge_weights):
             u, v = graph.es[edge_index].tuple
 
-            younger_component = uf.find(u)
-            older_component = uf.find(v)
+            # Preliminary assignment of younger and older component. We
+            # will check below whether this is actually correct, for it
+            # is possible that u is actually the older one.
+            younger = uf.find(u)
+            older = uf.find(v)
 
             # Nothing to do here: the two components are already the
             # same
-            if younger_component == older_component:
+            if younger == older:
                 continue
 
             # Ensures that the older component precedes the younger one
             # in terms of its vertex index
-            elif younger_component > older_component:
+            elif younger > older:
                 u, v = v, u
+                younger, older = older, younger
 
             # TODO: this does not yet take into account any weights for
             # the vertices themselves.
@@ -170,7 +174,7 @@ class PersistenceDiagramCalculator:
             destruction = edge_weight   # y coordinate for persistence diagram
 
             uf.merge(u, v)
-            pd.append(creation, destruction)
+            pd.append(creation, destruction, younger)
 
         # By default, use the largest (sublevel set) or lowest
         # (superlevel set) weight, unless the user specified a
@@ -189,7 +193,7 @@ class PersistenceDiagramCalculator:
             creation = 0.0
             destruction = unpaired_value
 
-            pd.append(creation, destruction)
+            pd.append(creation, destruction, root)
 
         return pd
 
@@ -202,5 +206,5 @@ if __name__ == '__main__':
     print(graph.ecount())
     print(len(pd))
 
-    for x, y in pd:
-        print(x, y)
+    for x, y, c in pd:
+        print(x, y, c)
