@@ -61,29 +61,42 @@ if __name__ == '__main__':
     label_dicts = wl.fit_transform(graphs, args.num_iterations)
 
     for iteration in tqdm(sorted(label_dicts.keys())):
+
+        weighted_graphs = [graph.copy() for graph in graphs]
+
         for graph_index in sorted(label_dicts[iteration].keys()):
-            labels_raw, labels_compressed = label_dicts[graph_index][iteration]
+            labels_raw, labels_compressed = label_dicts[iteration][graph_index]
 
-            print(labels_compressed)
+            weighted_graphs[graph_index].vs['label'] = labels_raw
+            weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
 
-    raise 'heck'
+            # TODO: rewrite weight assigner class to support lists
+            weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
 
-    for index, (graph, label) in tqdm(enumerate(zip(graphs, labels))):
-        wl.fit_transform(graph, args.num_iterations)
+        X = pfg.fit_transform(weighted_graphs)
 
-        # Stores the new multi-labels that occur in every iteration,
-        # plus the original labels of the zeroth iteration.
-        iteration_to_label = wl._multisets
-        iteration_to_label[0] = wl._graphs[0].vs['label']
+        ## TODO: rewrite
+        #for index, graph in enumerate(weighted_graphs):
 
-        total_persistence_values = []
+        #    persistence_diagram = pdc.fit_transform(graph)
+        #    X[index, iteration] = persistence_diagram.total_persistence()
 
-        for iteration in sorted(iteration_to_label.keys()):
-            graph.vs['label'] = iteration_to_label[iteration]
-            graph = wa.fit_transform(graph)
+    #for index, (graph, label) in tqdm(enumerate(zip(graphs, labels))):
+    #    wl.fit_transform(graph, args.num_iterations)
 
-            persistence_diagram = pdc.fit_transform(graph)
-            X[index, iteration] = persistence_diagram.total_persistence()
+    #    # Stores the new multi-labels that occur in every iteration,
+    #    # plus the original labels of the zeroth iteration.
+    #    iteration_to_label = wl._multisets
+    #    iteration_to_label[0] = wl._graphs[0].vs['label']
+
+    #    total_persistence_values = []
+
+    #    for iteration in sorted(iteration_to_label.keys()):
+    #        graph.vs['label'] = iteration_to_label[iteration]
+    #        graph = wa.fit_transform(graph)
+
+    #        persistence_diagram = pdc.fit_transform(graph)
+    #        X[index, iteration] = persistence_diagram.total_persistence()
 
     cv = StratifiedKFold(n_splits=10)
     accuracy_scores = []
