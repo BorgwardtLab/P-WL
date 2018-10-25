@@ -132,10 +132,12 @@ class PersistenceFeaturesGenerator:
             for graph in graphs:
                 labels.update(graph.vs['compressed_label'])
 
-            # TODO: check whether the labels are in [0, num_labels - 1]
-            # such that we can easily create a feature vector below.
-
             num_labels = len(labels)
+
+            # Ensures that the labels form a contiguous sequence of
+            # indices so that they can be easily mapped.
+            assert min(labels) == 0
+            assert max(labels) == num_labels - 1
 
         num_rows = len(graphs)
         num_columns = self._use_infinity_norm   \
