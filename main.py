@@ -18,8 +18,8 @@ from sklearn.model_selection import StratifiedKFold
 
 from tqdm import tqdm
 
+from features import WeightAssigner
 from topology import PersistenceDiagramCalculator
-from weight_assigner import WeightAssigner  # FIXME: put this in a different module
 from weisfeiler_lehman import WL
 
 def read_labels(filename):

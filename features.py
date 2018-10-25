@@ -1,3 +1,9 @@
+'''
+Contains methods and classes for generating features of unlabelled
+graphs.
+'''
+
+
 import collections
 import igraph as ig
 
