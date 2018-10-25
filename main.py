@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
     label_dicts = wl.fit_transform(graphs, args.num_iterations)
 
+    X_per_iteration = []
     for iteration in tqdm(sorted(label_dicts.keys())):
 
         weighted_graphs = [graph.copy() for graph in graphs]
@@ -73,30 +74,9 @@ if __name__ == '__main__':
             # TODO: rewrite weight assigner class to support lists
             weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
 
-        X = pfg.fit_transform(weighted_graphs)
+        X_per_iteration.append(pfg.fit_transform(weighted_graphs))
 
-        ## TODO: rewrite
-        #for index, graph in enumerate(weighted_graphs):
-
-        #    persistence_diagram = pdc.fit_transform(graph)
-        #    X[index, iteration] = persistence_diagram.total_persistence()
-
-    #for index, (graph, label) in tqdm(enumerate(zip(graphs, labels))):
-    #    wl.fit_transform(graph, args.num_iterations)
-
-    #    # Stores the new multi-labels that occur in every iteration,
-    #    # plus the original labels of the zeroth iteration.
-    #    iteration_to_label = wl._multisets
-    #    iteration_to_label[0] = wl._graphs[0].vs['label']
-
-    #    total_persistence_values = []
-
-    #    for iteration in sorted(iteration_to_label.keys()):
-    #        graph.vs['label'] = iteration_to_label[iteration]
-    #        graph = wa.fit_transform(graph)
-
-    #        persistence_diagram = pdc.fit_transform(graph)
-    #        X[index, iteration] = persistence_diagram.total_persistence()
+    X = np.concatenate(X_per_iteration, axis=1)
 
     cv = StratifiedKFold(n_splits=10)
     accuracy_scores = []
