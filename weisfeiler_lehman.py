@@ -73,7 +73,7 @@ class WL(TransformerMixin):
                 self._relabel_steps[i][it] = { idx: {old_label: new_labels[idx]} for idx, old_label in enumerate(current_labels) }
                 g.vs['label'] = new_labels
             
-                self._results[i][it] = (current_labels, new_labels)
+                self._results[it][i] = (merged_labels, new_labels)
         return self._results
 
     def _relabel_graph(self, X: ig.Graph, merged_labels: list):
