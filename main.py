@@ -58,6 +58,16 @@ if __name__ == '__main__':
     X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)
 
+    label_dicts = wl.fit_transform(graphs, args.num_iterations)
+
+    for iteration in tqdm(sorted(label_dicts.keys())):
+        for graph_index in sorted(label_dicts[iteration].keys()):
+            labels_raw, labels_compressed = label_dicts[graph_index][iteration]
+
+            print(labels_compressed)
+
+    raise 'heck'
+
     for index, (graph, label) in tqdm(enumerate(zip(graphs, labels))):
         wl.fit_transform(graph, args.num_iterations)
 
