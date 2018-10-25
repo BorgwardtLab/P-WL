@@ -1,5 +1,5 @@
 '''
-topology.py: contains classes that represent topological information
+Contains classes and methods that represent topological information
 about a data set.
 '''
 
@@ -47,6 +47,13 @@ class PersistenceDiagram(collections.abc.Sequence):
         '''
 
         return sum([abs(x - y)**p for x, y in self._pairs])**(1.0 / p)
+
+    def infinity_norm(self, p=1):
+        '''
+        Calculates the infinity norm of the current pairing.
+        '''
+
+        return max([abs(x - y)**p for x, y in self._pairs])
 
 
 class UnionFind:
