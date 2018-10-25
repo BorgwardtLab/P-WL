@@ -88,14 +88,3 @@ class WeightAssigner:
         B = set(B)
 
         return len(A.intersection(B)) / len(A.union(B))
-
-
-# FIXME: remove after debug
-if __name__ == '__main__':
-    graph = ig.read('data/MUTAG/000.gml')
-    print('Before:', graph.es['weight'])
-    WeightAssigner().fit_transform(graph)
-    print('After:', graph.es['weight'])
-    for edge in graph.es:
-        u, v = edge.tuple
-        print('{}--{}: {}'.format(graph.vs[u]['label'], graph.vs[v]['label'], edge['weight']))
