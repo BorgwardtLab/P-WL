@@ -72,8 +72,6 @@ if __name__ == '__main__':
             graph.vs['label'] = iteration_to_label[iteration]
             graph = wa.fit_transform(graph)
 
-            x = pfg.fit_transform(graph)
-
             persistence_diagram = pdc.fit_transform(graph)
             X[index, iteration] = persistence_diagram.total_persistence()
 
