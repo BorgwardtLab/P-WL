@@ -102,9 +102,9 @@ class PersistenceFeaturesGenerator:
     '''
 
     def __init__(self,
-                 use_infinity_norm=True,
+                 use_infinity_norm=False,
                  use_total_persistence=True,
-                 use_label_persistence=True,
+                 use_label_persistence=False,
                  p=1.0):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
@@ -148,18 +148,18 @@ class PersistenceFeaturesGenerator:
 
         for index, graph in enumerate(graphs):
 
-            x_infinity_norm = None      # Optionally contains the infinity norm of the diagram
-            x_total_persistence = None  # Optionally contains the total persistence of the diagram
-            x_label_persistence = None  # Optionally contains the label persistence as a vector
+            x_infinity_norm = []      # Optionally contains the infinity norm of the diagram
+            x_total_persistence = []  # Optionally contains the total persistence of the diagram
+            x_label_persistence = []  # Optionally contains the label persistence as a vector
 
             pdc = PersistenceDiagramCalculator()
             persistence_diagram = pdc.fit_transform(graph)
 
             if self._use_infinity_norm:
-                x_infinity_norm = persistence_diagram.infinity_norm(self._p)
+                x_infinity_norm = [persistence_diagram.infinity_norm(self._p)]
 
             if self._use_total_persistence:
-                x_total_persistence = persistence_diagram.total_persistence(self._p)
+                x_total_persistence = [persistence_diagram.total_persistence(self._p)]
 
             if self._use_label_persistence:
                 x_label_persistence = np.zeros(num_labels)
@@ -169,8 +169,8 @@ class PersistenceFeaturesGenerator:
                     persistence = abs(x - y)**self._p
                     x_label_persistence[label] += persistence
 
-            X[index, :] = np.concatenate(([x_infinity_norm],
-                                          [x_total_persistence],
+            X[index, :] = np.concatenate((x_infinity_norm,
+                                          x_total_persistence,
                                           x_label_persistence))
 
         return X
