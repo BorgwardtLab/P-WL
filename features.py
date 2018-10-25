@@ -132,6 +132,9 @@ class PersistenceFeaturesGenerator:
             for graph in graphs:
                 labels.update(graph.vs['compressed_label'])
 
+            # TODO: check whether the labels are in [0, num_labels - 1]
+            # such that we can easily create a feature vector below.
+
             num_labels = len(labels)
 
         num_rows = len(graphs)
@@ -145,6 +148,7 @@ class PersistenceFeaturesGenerator:
 
             x_infinity_norm = None      # Optionally contains the infinity norm of the diagram
             x_total_persistence = None  # Optionally contains the total persistence of the diagram
+            x_label_persistence = None  # Optionally contains the label persistence as a vector
 
             pdc = PersistenceDiagramCalculator()
             persistence_diagram = pdc.fit_transform(graph)
@@ -155,6 +159,16 @@ class PersistenceFeaturesGenerator:
             if self._use_total_persistence:
                 x_total_persistence = persistence_diagram.total_persistence(self._p)
 
-            X[index, :] = np.concatenate(([x_infinity_norm], [x_total_persistence]))
+            if self._use_label_persistence:
+                x_label_persistence = np.zeros(num_labels)
+
+                for x, y, index in persistence_diagram:
+                    label = graph.vs[index]['compressed_label']
+                    persistence = abs(x - y)**self._p
+                    x_label_persistence[label] += persistence
+
+            X[index, :] = np.concatenate(([x_infinity_norm],
+                                          [x_total_persistence],
+                                          x_label_persistence))
 
         return X
