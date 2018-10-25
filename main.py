@@ -24,6 +24,7 @@ from features import WeightAssigner
 from topology import PersistenceDiagramCalculator
 from weisfeiler_lehman import WL
 
+
 def read_labels(filename):
     labels = []
     with open(filename) as f:
@@ -54,7 +55,9 @@ if __name__ == '__main__':
     wl = WL()
     wa = WeightAssigner()
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
-    pfg = PersistenceFeaturesGenerator(use_infinity_norm=False, use_total_persistence=False)
+    pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
+                                       use_total_persistence=False,
+                                       use_label_persistence=True)
 
     X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)
