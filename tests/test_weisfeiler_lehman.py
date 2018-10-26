@@ -100,6 +100,25 @@ class WeisfeilerLehmanTests(unittest.TestCase):
         dot_product = np.dot(concat_graph_2, concat_graph_2)
         self.assertEqual(dot_product, 14)
 
+
+class MUTAGTest(unittest.TestCase):
+    def test(self):
+        G = ig.read('data/MUTAG/000.gml')
+        G = [G]
+
+        import graphkernels as gk
+        K = gk.CalculateWLKernel(G, 1)
+
+        labels_dict_0 = WL().fit_transform(G, num_iterations=0)
+        labels_dict_1 = WL().fit_transform(G, num_iterations=1)
+
+        # Check zeroth iteration: original 'relabelled' labels should
+        # coincide.
+        self.assertEqual(labels_dict_0[0], labels_dict_1[0])
+
+        print(labels_dict_1[1])
+
+
 if __name__== '__main__':
     import sys
     from os import path
