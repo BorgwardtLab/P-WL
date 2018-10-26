@@ -50,7 +50,7 @@ class WeisfeilerLehmanTests(unittest.TestCase):
         # Check results
         expected_results_graph_1 = ([[0,1,2,3], [1,0,2], [2,0,1,3], [3,0,2,4,4], [4,3], [4,3]], [0,1,2,3,4,4])
         expected_results_graph_2 = ([[1,0,3], [0,1,2,3], [2,0,1,3], [3,0,1,2,4], [4,3], [1,2]], [5,0,2,6,4,7])
-        self.assertEqual( {1: {0: expected_results_graph_1, 1: expected_results_graph_2}}, graph_transformed )
+        self.assertEqual( {0: expected_results_graph_1, 1: expected_results_graph_2}, graph_transformed[1] )
 
         # Expected labels of transformed graph
         expected_labels_graph_1 = [0,1,2,3,4,4]
@@ -90,6 +90,15 @@ class WeisfeilerLehmanTests(unittest.TestCase):
 
         dot_product = np.dot(np.array(counts_mapped_labels_graph_1), np.array(counts_mapped_labels_graph_2).T)
         self.assertEqual(dot_product, 4)
+
+        # Asses self-similarity
+        concat_graph_1 = counts_orig_labels_graph_1 + counts_mapped_labels_graph_1
+        dot_product = np.dot(concat_graph_1, concat_graph_1)
+        self.assertEqual(dot_product, 16)
+
+        concat_graph_2 = counts_orig_labels_graph_2 + counts_mapped_labels_graph_2
+        dot_product = np.dot(concat_graph_2, concat_graph_2)
+        self.assertEqual(dot_product, 14)
 
 if __name__== '__main__':
     import sys

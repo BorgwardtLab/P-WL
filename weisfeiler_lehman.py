@@ -1,4 +1,5 @@
 from collections import defaultdict
+import copy
 import numpy as np
 
 from sklearn.base import TransformerMixin
@@ -23,6 +24,7 @@ class WL(TransformerMixin):
         self._last_new_label = -1
         self._preprocess_relabel_dict = {}
         self._results = defaultdict(dict)
+        self._label_dicts = {}
 
     def _reset_label_generation(self):
         self._last_new_label = -1
@@ -34,7 +36,7 @@ class WL(TransformerMixin):
     def _relabel_graphs(self, X: List[ig.Graph]):
         num_unique_labels = 0
         preprocessed_graphs = []
-        for g in X:
+        for i, g in enumerate(X):
             x = g.copy()
             labels = x.vs['label']
             
@@ -46,11 +48,12 @@ class WL(TransformerMixin):
                     self._preprocess_relabel_dict[label] = self._get_next_label()
                     new_labels.append(self._preprocess_relabel_dict[label])
             x.vs['label'] = new_labels
+            self._results[0][i] = (labels, new_labels)
             preprocessed_graphs.append(x)
         self._reset_label_generation()
         return preprocessed_graphs
     
-    def fit_transform(self, X: List[ig.Graph], num_iterations: int=5):
+    def fit_transform(self, X: List[ig.Graph], num_iterations: int=3):
         X = self._relabel_graphs(X)
         for it in np.arange(1, num_iterations+1, 1):
             self._reset_label_generation()
@@ -74,6 +77,7 @@ class WL(TransformerMixin):
                 g.vs['label'] = new_labels
             
                 self._results[it][i] = (merged_labels, new_labels)
+            self._label_dicts[it] = copy.deepcopy(self._label_dict)
         return self._results
 
     def _relabel_graph(self, X: ig.Graph, merged_labels: list):
