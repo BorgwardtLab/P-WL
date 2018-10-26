@@ -57,7 +57,6 @@ if __name__ == '__main__':
         y_test = y[test_index]
 
         K_train = K[train_index][:, train_index]
-        K_train = K_train
         K_test = K[test_index][:, train_index]
 
         clf.fit(K_train, y_train)
