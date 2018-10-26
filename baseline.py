@@ -47,11 +47,11 @@ if __name__ == '__main__':
     K = gk.CalculateWLKernel(graphs, args.num_iterations)
     n, _ = K.shape
 
-    cv = StratifiedKFold(n_splits=10, random_state=42)
+    cv = StratifiedKFold(n_splits=10, random_state=42, shuffle=True)
     accuracy_scores = []
 
     for train_index, test_index in cv.split(np.arange(n), y):
-        clf = SVC(kernel='precomputed', C=1e6)
+        clf = SVC(kernel='precomputed', C=1)
 
         y_train = y[train_index]
         y_test = y[test_index]

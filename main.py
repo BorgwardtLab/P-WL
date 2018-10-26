@@ -54,7 +54,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner(similarity='minkowski', base_weight=0.0)
+    wa = WeightAssigner(similarity='minkowski', base_weight=1.0)
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
@@ -83,11 +83,11 @@ if __name__ == '__main__':
 
     X = np.concatenate(X_per_iteration, axis=1)
 
-    cv = StratifiedKFold(n_splits=10, random_state=42)
+    cv = StratifiedKFold(n_splits=10, random_state=42, shuffle=True)
     accuracy_scores = []
 
     for train_index, test_index in cv.split(X, y):
-        clf = SVC(kernel='precomputed', C=1e6)
+        clf = SVC(kernel='precomputed', C=1)
         scaler = StandardScaler()
 
         X_train, X_test = X[train_index], X[test_index]
