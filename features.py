@@ -32,6 +32,8 @@ class WeightAssigner:
             self._similarity = self._hamming
         elif similarity == 'jaccard':
             self._similarity = self._jaccard
+        elif similarity == 'minkowski':
+            self._similarity = self._minkowski
 
         if not self._similarity:
             raise RuntimeError('Unknown similarity measure \"{}\" requested'.format(similarity))
@@ -65,6 +67,28 @@ class WeightAssigner:
             return [l]
         else:
             return l
+
+    def _minkowski(self, A, B):
+        # TODO: make configurable
+        self._p = 2
+
+        label_to_index = dict()
+        index = 0
+        for label in A+B:
+            if label not in label_to_index:
+                label_to_index[label] = index
+                index += 1
+
+        x = np.zeros(len(label_to_index))
+        y = np.zeros(len(label_to_index))
+
+        for label in A:
+            x[label_to_index[label]] += 1
+
+        for label in B:
+            y[label_to_index[label]] += 1
+
+        return np.linalg.norm(x - y, ord=self._p)
 
     def _hamming(self, A, B):
         '''

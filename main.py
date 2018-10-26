@@ -54,7 +54,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner()
+    wa = WeightAssigner(similarity='minkowski', base_weight=0.0)
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
