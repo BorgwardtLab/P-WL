@@ -86,8 +86,6 @@ if __name__ == '__main__':
     cv = StratifiedKFold(n_splits=10, random_state=42)
     accuracy_scores = []
 
-    np.savetxt('/tmp/X.txt', X)
-
     for train_index, test_index in cv.split(X, y):
         clf = SVC(kernel='precomputed', C=1e6)
         scaler = StandardScaler()
