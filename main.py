@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     X = np.concatenate(X_per_iteration, axis=1)
 
-    cv = StratifiedKFold(n_splits=10)
+    cv = StratifiedKFold(n_splits=10, random_state=42)
     accuracy_scores = []
 
     np.savetxt('/tmp/X.txt', X)
@@ -102,9 +102,7 @@ if __name__ == '__main__':
         # that the standardization is not used here.
         K = pairwise_kernels(X, X, metric='linear')
         K_train = K[train_index][:, train_index]
-        normalization = np.max(K_train)
-        K_train = K_train / normalization
-        K_test = K[test_index][:, train_index] / normalization
+        K_test = K[test_index][:, train_index]
 
         clf.fit(K_train, y_train)
         y_pred = clf.predict(K_test)
