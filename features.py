@@ -21,9 +21,10 @@ class WeightAssigner:
     the weighted graph.
     '''
 
-    def __init__(self, ignore_label_order=False, similarity='hamming'):
+    def __init__(self, ignore_label_order=False, similarity='hamming', base_weight=1.0):
         self._ignore_label_order = ignore_label_order
         self._similarity = None
+        self._base_weight = base_weight
 
         # Select similarity measure to use in the `fit_transform()`
         # function later on.
@@ -48,6 +49,7 @@ class WeightAssigner:
 
             weight = self._similarity(source_labels[1:], target_labels[1:])
             weight = weight + (source_label != target_label)
+            weight = weight + self._base_weight
             edge['weight'] = weight
 
         return graph
