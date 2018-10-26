@@ -6,6 +6,12 @@
 
 import graphkernels as gk
 import igraph as ig
+import numpy as np
+
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import StandardScaler
 
 import argparse
 import logging
@@ -38,4 +44,28 @@ if __name__ == '__main__':
 
     assert len(graphs) == len(labels)
 
+    y = np.array(labels)
     K = gk.CalculateWLKernel(graphs, args.num_iterations)
+    n, _ = K.shape
+
+    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    accuracy_scores = []
+
+    for train_index, test_index in cv.split(np.arange(n), y):
+        clf = SVC(kernel='precomputed', C=1e6)
+        scaler = StandardScaler()
+
+        y_train = y[train_index]
+        y_test = y[test_index]
+
+        K_train = K[train_index][:, train_index]
+        normalization = 1.0 # / np.max(K_train)
+        K_train = K_train / normalization
+        K_test = K[test_index][:, train_index] / normalization
+
+        clf.fit(K_train, y_train)
+        y_pred = clf.predict(K_test)
+
+        accuracy_scores.append(accuracy_score(y_test, y_pred))
+
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(accuracy_scores) * 100, np.std(accuracy_scores) * 100 * 2))
