@@ -55,7 +55,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner(metric='angular')
+    wa = WeightAssigner(metric='minkowski')
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
                                        use_label_persistence=True)
