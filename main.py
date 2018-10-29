@@ -107,4 +107,4 @@ if __name__ == '__main__':
 
         accuracy_scores.append(accuracy_score(y_test, y_pred))
 
-    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(accuracy_scores) * 100, np.std(accuracy_scores) * 100 * 2))
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(accuracy_scores) * 100, np.std(accuracy_scores) * 100))
