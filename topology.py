@@ -151,14 +151,22 @@ class PersistenceDiagramCalculator:
     def fit_transform(self, graph):
         '''
         Applies a filtration to a graph and calculates its persistence
-        diagram.
+        diagram. The function will return the persistence diagram plus
+        all edges that are involved in cycles.
+
+        :param graph: Weighted graph whose persistence diagram will be
+        calculated.
+
+        :return: Tuple consisting of the persistence diagram, followed
+        by a list of all edge indices that create a cycle.
         '''
 
         num_vertices = graph.vcount()
         uf = UnionFind(num_vertices)
 
-        edge_weights = graph.es['weight']
-        edge_indices = None
+        edge_weights = graph.es['weight']   # All edge weights
+        edge_indices = None                 # Ordering for filtration
+        edge_indices_cycles = []            # Edge indices that create a cycle
 
         if self._order == 'sublevel':
             edge_indices = np.argsort(edge_weights, kind='stable')
@@ -185,6 +193,7 @@ class PersistenceDiagramCalculator:
             # Nothing to do here: the two components are already the
             # same
             if younger == older:
+                edge_indices_cycles.append(edge_index)
                 continue
 
             # Ensures that the older component precedes the younger one
@@ -225,7 +234,7 @@ class PersistenceDiagramCalculator:
             else:
                 pd.betti = 1
 
-        return pd
+        return pd, edge_indices_cycles
 
 
 # FIXME: hard-coded debug code
