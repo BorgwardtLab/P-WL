@@ -55,8 +55,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner(metric='angular', base_weight=1.0)
-    pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
+    wa = WeightAssigner(metric='angular')
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
                                        use_label_persistence=True)
@@ -96,7 +95,7 @@ if __name__ == '__main__':
 
         for train_index, test_index in cv.split(X, y):
             clf = SVC(kernel='precomputed', C=1)
-            clf = RandomForestClassifier(n_estimators=100, random_state=42)
+            clf = RandomForestClassifier(n_estimators=50)
             scaler = StandardScaler()
 
             X_train, X_test = X[train_index], X[test_index]

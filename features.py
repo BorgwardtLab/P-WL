@@ -20,10 +20,9 @@ class WeightAssigner:
     a distance metric and returns the weighted graph.
     '''
 
-    def __init__(self, ignore_label_order=False, metric='hamming', base_weight=1.0):
+    def __init__(self, ignore_label_order=False, metric='hamming'):
         self._ignore_label_order = ignore_label_order
         self._similarity = None
-        self._base_weight = base_weight
 
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
@@ -53,7 +52,6 @@ class WeightAssigner:
 
             weight = self._metric(source_labels[1:], target_labels[1:])
             weight = weight + (source_label != target_label)
-            weight = weight + self._base_weight
             edge['weight'] = weight
 
         return graph
