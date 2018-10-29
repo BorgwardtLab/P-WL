@@ -15,9 +15,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
-from sklearn.metrics.pairwise import pairwise_kernels
 from sklearn.model_selection import StratifiedKFold
-from sklearn.preprocessing import StandardScaler
 
 from tqdm import tqdm
 
@@ -96,27 +94,21 @@ if __name__ == '__main__':
         accuracy_scores = []
 
         for train_index, test_index in cv.split(X, y):
-            clf = SVC(kernel='precomputed', C=1)
-            clf = RandomForestClassifier(n_estimators=50)
-            scaler = StandardScaler()
+            #clf = SVC(kernel='precomputed', C=1)
+            #clf = RandomForestClassifier(n_estimators=50)
+            clf = LogisticRegression(solver='lbfgs',
+                                     max_iter=2000,
+                                     class_weight=None)
 
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
 
-            X_train = scaler.fit_transform(X_train)
-            X_test = scaler.transform(X_test)
-
-            # Calculate a kernel matrix on the original data; this means
-            # that the standardization is not used here.
-            K = pairwise_kernels(X, X, metric='linear')
-            K_train = K[train_index][:, train_index]
-            K_test = K[test_index][:, train_index]
-
-            clf.fit(K_train, y_train)
-            y_pred = clf.predict(K_test)
+            clf.fit(X_train, y_train)
+            y_pred = clf.predict(X_test)
 
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
+        print('  - Mean 10-fold accuracy: {:2.2f}'.format(np.mean(accuracy_scores)))
         mean_accuracies.append(np.mean(accuracy_scores))
 
     print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
