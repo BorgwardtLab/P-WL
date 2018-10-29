@@ -17,26 +17,27 @@ from topology import PersistenceDiagramCalculator
 class WeightAssigner:
     '''
     Given a labelled graph, this class assigns weights based on
-    a similarity measure and an assignment strategy and returns
-    the weighted graph.
+    a distance metric and returns the weighted graph.
     '''
 
-    def __init__(self, ignore_label_order=False, similarity='hamming', base_weight=1.0):
+    def __init__(self, ignore_label_order=False, metric='hamming', base_weight=1.0):
         self._ignore_label_order = ignore_label_order
         self._similarity = None
         self._base_weight = base_weight
 
-        # Select similarity measure to use in the `fit_transform()`
-        # function later on.
-        if similarity == 'hamming':
-            self._similarity = self._hamming
-        elif similarity == 'jaccard':
-            self._similarity = self._jaccard
-        elif similarity == 'minkowski':
-            self._similarity = self._minkowski
+        # Select metric to use in the `fit_transform()` function later
+        # on. All of these metrics need to support multi-sets.
 
-        if not self._similarity:
-            raise RuntimeError('Unknown similarity measure \"{}\" requested'.format(similarity))
+        metric_map = {
+            'hamming':   self._hamming,
+            'jaccard':   self._jaccard,
+            'minkowski': self._minkowski
+        }
+
+        if metric not in metric_map:
+            raise RuntimeError('Unknown metric \"{}\" requested'.format(metric))
+
+        self._metric = metric_map[metric]
 
     def fit_transform(self, graph):
 
@@ -49,7 +50,7 @@ class WeightAssigner:
             source_label = source_labels[0]
             target_label = target_labels[0]
 
-            weight = self._similarity(source_labels[1:], target_labels[1:])
+            weight = self._metric(source_labels[1:], target_labels[1:])
             weight = weight + (source_label != target_label)
             weight = weight + self._base_weight
             edge['weight'] = weight
