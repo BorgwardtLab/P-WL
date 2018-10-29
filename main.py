@@ -11,6 +11,7 @@ import argparse
 import collections
 import logging
 
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner(metric='minkowski', base_weight=1.0)
+    wa = WeightAssigner(metric='angular', base_weight=1.0)
     pdc = PersistenceDiagramCalculator()  # FIXME: need to add order/filtration
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
@@ -83,28 +84,38 @@ if __name__ == '__main__':
 
     X = np.concatenate(X_per_iteration, axis=1)
 
-    cv = StratifiedKFold(n_splits=10, random_state=42, shuffle=True)
-    accuracy_scores = []
+    np.random.seed(42)
+    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    mean_accuracies = []
 
-    for train_index, test_index in cv.split(X, y):
-        clf = SVC(kernel='precomputed', C=1)
-        scaler = StandardScaler()
+    for i in range(10):
 
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+        # Contains accuracy scores for each cross validation step; the
+        # means of this list will be used later on.
+        accuracy_scores = []
 
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.transform(X_test)
+        for train_index, test_index in cv.split(X, y):
+            clf = SVC(kernel='precomputed', C=1)
+            clf = RandomForestClassifier(n_estimators=100, random_state=42)
+            scaler = StandardScaler()
 
-        # Calculate a kernel matrix on the original data; this means
-        # that the standardization is not used here.
-        K = pairwise_kernels(X, X, metric='linear')
-        K_train = K[train_index][:, train_index]
-        K_test = K[test_index][:, train_index]
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
 
-        clf.fit(K_train, y_train)
-        y_pred = clf.predict(K_test)
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
 
-        accuracy_scores.append(accuracy_score(y_test, y_pred))
+            # Calculate a kernel matrix on the original data; this means
+            # that the standardization is not used here.
+            K = pairwise_kernels(X, X, metric='linear')
+            K_train = K[train_index][:, train_index]
+            K_test = K[test_index][:, train_index]
 
-    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(accuracy_scores) * 100, np.std(accuracy_scores) * 100))
+            clf.fit(K_train, y_train)
+            y_pred = clf.predict(K_test)
+
+            accuracy_scores.append(accuracy_score(y_test, y_pred))
+
+        mean_accuracies.append(np.mean(accuracy_scores))
+
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
