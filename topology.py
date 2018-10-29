@@ -235,15 +235,3 @@ class PersistenceDiagramCalculator:
                 pd.betti = 1
 
         return pd, edge_indices_cycles
-
-
-# FIXME: hard-coded debug code
-if __name__ == '__main__':
-    graph = ig.read('data/MUTAG/000.gml')
-    pd = PersistenceDiagramCalculator().fit_transform(graph)
-
-    print(graph.ecount())
-    print(len(pd))
-
-    for x, y, c in pd:
-        print(x, y, c)
