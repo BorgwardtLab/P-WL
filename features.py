@@ -27,8 +27,8 @@ class WeightAssigner:
 
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
-
         metric_map = {
+            'canberra':  self._canberra,
             'hamming':   self._hamming,
             'jaccard':   self._jaccard,
             'minkowski': self._minkowski
@@ -69,6 +69,10 @@ class WeightAssigner:
         else:
             return l
 
+    def _canberra(self, A, B):
+        a, b = self._to_vectors(A, B)
+        return np.sum(np.abs(a - b) / (a + b))
+
     def _hamming(self, A, B):
         '''
         Computes the (normalized) Hamming distance between two sets of
@@ -88,17 +92,17 @@ class WeightAssigner:
         num_missing = sum([abs(c) for _, c in counter.most_common()])
         return num_missing / n
 
-    def _jaccard(A, B):
-        '''
-        Computes the Jaccard index between two sets of labels A and B. The
-        measure is in the range of [0,1], where 0 indicates no overlap and
-        1 indicates a perfect overlap.
-        '''
+    def _jaccard(self, A, B):
+        a, b = self._to_vectors(A, B)
+        n = len(a)
 
-        A = set(A)
-        B = set(B)
+        denominator = (n - np.sum(np.multiply(1 - a, 1 - b)))
 
-        return len(A.intersection(B)) / len(A.union(B))
+        # This follows the standard definition of multi-set distances
+        if denominator == 0.0:
+            return 0.0
+
+        return np.sum(np.abs(a- b)) / denominator
 
     def _minkowski(self, A, B):
         # TODO: make configurable
