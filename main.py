@@ -55,7 +55,7 @@ if __name__ == '__main__':
     assert len(graphs) == len(labels)
 
     wl = WL()
-    wa = WeightAssigner(metric='minkowski')
+    wa = WeightAssigner(metric='minkowski', p=2.0)
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
                                        use_label_persistence=True)

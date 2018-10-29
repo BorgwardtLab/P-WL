@@ -20,9 +20,8 @@ class WeightAssigner:
     a distance metric and returns the weighted graph.
     '''
 
-    def __init__(self, ignore_label_order=False, metric='hamming'):
-        self._ignore_label_order = ignore_label_order
-        self._similarity = None
+    def __init__(self, metric='minkowski', p=1.0):
+        self._p = p
 
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
@@ -98,9 +97,6 @@ class WeightAssigner:
         return np.sum(np.abs(a - b)) / denominator
 
     def _minkowski(self, A, B):
-        # TODO: make configurable
-        self._p = 2
-
         a, b = self._to_vectors(A, B)
         return np.linalg.norm(a - b, ord=self._p)
 
