@@ -12,8 +12,6 @@ import collections
 import logging
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 
@@ -21,7 +19,7 @@ from tqdm import tqdm
 
 from features import PersistenceFeaturesGenerator
 from features import WeightAssigner
-from topology import PersistenceDiagramCalculator
+
 from weisfeiler_lehman import WL
 
 
@@ -94,11 +92,7 @@ if __name__ == '__main__':
         accuracy_scores = []
 
         for train_index, test_index in cv.split(X, y):
-            #clf = SVC(kernel='precomputed', C=1)
-            #clf = RandomForestClassifier(n_estimators=50)
-            clf = LogisticRegression(solver='lbfgs',
-                                     max_iter=2000,
-                                     class_weight=None)
+            clf = RandomForestClassifier(n_estimators=50)
 
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
