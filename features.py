@@ -28,6 +28,7 @@ class WeightAssigner:
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
         metric_map = {
+            'angular':   self._angular,
             'canberra':  self._canberra,
             'hamming':   self._hamming,
             'jaccard':   self._jaccard,
@@ -69,6 +70,19 @@ class WeightAssigner:
             return [l]
         else:
             return l
+
+    def _angular(self, A, B):
+        a, b = self._to_vectors(A, B)
+
+        denominator = np.linalg.norm(a) * np.linalg.norm(b)
+
+        # This should not happen for normal graphs, but let's be
+        # prepared for it nonetheless.
+        if denominator == 0.0:
+            return 0.0
+
+        cosine_similarity = np.clip(np.dot(a, b) / denominator, -1, 1)
+        return 2 * np.arccos(cosine_similarity) / np.pi
 
     def _canberra(self, A, B):
         a, b = self._to_vectors(A, B)
