@@ -31,7 +31,8 @@ class WeightAssigner:
             'canberra':  self._canberra,
             'hamming':   self._hamming,
             'jaccard':   self._jaccard,
-            'minkowski': self._minkowski
+            'minkowski': self._minkowski,
+            'sorensen':  self._sorensen,
         }
 
         if metric not in metric_map:
@@ -102,7 +103,7 @@ class WeightAssigner:
         if denominator == 0.0:
             return 0.0
 
-        return np.sum(np.abs(a- b)) / denominator
+        return np.sum(np.abs(a - b)) / denominator
 
     def _minkowski(self, A, B):
         # TODO: make configurable
@@ -110,6 +111,19 @@ class WeightAssigner:
 
         a, b = self._to_vectors(A, B)
         return np.linalg.norm(a - b, ord=self._p)
+
+    def _sorensen(self, A, B):
+        a, b = self._to_vectors(A, B)
+
+        denominator = np.sum(a + b)
+
+        # This follows the standard definition of multi-set distances;
+        # it should never happen for this distance but let's be on the
+        # safe side for once.
+        if denominator == 0.0:
+            return 0.0
+
+        return np.sum(np.abs(a - b)) / denominator
 
     @staticmethod
     def _to_vectors(A, B):
