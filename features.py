@@ -69,28 +69,6 @@ class WeightAssigner:
         else:
             return l
 
-    def _minkowski(self, A, B):
-        # TODO: make configurable
-        self._p = 2
-
-        label_to_index = dict()
-        index = 0
-        for label in A+B:
-            if label not in label_to_index:
-                label_to_index[label] = index
-                index += 1
-
-        x = np.zeros(len(label_to_index))
-        y = np.zeros(len(label_to_index))
-
-        for label in A:
-            x[label_to_index[label]] += 1
-
-        for label in B:
-            y[label_to_index[label]] += 1
-
-        return np.linalg.norm(x - y, ord=self._p)
-
     def _hamming(self, A, B):
         '''
         Computes the (normalized) Hamming distance between two sets of
@@ -121,6 +99,49 @@ class WeightAssigner:
         B = set(B)
 
         return len(A.intersection(B)) / len(A.union(B))
+
+    def _minkowski(self, A, B):
+        # TODO: make configurable
+        self._p = 2
+
+        a, b = self._to_vectors(A, B)
+        return np.linalg.norm(a - b, ord=self._p)
+
+    @staticmethod
+    def _to_vectors(A, B):
+        '''
+        Transforms two sets of labels to their corresponding
+        high-dimensional vectors. For example, a sequence of
+        `{a, a, b}` and `{a, c, c}` will be transformed to a
+        vector `(2, 1, 0)` and `(1, 0, 2)`, respectively.
+
+        This function does not have to care about the global
+        alphabet of labels because they will only yield zero
+        values.
+
+        :param A: First label sequence
+        :param B: Second label sequence
+
+        :return: Two transformed vectors
+        '''
+
+        label_to_index = dict()
+        index = 0
+        for label in A + B:
+            if label not in label_to_index:
+                label_to_index[label] = index
+                index += 1
+
+        a = np.zeros(len(label_to_index))
+        b = np.zeros(len(label_to_index))
+
+        for label in A:
+            a[label_to_index[label]] += 1
+
+        for label in B:
+            b[label_to_index[label]] += 1
+
+        return a, b
 
 
 class PersistenceFeaturesGenerator:
