@@ -159,10 +159,12 @@ class PersistenceFeaturesGenerator:
                  use_infinity_norm=False,
                  use_total_persistence=True,
                  use_label_persistence=False,
+                 use_cycle_persistence=False,
                  p=1.0):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
+        self._use_cycle_persistence = use_cycle_persistence
         self._p = p
 
         if p <= 0.0:
@@ -194,17 +196,21 @@ class PersistenceFeaturesGenerator:
             assert max(labels) == num_labels - 1
 
         num_rows = len(graphs)
-        num_columns = self._use_infinity_norm   \
-            + self._use_total_persistence       \
-            + self._use_label_persistence * num_labels
+        num_columns = self._use_infinity_norm          \
+            + self._use_total_persistence              \
+            + self._use_label_persistence * num_labels \
+            + self._use_cycle_persistence
 
         X = np.zeros((num_rows, num_columns))
 
         for index, graph in enumerate(graphs):
 
-            x_infinity_norm = []      # Optionally contains the infinity norm of the diagram
-            x_total_persistence = []  # Optionally contains the total persistence of the diagram
-            x_label_persistence = []  # Optionally contains the label persistence as a vector
+            # Initially, all of these vectors are empty and will only be
+            # filled depending on the client configuration.
+            x_infinity_norm = []
+            x_total_persistence = []
+            x_label_persistence = []
+            x_cycle_persistence = []
 
             pdc = PersistenceDiagramCalculator()
             persistence_diagram = pdc.fit_transform(graph)
@@ -223,8 +229,17 @@ class PersistenceFeaturesGenerator:
                     persistence = abs(x - y)**self._p
                     x_label_persistence[label] += persistence
 
+            if self._use_cycle_persistence:
+                n = len(persistence_diagram)
+                m = graph.ecount()
+                k = persistence_diagram.betti
+                num_cycles = m - n + k
+                x_cycle_persistence = [num_cycles]
+
+
             X[index, :] = np.concatenate((x_infinity_norm,
                                           x_total_persistence,
-                                          x_label_persistence))
+                                          x_label_persistence,
+                                          x_cycle_persistence))
 
         return X
