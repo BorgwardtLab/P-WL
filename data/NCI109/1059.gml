@@ -1,0 +1,349 @@
+graph [
+  directed 0
+  node [
+    id 27958
+    label "1"
+  ]
+  node [
+    id 27959
+    label "1"
+  ]
+  node [
+    id 27960
+    label "1"
+  ]
+  node [
+    id 27961
+    label "1"
+  ]
+  node [
+    id 27964
+    label "2"
+  ]
+  node [
+    id 27957
+    label "1"
+  ]
+  node [
+    id 27963
+    label "2"
+  ]
+  node [
+    id 27967
+    label "3"
+  ]
+  node [
+    id 27974
+    label "3"
+  ]
+  node [
+    id 27975
+    label "3"
+  ]
+  node [
+    id 27976
+    label "3"
+  ]
+  node [
+    id 27977
+    label "3"
+  ]
+  node [
+    id 27978
+    label "3"
+  ]
+  node [
+    id 27979
+    label "3"
+  ]
+  node [
+    id 27980
+    label "3"
+  ]
+  node [
+    id 27983
+    label "3"
+  ]
+  node [
+    id 27984
+    label "3"
+  ]
+  node [
+    id 27985
+    label "3"
+  ]
+  node [
+    id 27986
+    label "3"
+  ]
+  node [
+    id 27987
+    label "3"
+  ]
+  node [
+    id 27988
+    label "3"
+  ]
+  node [
+    id 27989
+    label "3"
+  ]
+  node [
+    id 27990
+    label "3"
+  ]
+  node [
+    id 27991
+    label "3"
+  ]
+  node [
+    id 27962
+    label "2"
+  ]
+  node [
+    id 27965
+    label "3"
+  ]
+  node [
+    id 27966
+    label "3"
+  ]
+  node [
+    id 27969
+    label "3"
+  ]
+  node [
+    id 27970
+    label "3"
+  ]
+  node [
+    id 27971
+    label "3"
+  ]
+  node [
+    id 27972
+    label "3"
+  ]
+  node [
+    id 27973
+    label "3"
+  ]
+  node [
+    id 27981
+    label "3"
+  ]
+  node [
+    id 27982
+    label "3"
+  ]
+  node [
+    id 27992
+    label "3"
+  ]
+  node [
+    id 27968
+    label "3"
+  ]
+
+  edge [
+    source 27983
+    target 27974
+    weight 2
+  ]
+  edge [
+    source 27984
+    target 27975
+    weight 2
+  ]
+  edge [
+    source 27985
+    target 27976
+    weight 2
+  ]
+  edge [
+    source 27986
+    target 27977
+    weight 2
+  ]
+  edge [
+    source 27987
+    target 27978
+    weight 2
+  ]
+  edge [
+    source 27988
+    target 27979
+    weight 2
+  ]
+  edge [
+    source 27989
+    target 27983
+    weight 2
+  ]
+  edge [
+    source 27989
+    target 27986
+    weight 2
+  ]
+  edge [
+    source 27990
+    target 27984
+    weight 2
+  ]
+  edge [
+    source 27990
+    target 27987
+    weight 2
+  ]
+  edge [
+    source 27991
+    target 27985
+    weight 2
+  ]
+  edge [
+    source 27991
+    target 27988
+    weight 2
+  ]
+  edge [
+    source 27965
+    target 27957
+    weight 3
+  ]
+  edge [
+    source 27966
+    target 27958
+    weight 3
+  ]
+  edge [
+    source 27966
+    target 27965
+    weight 3
+  ]
+  edge [
+    source 27967
+    target 27965
+    weight 3
+  ]
+  edge [
+    source 27969
+    target 27959
+    weight 3
+  ]
+  edge [
+    source 27969
+    target 27966
+    weight 3
+  ]
+  edge [
+    source 27970
+    target 27957
+    weight 3
+  ]
+  edge [
+    source 27970
+    target 27962
+    weight 3
+  ]
+  edge [
+    source 27970
+    target 27969
+    weight 3
+  ]
+  edge [
+    source 27974
+    target 27971
+    weight 3
+  ]
+  edge [
+    source 27975
+    target 27972
+    weight 3
+  ]
+  edge [
+    source 27976
+    target 27973
+    weight 3
+  ]
+  edge [
+    source 27977
+    target 27971
+    weight 3
+  ]
+  edge [
+    source 27978
+    target 27972
+    weight 3
+  ]
+  edge [
+    source 27979
+    target 27973
+    weight 3
+  ]
+  edge [
+    source 27980
+    target 27962
+    weight 3
+  ]
+  edge [
+    source 27981
+    target 27960
+    weight 3
+  ]
+  edge [
+    source 27981
+    target 27962
+    weight 3
+  ]
+  edge [
+    source 27981
+    target 27963
+    weight 3
+  ]
+  edge [
+    source 27982
+    target 27964
+    weight 3
+  ]
+  edge [
+    source 27982
+    target 27980
+    weight 3
+  ]
+  edge [
+    source 27992
+    target 27961
+    weight 3
+  ]
+  edge [
+    source 27992
+    target 27963
+    weight 3
+  ]
+  edge [
+    source 27992
+    target 27982
+    weight 3
+  ]
+  edge [
+    source 27968
+    target 27967
+    weight 4
+  ]
+  edge [
+    source 27971
+    target 27968
+    weight 4
+  ]
+  edge [
+    source 27972
+    target 27968
+    weight 4
+  ]
+  edge [
+    source 27973
+    target 27968
+    weight 4
+  ]
+
+]
