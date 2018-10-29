@@ -59,6 +59,7 @@ if __name__ == '__main__':
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
                                        use_label_persistence=True,
+                                       use_cycle_persistence=True,
                                        p=2.0)
 
     X = np.zeros((len(graphs), args.num_iterations + 1))

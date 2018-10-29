@@ -213,7 +213,7 @@ class PersistenceFeaturesGenerator:
             x_cycle_persistence = []
 
             pdc = PersistenceDiagramCalculator()
-            persistence_diagram = pdc.fit_transform(graph)
+            persistence_diagram, edge_indices_cycles = pdc.fit_transform(graph)
 
             if self._use_infinity_norm:
                 x_infinity_norm = [persistence_diagram.infinity_norm(self._p)]
@@ -234,8 +234,20 @@ class PersistenceFeaturesGenerator:
                 m = graph.ecount()
                 k = persistence_diagram.betti
                 num_cycles = m - n + k
-                x_cycle_persistence = [num_cycles]
 
+                # If this assertion fails, there's something seriously
+                # wrong with our understanding of cycles.
+                assert num_cycles == len(edge_indices_cycles)
+
+                total_cycle_persistence = 0.0
+                for edge_index in edge_indices_cycles:
+                    edge = graph.es[edge_index]
+                    total_cycle_persistence += edge['weight']**self._p
+
+                if num_cycles:
+                    x_cycle_persistence = [(total_cycle_persistence + 1) / num_cycles]
+                else:
+                    x_cycle_persistence = [0.0]
 
             X[index, :] = np.concatenate((x_infinity_norm,
                                           x_total_persistence,
