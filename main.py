@@ -58,7 +58,8 @@ if __name__ == '__main__':
     wa = WeightAssigner(metric='minkowski', p=2.0)
     pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
                                        use_total_persistence=False,
-                                       use_label_persistence=True)
+                                       use_label_persistence=True,
+                                       p=2.0)
 
     X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)

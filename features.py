@@ -163,7 +163,7 @@ class PersistenceFeaturesGenerator:
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
-        self._p = 1.0
+        self._p = p
 
         if p <= 0.0:
             raise RuntimeError('Power parameter must be non-negative')
