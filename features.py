@@ -30,7 +30,6 @@ class WeightAssigner:
         metric_map = {
             'angular':   self._angular,
             'canberra':  self._canberra,
-            'hamming':   self._hamming,
             'jaccard':   self._jaccard,
             'minkowski': self._minkowski,
             'sorensen':  self._sorensen,
@@ -87,25 +86,6 @@ class WeightAssigner:
     def _canberra(self, A, B):
         a, b = self._to_vectors(A, B)
         return np.sum(np.abs(a - b) / (a + b))
-
-    def _hamming(self, A, B):
-        '''
-        Computes the (normalized) Hamming distance between two sets of
-        labels A and B. This amounts to counting how many overlaps are
-        present in the sequences.
-        '''
-
-        n = len(A) + len(B)
-
-        # Empty lists are always treated as being equal
-        if n == 0:
-            return 0.0
-
-        counter = collections.Counter(A)
-        counter.subtract(B)
-
-        num_missing = sum([abs(c) for _, c in counter.most_common()])
-        return num_missing / n
 
     def _jaccard(self, A, B):
         a, b = self._to_vectors(A, B)
