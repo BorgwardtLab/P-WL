@@ -18,6 +18,7 @@ class PersistenceDiagram(collections.abc.Sequence):
 
     def __init__(self):
         self._pairs = []
+        self._betti = None
 
     def __len__(self):
         '''
@@ -60,6 +61,30 @@ class PersistenceDiagram(collections.abc.Sequence):
         '''
 
         return max([abs(x - y)**p for x, y, _ in self._pairs])
+
+    @property
+    def betti(self):
+        '''
+        :return: Betti number of the current persistence diagram or
+        `None` if no number has been assigned.
+        '''
+
+        return self._betti
+
+    @betti.setter
+    def betti(self, value):
+        '''
+        Sets the Betti number of the current persistence diagram.
+
+        :param value: Betti number to assign. The function will perform
+        a brief consistency check by counting the number of persistence
+        pairs.
+        '''
+
+        if value > len(self):
+            raise RuntimeError('Betti number must be less than or equal to persistence diagram cardinality')
+
+        self._betti = value
 
 
 class UnionFind:
@@ -194,6 +219,11 @@ class PersistenceDiagramCalculator:
             destruction = unpaired_value
 
             pd.append(creation, destruction, root)
+
+            if pd.betti is not None:
+                pd.betti = pd.betti + 1
+            else:
+                pd.betti = 1
 
         return pd
 
