@@ -65,13 +65,11 @@ def main(args, logger):
                     ]
                 )
 
-                # FIXME: replace...
-                clf = GridSearchCV(rf_clf, grid_params, cv=5, scoring='accuracy', n_jobs=4)
-
                 grid_params = {
                     'fs__num_iterations': np.arange(0, args.num_iterations + 1),
                     'clf__n_estimators': [10, 20, 50, 100, 150, 200]
                 }
+                # FIXME: replace...
 
                 clf = GridSearchCV(pipeline, grid_params, cv=StratifiedKFold(n_splits=10, shuffle=True), iid=False, scoring='accuracy', n_jobs=16)
 
