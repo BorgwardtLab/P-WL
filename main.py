@@ -18,11 +18,7 @@ from sklearn.model_selection import GridSearchCV
 
 from tqdm import tqdm
 
-from features import PersistenceFeaturesGenerator
-from features import WeightAssigner
-
-from weisfeiler_lehman import WL
-
+from features import PersistentWeisfeilerLehman
 
 def read_labels(filename):
     labels = []
@@ -41,36 +37,36 @@ def main(args, logger):
 
     assert len(graphs) == len(labels)
 
-    wl = WL()
-    wa = WeightAssigner(metric='minkowski', p=2.0)
-    pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
-                                       use_total_persistence=False,
-                                       use_label_persistence=True,
-                                       use_cycle_persistence=True,
-                                       p=2.0)
+    #wl = WeisfeilerLehman()
+    #wa = WeightAssigner(metric='minkowski', p=2.0)
+    #pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
+    #                                   use_total_persistence=False,
+    #                                   use_label_persistence=True,
+    #                                   use_cycle_persistence=True,
+    #                                   p=2.0)
 
-    X = np.zeros((len(graphs), args.num_iterations + 1))
     y = np.array(labels)
+    X = PersistentWeisfeilerLehman(num_iterations=args.num_iterations).fit_transform(graphs, y) #np.zeros((len(graphs), args.num_iterations + 1))
 
-    label_dicts = wl.fit_transform(graphs, args.num_iterations)
+    #label_dicts = wl.fit_transform(graphs, args.num_iterations)
 
-    X_per_iteration = []
-    for iteration in tqdm(sorted(label_dicts.keys())):
+    #X_per_iteration = []
+    #for iteration in tqdm(sorted(label_dicts.keys())):
 
-        weighted_graphs = [graph.copy() for graph in graphs]
+    #    weighted_graphs = [graph.copy() for graph in graphs]
 
-        for graph_index in sorted(label_dicts[iteration].keys()):
-            labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+    #    for graph_index in sorted(label_dicts[iteration].keys()):
+    #        labels_raw, labels_compressed = label_dicts[iteration][graph_index]
 
-            weighted_graphs[graph_index].vs['label'] = labels_raw
-            weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+    #        weighted_graphs[graph_index].vs['label'] = labels_raw
+    #        weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
 
-            # TODO: rewrite weight assigner class to support lists
-            weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
+    #        # TODO: rewrite weight assigner class to support lists
+    #        weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
 
-        X_per_iteration.append(pfg.fit_transform(weighted_graphs))
+    #    X_per_iteration.append(pfg.fit_transform(weighted_graphs))
 
-    X = np.concatenate(X_per_iteration, axis=1)
+    #X = np.concatenate(X_per_iteration, axis=1)
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)

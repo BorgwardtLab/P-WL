@@ -9,9 +9,12 @@ import collections
 import igraph as ig
 import numpy as np
 
-
 from topology import PersistenceDiagram
 from topology import PersistenceDiagramCalculator
+
+from weisfeiler_lehman import WeisfeilerLehman
+
+from sklearn.base import TransformerMixin
 
 
 class WeightAssigner:
@@ -255,3 +258,38 @@ class PersistenceFeaturesGenerator:
                                           x_cycle_persistence))
 
         return X
+
+
+class PersistentWeisfeilerLehman(TransformerMixin):
+    def __init__(self, **kwargs):
+        self._num_iterations = kwargs['num_iterations']
+
+    def fit_transform(self, X, y=None, **kwargs):
+        wl = WeisfeilerLehman()
+        wa = WeightAssigner(metric='minkowski', p=2.0)
+        pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
+                                           use_total_persistence=False,
+                                           use_label_persistence=True,
+                                           use_cycle_persistence=True,
+                                           p=2.0)
+
+        # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
+        # number of iterations.
+        label_dicts = wl.fit_transform(X, self._num_iterations)
+
+        X_per_iteration = []
+        for iteration in sorted(label_dicts.keys()):
+
+            weighted_graphs = [graph.copy() for graph in X]
+
+            for graph_index in sorted(label_dicts[iteration].keys()):
+                labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+
+                weighted_graphs[graph_index].vs['label'] = labels_raw
+                weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+
+                weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
+
+            X_per_iteration.append(pfg.fit_transform(weighted_graphs))
+
+        return np.concatenate(X_per_iteration, axis=1)
