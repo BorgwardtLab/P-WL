@@ -15,9 +15,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
 
 from tqdm import tqdm
 
+from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
 
 def read_labels(filename):
@@ -54,11 +56,27 @@ def main(args, logger):
         # means of this list will be used later on.
         accuracy_scores = []
 
+
         for train_index, test_index in cv.split(X, y):
             rf_clf = RandomForestClassifier(n_estimators=50)
 
             if args.grid_search:
+                pipeline = Pipeline(
+                    [
+                        ('fs', FeatureSelector(num_columns_per_iteration)),
+                        ('clf', rf_clf)
+                    ]
+                )
+
+                # FIXME: replace...
                 clf = GridSearchCV(rf_clf, grid_params, cv=5, scoring='accuracy', n_jobs=4)
+
+                grid_params = {
+                    'fs__num_iterations': np.arange(0, args.num_iterations + 1),
+                }
+
+                clf = GridSearchCV(pipeline, grid_params, cv=3, iid=False, scoring='accuracy', n_jobs=4)
+
             else:
                 clf = rf_clf
 

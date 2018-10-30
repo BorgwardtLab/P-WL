@@ -297,3 +297,29 @@ class PersistentWeisfeilerLehman:
             assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
 
         return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
+
+
+class FeatureSelector(TransformerMixin):
+    def __init__(self, num_columns_per_iteration):
+        self._num_columns_per_iteration = num_columns_per_iteration
+
+    def set_params(self, **params):
+        for key, value in params.items():
+            setattr(self, key, value)
+
+    def fit(self, X, y=None, **params):
+        return self
+
+    def transform(self, X):
+        return self.fit_transform(X)
+
+    def fit_transform(self, X, y=None, **params):
+
+        # Determine the number of columns to select for the desired
+        # number of iterations.
+
+        last_column = 0
+        for iteration in range(0, self.num_iterations + 1):
+            last_column += self._num_columns_per_iteration[iteration]
+
+        return X[:, :last_column]
