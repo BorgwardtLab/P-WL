@@ -28,6 +28,7 @@ def read_labels(filename):
 
     return labels
 
+
 def main(args, logger):
 
     graphs = [ig.read(filename) for filename in args.FILES]
@@ -38,7 +39,7 @@ def main(args, logger):
     assert len(graphs) == len(labels)
 
     y = np.array(labels)
-    X = PersistentWeisfeilerLehman(num_iterations=args.num_iterations).fit_transform(graphs, y)
+    X = PersistentWeisfeilerLehman().transform(graphs, args.num_iterations)
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
@@ -54,7 +55,7 @@ def main(args, logger):
 
         for train_index, test_index in cv.split(X, y):
             rf_clf = RandomForestClassifier(n_estimators=50)
-            
+
             if args.grid_search:
                 clf = GridSearchCV(rf_clf, grid_params, cv=5, scoring='accuracy', n_jobs=4)
             else:

@@ -260,11 +260,8 @@ class PersistenceFeaturesGenerator:
         return X
 
 
-class PersistentWeisfeilerLehman(TransformerMixin):
-    def __init__(self, **kwargs):
-        self._num_iterations = kwargs['num_iterations']
-
-    def fit_transform(self, X, y=None, **kwargs):
+class PersistentWeisfeilerLehman:
+    def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
         wa = WeightAssigner(metric='minkowski', p=2.0)
         pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
@@ -275,12 +272,12 @@ class PersistentWeisfeilerLehman(TransformerMixin):
 
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.
-        label_dicts = wl.fit_transform(X, self._num_iterations)
+        label_dicts = wl.fit_transform(graphs, num_iterations)
 
         X_per_iteration = []
         for iteration in sorted(label_dicts.keys()):
 
-            weighted_graphs = [graph.copy() for graph in X]
+            weighted_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
                 labels_raw, labels_compressed = label_dicts[iteration][graph_index]
