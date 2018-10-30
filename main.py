@@ -48,8 +48,6 @@ def main(args, logger):
     cv = StratifiedKFold(n_splits=10, shuffle=True)
     mean_accuracies = []
 
-    grid_params = { 'n_estimators': [10, 20, 50, 100, 200], 'criterion': ['gini', 'entropy'], 'max_depth': [None, 5, 10, 25] }
-
     for i in range(10):
 
         # Contains accuracy scores for each cross validation step; the
@@ -72,7 +70,7 @@ def main(args, logger):
 
                 grid_params = {
                     'fs__num_iterations': np.arange(0, args.num_iterations + 1),
-                    'clf__n_estimators': [16, 32, 64]
+                    'clf__n_estimators': [10, 20, 50, 100, 150, 200]
                 }
 
                 clf = GridSearchCV(pipeline, grid_params, cv=StratifiedKFold(n_splits=10, shuffle=True), iid=False, scoring='accuracy', n_jobs=16)
@@ -88,22 +86,24 @@ def main(args, logger):
 
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
-        print('  - Mean 10-fold accuracy: {:2.2f}'.format(np.mean(accuracy_scores)))
+            logger.info(clf)
+        logger.info('  - Mean 10-fold accuracy: {:2.2f}'.format(np.mean(accuracy_scores)))
         mean_accuracies.append(np.mean(accuracy_scores))
 
-    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
-    print(clf)
+    logger.info('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
+    parser.add_argument('-d', '--dataset', help='Name of data set')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
     parser.add_argument('-g', '--grid-search', type=bool, default=False, help='Whether to do hyperparameter grid search')
 
-    logging.basicConfig(level=logging.DEBUG)
+    args = parser.parse_args()
+    
+    logging.basicConfig(level=logging.DEBUG, filename='{}_{}.log'.format(args.dataset, args.num_iterations))
     logger = logging.getLogger('P-WL')
 
-    args = parser.parse_args()
     main(args, logger)
