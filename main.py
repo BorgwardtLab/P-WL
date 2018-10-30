@@ -97,11 +97,12 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
-    parser.add_argument('-g', '--grid-search', type=bool, default=False, help='Whether to do hyperparameter grid search')
+    parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
 
     args = parser.parse_args()
-    
+
     logging.basicConfig(level=logging.DEBUG, filename='{}_{}.log'.format(args.dataset, args.num_iterations))
     logger = logging.getLogger('P-WL')
+    logger.addHandler(logging.StreamHandler())
 
     main(args, logger)
