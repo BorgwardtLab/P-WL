@@ -6,12 +6,12 @@ from sklearn.base import TransformerMixin
 
 import igraph as ig
 import numpy as np
-            
-class WL(TransformerMixin):
+
+class WeisfeilerLehman(TransformerMixin):
     """
-    Class that implements the Weisefeiler-Lehman transform 
+    Class that implements the Weisfeiler-Lehman transform
     """
-    
+
     def __init__(self):
         self._relabel_steps = defaultdict(dict)
         self._label_dict = {}
@@ -33,7 +33,7 @@ class WL(TransformerMixin):
         for i, g in enumerate(X):
             x = g.copy()
             labels = x.vs['label']
-            
+
             new_labels = []
             for label in labels:
                 if label in self._preprocess_relabel_dict.keys():
@@ -46,7 +46,7 @@ class WL(TransformerMixin):
             preprocessed_graphs.append(x)
         self._reset_label_generation()
         return preprocessed_graphs
-    
+
     def fit_transform(self, X: List[ig.Graph], num_iterations: int=3):
         X = self._relabel_graphs(X)
         for it in np.arange(1, num_iterations+1, 1):
@@ -55,13 +55,13 @@ class WL(TransformerMixin):
             for i, g in enumerate(X):
                 # Get labels of current interation
                 current_labels = g.vs['label']
-               
+
                 # Get for each vertex the labels of its neighbors
                 neighbor_labels = self._get_neighbor_labels(g, sort=True)
-                
+
                 # Prepend the vertex label to the list of labels of its neighbors
                 merged_labels = [[b]+a for a,b in zip(neighbor_labels, current_labels)]
-                
+
                 # Generate a label dictionary based on the merged labels
                 self._append_label_dict(merged_labels)
 
@@ -69,7 +69,7 @@ class WL(TransformerMixin):
                 new_labels = self._relabel_graph(g, merged_labels)
                 self._relabel_steps[i][it] = { idx: {old_label: new_labels[idx]} for idx, old_label in enumerate(current_labels) }
                 g.vs['label'] = new_labels
-            
+
                 self._results[it][i] = (merged_labels, new_labels)
             self._label_dicts[it] = copy.deepcopy(self._label_dict)
         return self._results
@@ -82,7 +82,7 @@ class WL(TransformerMixin):
 
     def _append_label_dict(self, merged_labels: List[list]):
         for merged_label in merged_labels:
-            dict_key = '-'.join(map(str,merged_label)) 
+            dict_key = '-'.join(map(str,merged_label))
             if dict_key not in self._label_dict.keys():
                 self._label_dict[ dict_key ] = self._get_next_label()
 
