@@ -56,7 +56,6 @@ def main(args, logger):
         # means of this list will be used later on.
         accuracy_scores = []
 
-
         for train_index, test_index in cv.split(X, y):
             rf_clf = RandomForestClassifier(n_estimators=50)
 
@@ -73,9 +72,10 @@ def main(args, logger):
 
                 grid_params = {
                     'fs__num_iterations': np.arange(0, args.num_iterations + 1),
+                    'clf__n_estimators': [16, 32, 64]
                 }
 
-                clf = GridSearchCV(pipeline, grid_params, cv=3, iid=False, scoring='accuracy', n_jobs=4)
+                clf = GridSearchCV(pipeline, grid_params, cv=StratifiedKFold(n_splits=10, shuffle=True), iid=False, scoring='accuracy', n_jobs=16)
 
             else:
                 clf = rf_clf
