@@ -275,6 +275,8 @@ class PersistentWeisfeilerLehman:
         label_dicts = wl.fit_transform(graphs, num_iterations)
 
         X_per_iteration = []
+        num_columns_per_iteration = {}
+
         for iteration in sorted(label_dicts.keys()):
 
             weighted_graphs = [graph.copy() for graph in graphs]
@@ -289,4 +291,9 @@ class PersistentWeisfeilerLehman:
 
             X_per_iteration.append(pfg.fit_transform(weighted_graphs))
 
-        return np.concatenate(X_per_iteration, axis=1)
+            if iteration not in num_columns_per_iteration:
+                num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
+
+            assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
+
+        return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration

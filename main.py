@@ -39,7 +39,8 @@ def main(args, logger):
     assert len(graphs) == len(labels)
 
     y = np.array(labels)
-    X = PersistentWeisfeilerLehman().transform(graphs, args.num_iterations)
+    X, num_columns_per_iteration = PersistentWeisfeilerLehman().transform(graphs,
+                                                                          args.num_iterations)
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
