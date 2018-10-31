@@ -103,6 +103,16 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG, filename='{}_{}.log'.format(args.dataset, args.num_iterations))
     logger = logging.getLogger('P-WL')
-    logger.addHandler(logging.StreamHandler())
+
+    # Create a second stream handler for logging to `stderr`, but set
+    # its log level to be a little bit smaller such that we only have
+    # informative messages
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+
+    # Use the default format; since we do not adjust the logger before,
+    # this is all right.
+    stream_handler.setFormatter(logging.Formatter(logging.BASIC_FORMAT))
+    logger.addHandler(stream_handler)
 
     main(args, logger)
