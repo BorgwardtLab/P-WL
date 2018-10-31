@@ -70,7 +70,7 @@ def main(args, logger):
 
                 grid_params = {
                     'fs__num_iterations': np.arange(0, args.num_iterations + 1),
-                    'clf__n_estimators': [10, 20, 50, 100, 150, 200]
+                    'clf__n_estimators': [10, 20, 50, 100, 150, 200],
                 }
 
                 clf = GridSearchCV(
@@ -80,7 +80,6 @@ def main(args, logger):
                         iid=False,
                         scoring='accuracy',
                         n_jobs=4)
-
             else:
                 clf = rf_clf
 
