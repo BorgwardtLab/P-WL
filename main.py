@@ -65,7 +65,7 @@ def main(args, logger):
                     [
                         ('fs', FeatureSelector(num_columns_per_iteration)),
                         ('clf', rf_clf)
-                    ]
+                    ],
                 )
 
                 grid_params = {
@@ -92,7 +92,11 @@ def main(args, logger):
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
             logger.debug('Best classifier for this fold: {}'.format(clf))
-            logger.debug('Best parameters for this fold: {}'.format(clf.best_params_))
+
+            if args.grid_search:
+                logger.debug('Best parameters for this fold: {}'.format(clf.best_params_))
+            else:
+                logger.debug('Best parameters for this fold: {}'.format(clf.get_params()))
 
         mean_accuracies.append(np.mean(accuracy_scores))
         logger.info('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
