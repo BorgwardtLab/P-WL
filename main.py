@@ -22,6 +22,7 @@ from tqdm import tqdm
 from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
 
+
 def read_labels(filename):
     labels = []
     with open(filename) as f:
@@ -43,6 +44,8 @@ def main(args, logger):
     y = np.array(labels)
     X, num_columns_per_iteration = PersistentWeisfeilerLehman().transform(graphs,
                                                                           args.num_iterations)
+
+    logger.debug('Finished persistent Weisfeiler-Lehman transformation')
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
@@ -69,9 +72,14 @@ def main(args, logger):
                     'fs__num_iterations': np.arange(0, args.num_iterations + 1),
                     'clf__n_estimators': [10, 20, 50, 100, 150, 200]
                 }
-                # FIXME: replace...
 
-                clf = GridSearchCV(pipeline, grid_params, cv=StratifiedKFold(n_splits=10, shuffle=True), iid=False, scoring='accuracy', n_jobs=16)
+                clf = GridSearchCV(
+                        pipeline,
+                        grid_params,
+                        cv=StratifiedKFold(n_splits=10, shuffle=True),
+                        iid=False,
+                        scoring='accuracy',
+                        n_jobs=4)
 
             else:
                 clf = rf_clf
@@ -84,11 +92,13 @@ def main(args, logger):
 
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
-            logger.info(clf)
-        logger.info('  - Mean 10-fold accuracy: {:2.2f}'.format(np.mean(accuracy_scores)))
+            logger.debug('Best classifier for this fold: {}'.format(clf))
+
         mean_accuracies.append(np.mean(accuracy_scores))
+        logger.info('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
 
     logger.info('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
