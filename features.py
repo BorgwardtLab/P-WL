@@ -261,14 +261,26 @@ class PersistenceFeaturesGenerator:
 
 
 class PersistentWeisfeilerLehman:
+
+    def __init__(self,
+                 use_infinity_norm=False,
+                 use_total_persistence=False,
+                 use_label_persistence=True,
+                 use_cycle_persistence=False):
+        self._use_infinity_norm = use_infinity_norm
+        self._use_total_persistence = use_total_persistence
+        self._use_label_persistence = use_label_persistence
+        self._use_cycle_persistence = use_cycle_persistence
+
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
         wa = WeightAssigner(metric='minkowski', p=2.0)
-        pfg = PersistenceFeaturesGenerator(use_infinity_norm=False,
-                                           use_total_persistence=False,
-                                           use_label_persistence=True,
-                                           use_cycle_persistence=True,
-                                           p=2.0)
+        pfg = PersistenceFeaturesGenerator(
+                use_infinity_norm=self._use_infinity_norm,
+                use_total_persistence=self._use_total_persistence,
+                use_label_persistence=self._use_label_persistence,
+                use_cycle_persistence=self._use_cycle_persistence,
+                p=2.0)
 
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.

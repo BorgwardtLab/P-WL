@@ -41,9 +41,15 @@ def main(args, logger):
 
     assert len(graphs) == len(labels)
 
+    pwl = PersistentWeisfeilerLehman(
+            use_cycle_persistence=args.use_cycle_persistence
+    )
+
+    if args.use_cycle_persistence:
+        logger.info('Using cycle persistence')
+
     y = np.array(labels)
-    X, num_columns_per_iteration = PersistentWeisfeilerLehman().transform(graphs,
-                                                                          args.num_iterations)
+    X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
     logger.debug('Finished persistent Weisfeiler-Lehman transformation')
 
@@ -112,6 +118,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
     parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
+    parser.add_argument('-c', '--use-cycle-persistence', action='store_true', default=False, help='Indicates whether cycle persistence should be calculated or not')
 
     args = parser.parse_args()
 
