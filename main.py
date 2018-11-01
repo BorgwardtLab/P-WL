@@ -44,7 +44,7 @@ def main(args, logger):
         if 'label' not in graph.vs.attributes():
             graph.vs['label'] = [0] * len(graph.vs)
 
-    logger.debug('Read {} graphs and {} labels'.format(len(graphs), len(labels)))
+    logger.info('Read {} graphs and {} labels'.format(len(graphs), len(labels)))
 
     assert len(graphs) == len(labels)
 
@@ -58,7 +58,7 @@ def main(args, logger):
     y = np.array(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
-    logger.debug('Finished persistent Weisfeiler-Lehman transformation')
+    logger.info('Finished persistent Weisfeiler-Lehman transformation')
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
