@@ -41,6 +41,13 @@ if __name__ == '__main__':
     graphs = [ig.read(filename) for filename in args.FILES]
     labels = read_labels(args.labels)
 
+    # Set the label to be uniform over all graphs in case no labels are
+    # available. This essentially changes our iteration to degree-based
+    # checks.
+    for graph in graphs:
+        if 'label' not in graph.vs.attributes():
+            graph.vs['label'] = [0] * len(graph.vs)
+ 
     assert len(graphs) == len(labels)
 
     y = np.array(labels)
