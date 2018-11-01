@@ -1,0 +1,1841 @@
+graph [
+  directed 0
+  node [
+    id 13141
+  ]
+  node [
+    id 13142
+  ]
+  node [
+    id 13143
+  ]
+  node [
+    id 13144
+  ]
+  node [
+    id 13145
+  ]
+  node [
+    id 13146
+  ]
+  node [
+    id 13147
+  ]
+  node [
+    id 13148
+  ]
+  node [
+    id 13149
+  ]
+  node [
+    id 13150
+  ]
+  node [
+    id 13151
+  ]
+  node [
+    id 13152
+  ]
+  node [
+    id 13153
+  ]
+  node [
+    id 13154
+  ]
+  node [
+    id 13155
+  ]
+  node [
+    id 13156
+  ]
+  node [
+    id 13157
+  ]
+  node [
+    id 13158
+  ]
+  node [
+    id 13159
+  ]
+  node [
+    id 13160
+  ]
+  node [
+    id 13161
+  ]
+  node [
+    id 13162
+  ]
+  node [
+    id 13163
+  ]
+  node [
+    id 13164
+  ]
+  node [
+    id 13165
+  ]
+  node [
+    id 13166
+  ]
+  node [
+    id 13167
+  ]
+
+  edge [
+    source 13142
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13143
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13143
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13144
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13144
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13144
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13145
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13145
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13145
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13145
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13146
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13146
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13146
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13146
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13146
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13147
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13148
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13149
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13150
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13151
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13152
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13153
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13154
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13155
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13156
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13157
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13158
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13159
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13160
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13161
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13162
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13163
+    target 13162
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13162
+    weight 26
+  ]
+  edge [
+    source 13164
+    target 13163
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13162
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13163
+    weight 26
+  ]
+  edge [
+    source 13165
+    target 13164
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13162
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13163
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13164
+    weight 26
+  ]
+  edge [
+    source 13166
+    target 13165
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13141
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13142
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13143
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13144
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13145
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13146
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13147
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13148
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13149
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13150
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13151
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13152
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13153
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13154
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13155
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13156
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13157
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13158
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13159
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13160
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13161
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13162
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13163
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13164
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13165
+    weight 26
+  ]
+  edge [
+    source 13167
+    target 13166
+    weight 26
+  ]
+
+]
