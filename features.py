@@ -248,7 +248,7 @@ class PersistenceFeaturesGenerator:
                     total_cycle_persistence += edge['weight']**self._p
 
                 if num_cycles:
-                    x_cycle_persistence = [(total_cycle_persistence + 1) / num_cycles]
+                    x_cycle_persistence = [total_cycle_persistence]
                 else:
                     x_cycle_persistence = [0.0]
 
