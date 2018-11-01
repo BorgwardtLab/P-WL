@@ -59,6 +59,7 @@ def main(args, logger):
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
+    logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
@@ -71,7 +72,10 @@ def main(args, logger):
         accuracy_scores = []
 
         for train_index, test_index in cv.split(X, y):
-            rf_clf = RandomForestClassifier(n_estimators=50)
+            rf_clf = RandomForestClassifier(
+                n_estimators=50,
+                class_weight='balanced'
+            )
 
             if args.grid_search:
                 pipeline = Pipeline(
