@@ -229,7 +229,7 @@ class PersistenceFeaturesGenerator:
 
                 for x, y, c in persistence_diagram:
                     label = graph.vs[c]['compressed_label']
-                    persistence = abs(x - y)**self._p
+                    persistence = 0.01 + abs(x - y)**self._p
                     x_label_persistence[label] += persistence
 
             if self._use_cycle_persistence:
