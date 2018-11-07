@@ -54,21 +54,32 @@ if __name__ == '__main__':
     K = gk.CalculateWLKernel(graphs, args.num_iterations)
     n, _ = K.shape
 
-    cv = StratifiedKFold(n_splits=10, random_state=42, shuffle=True)
-    accuracy_scores = []
+    np.random.seed(42)
+    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    mean_accuracies = []
 
-    for train_index, test_index in cv.split(np.arange(n), y):
-        clf = SVC(kernel='precomputed', C=1)
+    for i in range(10):
 
-        y_train = y[train_index]
-        y_test = y[test_index]
+        # Contains accuracy scores for each cross validation step; the
+        # means of this list will be used later on.
+        accuracy_scores = []
 
-        K_train = K[train_index][:, train_index]
-        K_test = K[test_index][:, train_index]
+        for train_index, test_index in cv.split(np.arange(n), y):
+            # TODO: offer grid search capabilities here to be really
+            # fair and all...
+            clf = SVC(kernel='precomputed', C=1)
 
-        clf.fit(K_train, y_train)
-        y_pred = clf.predict(K_test)
+            y_train, y_test = y[train_index], y[test_index]
 
-        accuracy_scores.append(accuracy_score(y_test, y_pred))
+            K_train = K[train_index][:, train_index]
+            K_test = K[test_index][:, train_index]
 
-    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(accuracy_scores) * 100, np.std(accuracy_scores) * 100))
+            clf.fit(K_train, y_train)
+            y_pred = clf.predict(K_test)
+
+            accuracy_scores.append(accuracy_score(y_test, y_pred))
+
+        mean_accuracies.append(np.mean(accuracy_scores))
+        print('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
+
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
