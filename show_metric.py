@@ -27,15 +27,19 @@ if __name__ == '__main__':
     label_dicts = wl.fit_transform([graph], args.num_iterations)
     graph_index = 0
 
+    matrices = []
+
     for iteration in sorted(label_dicts.keys()):
         weighted_graph = graph.copy()
 
         labels_raw, labels_compressed = label_dicts[iteration][graph_index]
 
-        weighted_graphs[graph_index].vs['label'] = labels_raw
-        weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+        weighted_graph.vs['label'] = labels_raw
+        weighted_graph.vs['compressed_label'] = labels_compressed
 
-        weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
+        weighted_graph = wa.fit_transform(weighted_graph)
 
+        matrices.append(weighted_graph.get_adjacency(attribute='weight'))
 
+    print(matrices)
 
