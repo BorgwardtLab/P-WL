@@ -27,6 +27,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     graph = ig.read(args.FILE)
 
+    # Set a standard uniform label in case no labels exist. This makes
+    # the iteration into a degree propagation process.
+    if 'label' not in graph.vs.attributes():
+        graph.vs['label'] = [0] * len(graph.vs)
+
     wl = WeisfeilerLehman()
     wa = WeightAssigner(metric='minkowski', p=2.0)  # TODO: make configurable
 
