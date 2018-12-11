@@ -11,6 +11,7 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 
 import argparse
+import sys
 
 from features import WeisfeilerLehman
 from features import WeightAssigner
@@ -45,14 +46,19 @@ if __name__ == '__main__':
 
         weighted_graph = wa.fit_transform(weighted_graph)
 
-        A = weighted_graph.get_adjacency(attribute='weight')
+        A = weighted_graph.get_adjacency(default=np.nan, attribute='weight')
         matrices.append(np.array(A.data))
 
+    vmin = 0
+    vmax = sys.float_info.min
+    for matrix in matrices:
+        vmax = max(vmax, np.nanmax(matrix))
+
     matrix_iterator = cycle(matrices)
-    im = plt.imshow(next(matrix_iterator), animated=True)
+    im = plt.imshow(next(matrix_iterator), animated=True, vmin=vmin, vmax=vmax)
 
     def update_matrix(*args):
-        im.set_array(next(matrix_iterator))
+        im.set_data(next(matrix_iterator))
         return im,
 
     ani = animation.FuncAnimation(fig, update_matrix, interval=1000, blit=True)
