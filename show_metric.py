@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
 
     args = parser.parse_args()
-    graphs = ig.read(args.FILE)
+    graph = ig.read(args.FILE)
 
     wl = WeisfeilerLehman()
     wa = WeightAssigner(metric='minkowski', p=2.0)  # TODO: make configurable
