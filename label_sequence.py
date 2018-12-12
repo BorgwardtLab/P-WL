@@ -10,17 +10,25 @@ import numpy as np
 import argparse
 import os
 
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
 
 from features import PersistenceFeaturesGenerator
 from features import WeisfeilerLehman
 
+from utilities import read_labels
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
+    parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
 
     args = parser.parse_args()
     graphs = [ig.read(filename) for filename in args.FILES]
+    labels = read_labels(args.labels)
 
     wl = WeisfeilerLehman()
     label_dicts = wl.fit_transform(graphs, args.num_iterations)
@@ -69,3 +77,34 @@ if __name__ == '__main__':
 
     pfg = PersistenceFeaturesGenerator(use_label_persistence=True)
     X = pfg.fit_transform(weighted_graphs)
+    y = np.array(labels)
+
+    np.random.seed(42)
+    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    mean_accuracies = []
+
+    for i in range(10):
+
+        # Contains accuracy scores for each cross validation step; the
+        # means of this list will be used later on.
+        accuracy_scores = []
+
+        for train_index, test_index in cv.split(X, y):
+            clf = RandomForestClassifier(
+                n_estimators=50,
+                class_weight='balanced'
+            )
+
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+
+            clf.fit(X_train, y_train)
+            y_pred = clf.predict(X_test)
+
+            accuracy_scores.append(accuracy_score(y_test, y_pred))
+
+        mean_accuracies.append(np.mean(accuracy_scores))
+
+        print('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
+
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(np.mean(mean_accuracies) * 100, np.std(mean_accuracies) * 100))
