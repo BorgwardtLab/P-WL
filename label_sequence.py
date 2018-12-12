@@ -41,6 +41,8 @@ if __name__ == '__main__':
             # of the compressed labels.
             label_sequences[graph_index][:, iteration] = labels_compressed
 
+    weighted_graphs = []
+
     # Transform the label sequence into a matrix of distances by
     # calculating the Hamming distance. Since we are technically
     # in a discrete space, this is the *only* suitable distance.
@@ -52,14 +54,11 @@ if __name__ == '__main__':
         # number of labelling iterations.
         distances = distances / (args.num_iterations + 1)
 
-        ################################################################
-        # Output
-        ################################################################
+        # Convert graph to an adjacency matrix. This requires two steps:
+        # first, a calculation of the adjacency structure based on lists
+        # of distance values that are nonzero, then an assignment of the
+        # weights.
+        weighted_graph = ig.Graph.Adjacency((distances > 0).tolist())
+        weighted_graph.es['weight'] = distances[distances.nonzero()]
 
-        filename = args.FILES[graph_index]
-
-        name = os.path.basename(filename)
-        name = os.path.splitext(name)[0] + '_label_sequence.txt'
-        name = os.path.join('/tmp', name)
-
-        np.savetxt(name, distances)
+        weighted_graphs.append(weighted_graph)
