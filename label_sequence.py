@@ -5,6 +5,7 @@
 # a result, a distance matrix will be stored.
 
 import igraph as ig
+import numpy as np
 
 import argparse
 
@@ -22,4 +23,15 @@ if __name__ == '__main__':
     wl = WeisfeilerLehman()
     label_dicts = wl.fit_transform(graphs, args.num_iterations)
 
-    print(label_dicts)
+    # Each entry in the list represents the label sequence of a single
+    # graph. The label sequence contains the vertices in its rows, and
+    # the individual iterations in its columns.
+    #
+    # Hence, (i, j) will contain the label of vertex i at iteration j.
+    label_sequences = [
+        np.zeros((len(graph.vs), args.num_iterations)) for graph in graphs
+    ]
+
+    for iteration in sorted(label_dicts.keys()):
+        for graph_index, graph in enumerate(graphs):
+            labels_raw, labels_compressed = label_dicts[iteration][graph_index]
