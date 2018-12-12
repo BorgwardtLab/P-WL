@@ -39,3 +39,14 @@ if __name__ == '__main__':
             # Store label sequence of the current iteration, i.e. *all*
             # of the compressed labels.
             label_sequences[graph_index][:, iteration] = labels_compressed
+
+    # Transform the label sequence into a matrix of distances by
+    # calculating the Hamming distance. Since we are technically
+    # in a discrete space, this is the *only* suitable distance.
+    for graph_index, _ in enumerate(graphs):
+        labels = label_sequences[graph_index]
+        distances = (labels[:, None, :] != labels).sum(2)
+
+        # Normalize distances to [0, 1] because they depend on the
+        # number of labelling iterations.
+        distances = distances / (args.num_iterations + 1)
