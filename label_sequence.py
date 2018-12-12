@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     graphs = [ig.read(filename) for filename in args.FILES]
-    labels = read_labels(args.labels)
+    y = np.array(read_labels(args.labels))
 
     wl = WeisfeilerLehman()
     label_dicts = wl.fit_transform(graphs, args.num_iterations)
@@ -77,7 +77,6 @@ if __name__ == '__main__':
 
     pfg = PersistenceFeaturesGenerator(use_label_persistence=True)
     X = pfg.fit_transform(weighted_graphs)
-    y = np.array(labels)
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
