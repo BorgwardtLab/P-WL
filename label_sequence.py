@@ -8,6 +8,7 @@ import igraph as ig
 import numpy as np
 
 import argparse
+import os
 
 
 from features import WeisfeilerLehman
@@ -50,3 +51,15 @@ if __name__ == '__main__':
         # Normalize distances to [0, 1] because they depend on the
         # number of labelling iterations.
         distances = distances / (args.num_iterations + 1)
+
+        ################################################################
+        # Output
+        ################################################################
+
+        filename = args.FILES[graph_index]
+
+        name = os.path.basename(filename)
+        name = os.path.splitext(name)[0] + '_label_sequence.txt'
+        name = os.path.join('/tmp', name)
+
+        np.savetxt(name, distances)
