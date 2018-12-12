@@ -29,9 +29,13 @@ if __name__ == '__main__':
     #
     # Hence, (i, j) will contain the label of vertex i at iteration j.
     label_sequences = [
-        np.zeros((len(graph.vs), args.num_iterations)) for graph in graphs
+        np.empty((len(graph.vs), args.num_iterations + 1)) for graph in graphs
     ]
 
     for iteration in sorted(label_dicts.keys()):
         for graph_index, graph in enumerate(graphs):
             labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+
+            # Store label sequence of the current iteration, i.e. *all*
+            # of the compressed labels.
+            label_sequences[graph_index][:, iteration] = labels_compressed
