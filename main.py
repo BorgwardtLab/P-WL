@@ -80,7 +80,7 @@ def main(args, logger):
         for train_index, test_index in cv.split(X, y):
             rf_clf = RandomForestClassifier(
                 n_estimators=50,
-                class_weight='balanced'
+                class_weight='balanced' if args.balanced else None
             )
 
             if args.grid_search:
@@ -140,6 +140,7 @@ def main(args, logger):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
+    parser.add_argument('-b', '--balanced', help='Make random forest classifier balanced')
     parser.add_argument('-d', '--dataset', help='Name of data set')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
