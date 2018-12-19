@@ -18,6 +18,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -60,7 +61,7 @@ def main(args, logger):
     if args.use_cycle_persistence:
         logger.info('Using cycle persistence')
 
-    y = np.array(labels)
+    y = LabelEncoder().fit_transform(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
