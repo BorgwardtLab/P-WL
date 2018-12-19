@@ -281,11 +281,13 @@ class PersistentWeisfeilerLehman:
                  use_infinity_norm=False,
                  use_total_persistence=False,
                  use_label_persistence=True,
-                 use_cycle_persistence=False):
+                 use_cycle_persistence=False,
+                 use_original_features=False):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
         self._use_cycle_persistence = use_cycle_persistence
+        self._use_original_features = use_original_features
 
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
@@ -295,6 +297,7 @@ class PersistentWeisfeilerLehman:
                 use_total_persistence=self._use_total_persistence,
                 use_label_persistence=self._use_label_persistence,
                 use_cycle_persistence=self._use_cycle_persistence,
+                use_original_features=self._use_original_features,
                 p=2.0)
 
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
