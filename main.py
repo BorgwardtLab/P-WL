@@ -55,7 +55,8 @@ def main(args, logger):
     assert len(graphs) == len(labels)
 
     pwl = PersistentWeisfeilerLehman(
-            use_cycle_persistence=args.use_cycle_persistence
+            use_cycle_persistence=args.use_cycle_persistence,
+            use_original_features=args.use_original_features
     )
 
     if args.use_cycle_persistence:
@@ -147,6 +148,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
     parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
     parser.add_argument('-c', '--use-cycle-persistence', action='store_true', default=False, help='Indicates whether cycle persistence should be calculated or not')
+    parser.add_argument('-o', '--use-original-features', action='store_true', default=False, help='Indicates that original features should be used as well')
 
     args = parser.parse_args()
 
