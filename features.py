@@ -204,7 +204,7 @@ class PersistenceFeaturesGenerator:
         num_columns = self._use_infinity_norm          \
             + self._use_total_persistence              \
             + self._use_label_persistence * num_labels \
-            + self._use_total_persistence * num_labels \
+            + self._use_original_features * num_labels \
             + self._use_cycle_persistence
 
         X = np.zeros((num_rows, num_columns))
