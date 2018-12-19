@@ -163,11 +163,13 @@ class PersistenceFeaturesGenerator:
                  use_total_persistence=True,
                  use_label_persistence=False,
                  use_cycle_persistence=False,
+                 use_original_features=False,
                  p=1.0):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
         self._use_cycle_persistence = use_cycle_persistence
+        self._use_original_features = use_original_features
         self._p = p
 
         if p <= 0.0:
@@ -202,6 +204,7 @@ class PersistenceFeaturesGenerator:
         num_columns = self._use_infinity_norm          \
             + self._use_total_persistence              \
             + self._use_label_persistence * num_labels \
+            + self._use_total_persistence * num_labels \
             + self._use_cycle_persistence
 
         X = np.zeros((num_rows, num_columns))
@@ -214,6 +217,7 @@ class PersistenceFeaturesGenerator:
             x_total_persistence = []
             x_label_persistence = []
             x_cycle_persistence = []
+            x_original_features = []
 
             pdc = PersistenceDiagramCalculator()
             persistence_diagram, edge_indices_cycles = pdc.fit_transform(graph)
@@ -231,6 +235,16 @@ class PersistenceFeaturesGenerator:
                     label = graph.vs[c]['compressed_label']
                     persistence = 0.01 + abs(x - y)**self._p
                     x_label_persistence[label] += persistence
+
+            # Add the original features of the Weisfeiler--Lehman
+            # iteration to the feature matrix. This can be easily
+            # done by just counting '1' for each point in the PD.
+            if self._use_original_features:
+                x_original_features = np.zeros(num_labels)
+
+                for _, _, c in persistence_diagram:
+                    label = graph.vs[c]['compressed_label']
+                    x_original_features[label] += 1
 
             if self._use_cycle_persistence:
                 n = len(persistence_diagram)
@@ -255,6 +269,7 @@ class PersistenceFeaturesGenerator:
             X[index, :] = np.concatenate((x_infinity_norm,
                                           x_total_persistence,
                                           x_label_persistence,
+                                          x_original_features,
                                           x_cycle_persistence))
 
         return X
