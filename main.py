@@ -11,11 +11,16 @@ import argparse
 import collections
 import logging
 
+
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 
 from tqdm import tqdm
 
@@ -102,6 +107,16 @@ def main(args, logger):
 
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
+
+            # TODO: need to discuss whether this is 'allowed' or smart
+            # to do; this assumes normality of the attributes.
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
+
+            scaler = MinMaxScaler()
+            X_train = scaler.fit_transform(X_train)
+            X_test = scaler.transform(X_test)
 
             clf.fit(X_train, y_train)
             y_pred = clf.predict(X_test)
