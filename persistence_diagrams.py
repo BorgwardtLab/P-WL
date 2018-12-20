@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import argparse
 import collections
 import logging
+import sys
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -67,15 +68,28 @@ def main(args, logger):
     fig, ax = plt.subplots(args.num_iterations + 1)
 
     for iteration in persistence_diagrams.keys():
-        M = []
+        M = collections.defaultdict(list)
 
-        for pd in persistence_diagrams[iteration]:
-            for _, y, _ in pd:
-                M.append(y)
+        for index, pd in enumerate(persistence_diagrams[iteration]):
+            label = y[index]
+            for _, d, _ in pd:
+                M[label].append(d)
 
-        ax[iteration].scatter(np.arange(len(M)), M)
+        d_min = sys.float_info.max
+        d_max = -d_min
+
+        for hist in M.values():
+            d_min = min(d_min, min(hist))
+            d_max = max(d_max, max(hist))
+
+        bins = np.linspace(d_min, d_max, 20)
+
+        for label, hist in M.items():
+            ax[iteration].hist(hist, alpha=0.50, bins=bins)
 
     plt.show()
+
+    raise 'heck'
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
