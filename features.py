@@ -159,12 +159,12 @@ class PersistenceFeaturesGenerator:
     '''
 
     def __init__(self,
-                 use_infinity_norm=False,
-                 use_total_persistence=True,
-                 use_label_persistence=False,
-                 use_cycle_persistence=False,
-                 use_original_features=False,
-                 p=1.0):
+                 use_infinity_norm,
+                 use_total_persistence,
+                 use_label_persistence,
+                 use_cycle_persistence,
+                 use_original_features,
+                 p):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
