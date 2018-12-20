@@ -23,6 +23,7 @@ from utilities import read_labels
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
+    parser.add_argument('-b', '--balanced', action='store_true', help='Make random forest classifier balanced')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
 
@@ -91,7 +92,7 @@ if __name__ == '__main__':
         for train_index, test_index in cv.split(X, y):
             clf = RandomForestClassifier(
                 n_estimators=50,
-                class_weight='balanced'
+                class_weight='balanced' if args.balanced else None
             )
 
             X_train, X_test = X[train_index], X[test_index]
