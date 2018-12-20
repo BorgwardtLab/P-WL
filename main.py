@@ -153,7 +153,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.DEBUG, filename='{}_{}.log'.format(args.dataset, args.num_iterations))
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename='{}_{:02d}.log'.format(args.dataset, args.num_iterations)
+    )
+
     logger = logging.getLogger('P-WL')
 
     # Create a second stream handler for logging to `stderr`, but set
