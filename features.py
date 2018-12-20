@@ -187,7 +187,7 @@ class PersistenceFeaturesGenerator:
         # Calculating label persistence requires us to know the number
         # of distinct labels in the set of graphs as it determines the
         # length of the created feature vector.
-        if self._use_label_persistence:
+        if self._use_label_persistence or self._use_original_features:
             labels = set()
 
             for graph in graphs:
