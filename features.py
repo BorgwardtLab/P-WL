@@ -164,6 +164,7 @@ class PersistenceFeaturesGenerator:
                  use_label_persistence,
                  use_cycle_persistence,
                  use_original_features,
+                 store_persistence_diagrams,
                  p):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
@@ -171,6 +172,7 @@ class PersistenceFeaturesGenerator:
         self._use_cycle_persistence = use_cycle_persistence
         self._use_original_features = use_original_features
         self._p = p
+        self._store_persistence_diagrams = store_persistence_diagrams
 
         if p <= 0.0:
             raise RuntimeError('Power parameter must be non-negative')
@@ -183,6 +185,9 @@ class PersistenceFeaturesGenerator:
         '''
 
         num_labels = 0
+
+        if self._store_persistence_diagrams:
+            self._persistence_diagrams = []
 
         # Calculating label persistence requires us to know the number
         # of distinct labels in the set of graphs as it determines the
@@ -236,6 +241,9 @@ class PersistenceFeaturesGenerator:
                     persistence = 0.01 + abs(x - y)**self._p
                     x_label_persistence[label] += persistence
 
+                if self._store_persistence_diagrams:
+                    self._persistence_diagrams.append(persistence_diagram)
+
             # Add the original features of the Weisfeiler--Lehman
             # iteration to the feature matrix. This can be easily
             # done by just counting '1' for each point in the PD.
@@ -282,12 +290,14 @@ class PersistentWeisfeilerLehman:
                  use_total_persistence=False,
                  use_label_persistence=False,
                  use_cycle_persistence=False,
-                 use_original_features=False):
+                 use_original_features=False,
+                 store_persistence_diagrams=False):
         self._use_infinity_norm = use_infinity_norm
         self._use_total_persistence = use_total_persistence
         self._use_label_persistence = use_label_persistence
         self._use_cycle_persistence = use_cycle_persistence
         self._use_original_features = use_original_features
+        self._store_persistence_diagrams = store_persistence_diagrams
 
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
@@ -298,6 +308,7 @@ class PersistentWeisfeilerLehman:
                 use_label_persistence=self._use_label_persistence,
                 use_cycle_persistence=self._use_cycle_persistence,
                 use_original_features=self._use_original_features,
+                store_persistence_diagrams=self._store_persistence_diagrams,
                 p=2.0)
 
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
@@ -306,6 +317,9 @@ class PersistentWeisfeilerLehman:
 
         X_per_iteration = []
         num_columns_per_iteration = {}
+
+        if self._store_persistence_diagrams:
+            self._persistence_diagrams = collections.defaultdict(list)
 
         for iteration in sorted(label_dicts.keys()):
 
@@ -320,6 +334,9 @@ class PersistentWeisfeilerLehman:
                 weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
 
             X_per_iteration.append(pfg.fit_transform(weighted_graphs))
+
+            if self._store_persistence_diagrams:
+                self._persistence_diagrams[iteration] = pfg._persistence_diagrams
 
             if iteration not in num_columns_per_iteration:
                 num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
