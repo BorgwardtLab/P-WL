@@ -7,6 +7,7 @@ import igraph as ig
 import numpy as np
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 import argparse
 import collections
@@ -82,10 +83,15 @@ def main(args, logger):
             d_min = min(d_min, min(hist))
             d_max = max(d_max, max(hist))
 
-        bins = np.linspace(d_min, d_max, 20)
+        bins = np.linspace(d_min, d_max, 10)
 
         for label, hist in M.items():
-            ax[iteration].hist(hist, alpha=0.50, bins=bins)
+            sns.distplot(hist,
+                bins=bins,
+                rug=True,
+                kde=True,
+                hist=False,
+                ax=ax[iteration])
 
     plt.show()
 
