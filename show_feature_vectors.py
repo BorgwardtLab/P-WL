@@ -46,7 +46,7 @@ def main(args, logger):
     pwl = PersistentWeisfeilerLehman(
             use_cycle_persistence=args.use_cycle_persistence,
             use_original_features=args.use_original_features,
-            use_label_persistence=True,
+            use_label_persistence=args.use_persistence_features,
     )
 
     if args.use_cycle_persistence:
@@ -58,7 +58,17 @@ def main(args, logger):
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
-    plt.matshow(X)
+    num_classes = len(np.bincount(y))
+
+    plt.close()
+
+    for index in range(num_classes):
+        plt.figure(index)
+
+        plt.matshow(np.log(X[y == index]+1))
+        plt.title(f'Class {index}')
+
+
     plt.show()
 
 
@@ -73,6 +83,7 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
     parser.add_argument('-c', '--use-cycle-persistence', action='store_true', default=False, help='Indicates whether cycle persistence should be calculated or not')
     parser.add_argument('-o', '--use-original-features', action='store_true', default=False, help='Indicates that original features should be used as well')
+    parser.add_argument('-p', '--use-persistence-features', action='store_true', help='Indicates that standard persistence-based features should be used')
 
     args = parser.parse_args()
 
