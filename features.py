@@ -280,7 +280,7 @@ class PersistentWeisfeilerLehman:
     def __init__(self,
                  use_infinity_norm=False,
                  use_total_persistence=False,
-                 use_label_persistence=True,
+                 use_label_persistence=False,
                  use_cycle_persistence=False,
                  use_original_features=False):
         self._use_infinity_norm = use_infinity_norm
