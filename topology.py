@@ -86,6 +86,13 @@ class PersistenceDiagram(collections.abc.Sequence):
 
         self._betti = value
 
+    def __repr__(self):
+        '''
+        :return: String-based representation of the diagram
+        '''
+
+        return '\n'.join([f'{x} {y} [{c}]' for x, y, c in self._pairs])
+
 
 class UnionFind:
     '''
