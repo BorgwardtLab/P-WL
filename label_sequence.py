@@ -76,7 +76,15 @@ if __name__ == '__main__':
 
         weighted_graphs.append(weighted_graph)
 
-    pfg = PersistenceFeaturesGenerator(use_label_persistence=True)
+    pfg = PersistenceFeaturesGenerator(
+        use_infinity_norm=False,
+        use_total_persistence=False,
+        use_cycle_persistence=False,
+        use_label_persistence=True,
+        use_original_features=False,
+        p=2.0
+    )
+
     X = pfg.fit_transform(weighted_graphs)
 
     np.random.seed(42)
