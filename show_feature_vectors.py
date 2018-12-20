@@ -63,11 +63,20 @@ def main(args, logger):
 
     num_classes = len(np.bincount(y))
 
-    fig, ax = plt.subplots(num_classes, sharex=True, sharey=True)
+    fig, ax = plt.subplots(
+        nrows=num_classes,
+        ncols=2,
+        sharex=True,
+        sharey=False,
+        squeeze=False
+    )
 
     for index in range(num_classes):
-        ax[index].matshow(X[y == index], aspect='auto')
-        ax[index].set_title(f'Class {index}')
+        ax[index][0].matshow(X[y == index], aspect='auto')
+        ax[index][0].set_title(f'Class {index} (features)')
+
+        ax[index][1].matshow(np.mean(X[y == index], axis=0).reshape(1, -1), aspect='auto')
+        ax[index][1].set_title(f'Class {index} (mean)')
 
     plt.show()
 
