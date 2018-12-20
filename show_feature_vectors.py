@@ -55,22 +55,21 @@ def main(args, logger):
     y = LabelEncoder().fit_transform(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
+    X = StandardScaler().fit_transform(X)
+    X = MinMaxScaler().fit_transform(X)
+
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
     num_classes = len(np.bincount(y))
 
-    plt.close()
+    fig, ax = plt.subplots(num_classes, sharex=True, sharey=True)
 
     for index in range(num_classes):
-        plt.figure(index)
-
-        plt.matshow(np.log(X[y == index]+1))
-        plt.title(f'Class {index}')
-
+        ax[index].matshow(X[y == index], aspect='auto')
+        ax[index].set_title(f'Class {index}')
 
     plt.show()
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
