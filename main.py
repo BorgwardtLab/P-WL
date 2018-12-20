@@ -28,14 +28,7 @@ from tqdm import tqdm
 from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
 
-
-def read_labels(filename):
-    labels = []
-    with open(filename) as f:
-        labels = f.readlines()
-        labels = [label.strip() for label in labels]
-
-    return labels
+from utilities import read_labels
 
 
 def main(args, logger):
