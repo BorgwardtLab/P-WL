@@ -56,7 +56,8 @@ def main(args, logger):
 
     pwl = PersistentWeisfeilerLehman(
             use_cycle_persistence=args.use_cycle_persistence,
-            use_original_features=args.use_original_features
+            use_original_features=args.use_original_features,
+            use_label_persistence=True,
     )
 
     if args.use_cycle_persistence:
