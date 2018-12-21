@@ -38,6 +38,8 @@ def to_probability_distribution(persistence_diagram, C):
 
     :param persistence_diagram: Persistence diagram
     :param C: Maximum number of labels of discrete distribution
+
+    :return: Discrete probability distribution
     '''
 
     P = np.zeros(C)
@@ -51,7 +53,24 @@ def to_probability_distribution(persistence_diagram, C):
         # TODO: make power configurable?
         P[c] += (y - x)**2
 
+    # Ensures that this distribution is valid, i.e. normalized to sum to
+    # one; else, we are implicitly comparing distributions whose size or
+    # weight varies.
+    P = P / np.sum(P)
     return P
+
+
+def kullback_leibler(p, q):
+    '''
+    Kullback--Leibler divergence between two discrete distributions.
+
+    :param p: First discrete probability distribution
+    :param q: Second discrete probability distribution
+
+    :return: Value of Kullback--Leibler divergence
+    '''
+
+    return np.sum(np.where(p != 0, p * np.log(q / p), 0))
 
 
 def main(args, logger):
