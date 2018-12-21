@@ -62,7 +62,8 @@ def to_probability_distribution(persistence_diagram, C):
 
 def kullback_leibler(p, q):
     '''
-    Kullback--Leibler divergence between two discrete distributions.
+    Calculates the Kullback--Leibler divergence between two discrete
+    probability distributions.
 
     :param p: First discrete probability distribution
     :param q: Second discrete probability distribution
@@ -71,6 +72,20 @@ def kullback_leibler(p, q):
     '''
 
     return np.sum(np.where(p != 0, p * np.log(q / p), 0))
+
+
+def jensen_shannon(p, q):
+    '''
+    Calculates the Jensen--Shannon divergence between two discrete
+    probability distributions.
+
+    :param p: First discrete probability distribution
+    :param q: Second discrete probability distribution
+
+    :return: Value of Jensen--Shannon divergence
+    '''
+
+    return 0.5 * (kullback_leibler(p, q) + kullback_leibler(q, p))
 
 
 def main(args, logger):
