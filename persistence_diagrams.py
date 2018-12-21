@@ -31,6 +31,29 @@ from features import PersistentWeisfeilerLehman
 from utilities import read_labels
 
 
+def to_probability_distribution(persistence_diagram, C):
+    '''
+    Converts a persistence diagram with labels to a (discrete)
+    probability distribution.
+
+    :param persistence_diagram: Persistence diagram
+    :param C: Maximum number of labels of discrete distribution
+    '''
+
+    P = np.zeros(C)
+
+    for x, y, c in persistence_diagram:
+
+        # Just to make sure that this mapping can work
+        assert c < C
+        assert c >= 0
+
+        # TODO: make power configurable?
+        P[c] += (y - x)**2
+
+    return P
+
+
 def main(args, logger):
 
     graphs = [ig.read(filename) for filename in args.FILES]
