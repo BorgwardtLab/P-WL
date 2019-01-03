@@ -74,7 +74,14 @@ def kullback_leibler(p, q):
     :return: Value of Kullback--Leibler divergence
     '''
 
-    return np.sum(np.where(p != 0, p * np.log(q / p), 0))
+    p += 1e-8
+    q += 1e-8
+
+    return np.sum(p * np.log(q / p))
+
+    # FIXME: why does this not work? Even if the two conditions are
+    # chained together...
+    #return np.sum(np.where(p != 0, p * np.log(q / p), 0))
 
 
 def jensen_shannon(p, q):
