@@ -123,7 +123,6 @@ def main(args, logger):
     if args.use_cycle_persistence:
         logger.info('Using cycle persistence')
 
-
     y = LabelEncoder().fit_transform(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
@@ -155,6 +154,29 @@ def main(args, logger):
                 kde=True,
                 hist=False,
                 ax=ax[iteration])
+
+    plt.show()
+
+    L = len(vertex_labels)
+    assert L > 0
+
+    original_labels = pwl._original_labels
+
+    # Will store *all* persistence diagrams in the form of a probability
+    # distribution.
+    M = np.zeros((len(graphs), (args.num_iterations + 1) * L))
+
+    for iteration in persistence_diagrams.keys():
+
+        for index, pd in enumerate(persistence_diagrams[iteration]):
+            P = to_probability_distribution(pd, original_labels[index], L)
+            print(P)
+            M[index, iteration * L : (iteration + 1) * L] = P
+
+    fig, ax = plt.subplots(len(set(y)))
+
+    for label in sorted(set(y)):
+        ax[label].matshow(M[y == label], aspect='auto')
 
     plt.show()
 
