@@ -298,6 +298,7 @@ class PersistentWeisfeilerLehman:
         self._use_cycle_persistence = use_cycle_persistence
         self._use_original_features = use_original_features
         self._store_persistence_diagrams = store_persistence_diagrams
+        self._original_labels = None
 
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
@@ -358,6 +359,12 @@ class PersistentWeisfeilerLehman:
                 num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
 
             assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
+
+        # Store original labels only if there is something to store.
+        # Notice that these labels are *standardized*, i.e. they are
+        # zero-indexed.
+        if original_labels:
+            self._original_labels = original_labels
 
         return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
 
