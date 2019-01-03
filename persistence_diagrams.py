@@ -106,15 +106,23 @@ def make_kernel_matrices(persistence_diagrams, l, L):
     :param persistence_diagrams: List of persistence diagrams
     :param l: Label lookup (maps graph indices to a set of vertex labels)
     :param L: Maximum number of labels
+
+    :return: Probability distribution matrix, KL matrix, JS matrix
     '''
+
+    # Number of graphs/objects/what-have-you...
+    n = len(persistence_diagrams)
 
     # Will store *all* persistence diagrams in the form of a probability
     # distribution.
-    M = np.zeros((len(persistence_diagrams), L))
+    M = np.zeros((n, L))
 
-    for index, pd in enumerate(persistence_diagrams[iteration]):
+    for index, pd in enumerate(persistence_diagrams):
         P = to_probability_distribution(pd, l[index], L)
         M[index, :] = P
+
+    D_KL = np.zeros((n, n))
+    D_JS = np.zeros((n, n))
 
     # TODO: rewrite this into a broadcasted version of the same loop
     # because it is probably a lot faster.
@@ -128,9 +136,7 @@ def make_kernel_matrices(persistence_diagrams, l, L):
             D_JS[i, j] = jensen_shannon(p, q)
             D_JS[j, i] = D_JS[i, j]
 
-            D += D_JS
-
-    return D_KL, D_JS
+    return M, D_KL, D_JS
 
 
 def main(args, logger):
@@ -218,23 +224,13 @@ def main(args, logger):
 
     for iteration in persistence_diagrams.keys():
 
-        for index, pd in enumerate(persistence_diagrams[iteration]):
-            P = to_probability_distribution(pd, original_labels[index], L)
-            M[index, iteration * L : (iteration + 1) * L] = P
+        M, D_KL, D_JS = make_kernel_matrices(
+            persistence_diagrams[iteration],
+            original_labels,  # notice that they do *not* change
+            L
+        )
 
-        # TODO: rewrite this into a broadcasted version of the same loop
-        # because it is probably a lot faster.
-        for i in range(len(persistence_diagrams[iteration])):
-            p = M[i, iteration * L : (iteration + 1) * L]
-            for j in range(i, len(persistence_diagrams[iteration])):
-                q = M[j, iteration * L : (iteration + 1) * L]
-
-                D_KL[i, j] = kullback_leibler(p, q)
-                D_KL[j, i] = D_KL[i, j]
-                D_JS[i, j] = jensen_shannon(p, q)
-                D_JS[j, i] = D_JS[i, j]
-
-                D += D_JS
+        D += D_JS
 
     D = -D
 
