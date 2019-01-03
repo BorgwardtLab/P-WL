@@ -93,12 +93,18 @@ def main(args, logger):
     graphs = [ig.read(filename) for filename in args.FILES]
     labels = read_labels(args.labels)
 
+    # Stores *all* vertex labels of the given graph in order to
+    # determine the conversion factor for persistence diagrams.
+    vertex_labels = set()
+
     # Set the label to be uniform over all graphs in case no labels are
     # available. This essentially changes our iteration to degree-based
     # checks.
     for graph in graphs:
         if 'label' not in graph.vs.attributes():
             graph.vs['label'] = [0] * len(graph.vs)
+
+        vertex_labels.update(graph.vs['label'])
 
     logger.info('Read {} graphs and {} labels'.format(len(graphs), len(labels)))
 
