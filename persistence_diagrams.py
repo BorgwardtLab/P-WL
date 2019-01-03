@@ -179,6 +179,8 @@ def main(args, logger):
     D_KL = np.zeros((len(graphs), len(graphs)))
     D_JS = np.zeros((len(graphs), len(graphs)))
 
+    D = np.zeros((len(graphs), len(graphs)))
+
     for iteration in persistence_diagrams.keys():
 
         for index, pd in enumerate(persistence_diagrams[iteration]):
@@ -196,6 +198,10 @@ def main(args, logger):
                 D_KL[j, i] = D_KL[i, j]
                 D_JS[i, j] = jensen_shannon(p, q)
                 D_JS[j, i] = D_JS[i, j]
+
+                D += D_JS
+
+    D = -D
 
     fig, ax = plt.subplots(len(set(y)))
 
@@ -246,21 +252,26 @@ def main(args, logger):
             else:
                 clf = rf_clf
 
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
+            clf = SVC(kernel='precomputed')
+            clf.fit(D, y)
+            y_test = y
+            y_pred = clf.predict(D)
 
-            # TODO: need to discuss whether this is 'allowed' or smart
-            # to do; this assumes normality of the attributes.
-            scaler = StandardScaler()
-            X_train = scaler.fit_transform(X_train)
-            X_test = scaler.transform(X_test)
+            #X_train, X_test = X[train_index], X[test_index]
+            #y_train, y_test = y[train_index], y[test_index]
 
-            scaler = MinMaxScaler()
-            X_train = scaler.fit_transform(X_train)
-            X_test = scaler.transform(X_test)
+            ## TODO: need to discuss whether this is 'allowed' or smart
+            ## to do; this assumes normality of the attributes.
+            #scaler = StandardScaler()
+            #X_train = scaler.fit_transform(X_train)
+            #X_test = scaler.transform(X_test)
 
-            clf.fit(X_train, y_train)
-            y_pred = clf.predict(X_test)
+            #scaler = MinMaxScaler()
+            #X_train = scaler.fit_transform(X_train)
+            #X_test = scaler.transform(X_test)
+
+            #clf.fit(X_train, y_train)
+            #y_pred = clf.predict(X_test)
 
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
