@@ -321,6 +321,10 @@ class PersistentWeisfeilerLehman:
         if self._store_persistence_diagrams:
             self._persistence_diagrams = collections.defaultdict(list)
 
+        # Stores the *original* labels in the original graph for
+        # subsequent forward propagation.
+        original_labels = collections.defaultdict(list)
+
         for iteration in sorted(label_dicts.keys()):
 
             weighted_graphs = [graph.copy() for graph in graphs]
@@ -330,6 +334,18 @@ class PersistentWeisfeilerLehman:
 
                 weighted_graphs[graph_index].vs['label'] = labels_raw
                 weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+
+                # Assign the *compressed* labels as the *original*
+                # labels of the graph in order to ensure that they
+                # are zero-indexed.
+                if iteration == 0:
+                    original_labels[graph_index] = labels_compressed
+
+                # Use labels from the *previous* iteration to assign the
+                # *original* label.
+                else:
+                    labels = original_labels[graph_index]
+                    weighted_graphs[graph_index]['original_label'] = labels
 
                 weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
 
