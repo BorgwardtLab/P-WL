@@ -173,21 +173,36 @@ def main(args, logger):
     # distribution.
     M = np.zeros((len(graphs), (args.num_iterations + 1) * L))
 
+    # Will store *all* pairwise distances according to the
+    # Jensen--Shannon divergence (JS),  or, alternatively,
+    # the Kullback--Leibler divergence (KL).
+    D_KL = np.zeros((len(graphs), len(graphs)))
+    D_JS = np.zeros((len(graphs), len(graphs)))
+
     for iteration in persistence_diagrams.keys():
 
         for index, pd in enumerate(persistence_diagrams[iteration]):
             P = to_probability_distribution(pd, original_labels[index], L)
-            print(P)
             M[index, iteration * L : (iteration + 1) * L] = P
+
+        # TODO: rewrite this into a broadcasted version of the same loop
+        # because it is probably a lot faster.
+        for i in range(len(persistence_diagrams[iteration])):
+            p = M[i, iteration * L : (iteration + 1) * L]
+            for j in range(i, len(persistence_diagrams[iteration])):
+                q = M[j, iteration * L : (iteration + 1) * L]
+
+                D_KL[i, j] = kullback_leibler(p, q)
+                D_KL[j, i] = D_KL[i, j]
+                D_JS[i, j] = jensen_shannon(p, q)
+                D_JS[j, i] = D_JS[i, j]
 
     fig, ax = plt.subplots(len(set(y)))
 
     for label in sorted(set(y)):
-        ax[label].matshow(M[y == label], aspect='auto')
+        ax[label].matshow(M[y == label], aspect='auto', vmin=0, vmax=1)
 
     plt.show()
-
-    raise 'heck'
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
