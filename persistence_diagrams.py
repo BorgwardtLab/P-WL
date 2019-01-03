@@ -43,7 +43,7 @@ def to_probability_distribution(persistence_diagram, l, L):
     :return: Discrete probability distribution
     '''
 
-    P = np.zeros(C)
+    P = np.zeros(L)
 
     for x, y, v in persistence_diagram:
 
