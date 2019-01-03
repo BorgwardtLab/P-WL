@@ -31,27 +31,30 @@ from features import PersistentWeisfeilerLehman
 from utilities import read_labels
 
 
-def to_probability_distribution(persistence_diagram, C):
+def to_probability_distribution(persistence_diagram, l, L):
     '''
     Converts a persistence diagram with labels to a (discrete)
     probability distribution.
 
     :param persistence_diagram: Persistence diagram
-    :param C: Maximum number of labels of discrete distribution
+    :param l: Label lookup data structure for individual vertices
+    :param L: Maximum number of labels of discrete distribution
 
     :return: Discrete probability distribution
     '''
 
     P = np.zeros(C)
 
-    for x, y, c in persistence_diagram:
+    for x, y, v in persistence_diagram:
+
+        label = l[v]
 
         # Just to make sure that this mapping can work
-        assert c < C
-        assert c >= 0
+        assert label < L
+        assert label >= 0
 
         # TODO: make power configurable?
-        P[c] += (y - x)**2
+        P[label] += (y - x)**2
 
     # Ensures that this distribution is valid, i.e. normalized to sum to
     # one; else, we are implicitly comparing distributions whose size or
