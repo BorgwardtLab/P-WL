@@ -123,14 +123,11 @@ def main(args, logger):
     if args.use_cycle_persistence:
         logger.info('Using cycle persistence')
 
+
     y = LabelEncoder().fit_transform(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
     persistence_diagrams = pwl._persistence_diagrams
-
-    # Will store *all* persistence diagrams in a compressed form, i.e.
-    # as a sequence of vertex destruction values.
-    M = np.zeros((len(graphs), args.num_iterations))
 
     fig, ax = plt.subplots(args.num_iterations + 1)
 
