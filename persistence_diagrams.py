@@ -98,6 +98,41 @@ def jensen_shannon(p, q):
     return 0.5 * (kullback_leibler(p, q) + kullback_leibler(q, p))
 
 
+def make_kernel_matrices(persistence_diagrams, l, L):
+    '''
+    Converts a set of persistence diagrams into a set of kernel
+    matrices, both for the KL and the JS divergence.
+
+    :param persistence_diagrams: List of persistence diagrams
+    :param l: Label lookup (maps graph indices to a set of vertex labels)
+    :param L: Maximum number of labels
+    '''
+
+    # Will store *all* persistence diagrams in the form of a probability
+    # distribution.
+    M = np.zeros((len(persistence_diagrams), L))
+
+    for index, pd in enumerate(persistence_diagrams[iteration]):
+        P = to_probability_distribution(pd, l[index], L)
+        M[index, :] = P
+
+    # TODO: rewrite this into a broadcasted version of the same loop
+    # because it is probably a lot faster.
+    for i in range(len(persistence_diagrams)):
+        p = M[i, :]
+        for j in range(i, len(persistence_diagrams)):
+            q = M[j, :]
+
+            D_KL[i, j] = kullback_leibler(p, q)
+            D_KL[j, i] = D_KL[i, j]
+            D_JS[i, j] = jensen_shannon(p, q)
+            D_JS[j, i] = D_JS[i, j]
+
+            D += D_JS
+
+    return D_KL, D_JS
+
+
 def main(args, logger):
 
     graphs = [ig.read(filename) for filename in args.FILES]
