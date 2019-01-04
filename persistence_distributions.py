@@ -109,7 +109,7 @@ def main(args, logger):
         return K
 
     def jensen_shannon_kernel(X, Y):
-        return -product_kernel(X, Y, jensen_shannon)
+        return product_kernel(X, Y, jensen_shannon)
 
     def kullback_leibler_kernel(X, Y):
         return -product_kernel(X, Y, kullback_leibler)
