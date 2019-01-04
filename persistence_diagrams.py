@@ -25,77 +25,13 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
+from distances import jensen_shannon
+from distances import kullback_leibler
+
 from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
 
 from utilities import read_labels
-
-
-def to_probability_distribution(persistence_diagram, l, L):
-    '''
-    Converts a persistence diagram with labels to a (discrete)
-    probability distribution.
-
-    :param persistence_diagram: Persistence diagram
-    :param l: Label lookup data structure for individual vertices
-    :param L: Maximum number of labels of discrete distribution
-
-    :return: Discrete probability distribution
-    '''
-
-    P = np.zeros(L)
-
-    for x, y, v in persistence_diagram:
-
-        label = l[v]
-
-        # Just to make sure that this mapping can work
-        assert label < L
-        assert label >= 0
-
-        # TODO: make power configurable?
-        P[label] += (y - x)**2
-
-    # Ensures that this distribution is valid, i.e. normalized to sum to
-    # one; else, we are implicitly comparing distributions whose size or
-    # weight varies.
-    P = P / np.sum(P)
-    return P
-
-
-def kullback_leibler(p, q):
-    '''
-    Calculates the Kullback--Leibler divergence between two discrete
-    probability distributions.
-
-    :param p: First discrete probability distribution
-    :param q: Second discrete probability distribution
-
-    :return: Value of Kullback--Leibler divergence
-    '''
-
-    p += 1e-8
-    q += 1e-8
-
-    return np.sum(p * np.log(q / p))
-
-    # FIXME: why does this not work? Even if the two conditions are
-    # chained together...
-    #return np.sum(np.where(p != 0, p * np.log(q / p), 0))
-
-
-def jensen_shannon(p, q):
-    '''
-    Calculates the Jensen--Shannon divergence between two discrete
-    probability distributions.
-
-    :param p: First discrete probability distribution
-    :param q: Second discrete probability distribution
-
-    :return: Value of Jensen--Shannon divergence
-    '''
-
-    return 0.5 * (kullback_leibler(p, q) + kullback_leibler(q, p))
 
 
 def make_kernel_matrices(persistence_diagrams, l, L):
