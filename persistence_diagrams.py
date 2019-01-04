@@ -32,6 +32,7 @@ from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
 
 from utilities import read_labels
+from utilities import to_probability_distribution
 
 
 def make_kernel_matrices(persistence_diagrams, l, L):
