@@ -83,9 +83,10 @@ def main(args, logger):
 
     def jensen_shannon_kernel(X, Y):
 
+        # Index for the current iteration; indicates which column is
+        # used as the *first* one.
         start_index = 0
-
-        K = np.array((X.shape[0], Y.shape[0]))
+        K = np.empty((X.shape[0], Y.shape[0]))
 
         for iteration in sorted(num_columns_per_iteration.keys()):
             end_index = num_columns_per_iteration[iteration]
