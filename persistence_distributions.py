@@ -109,10 +109,10 @@ def main(args, logger):
         return K
 
     def jensen_shannon_kernel(X, Y):
-        return product_kernel(X, Y, jensen_shannon)
+        return -product_kernel(X, Y, jensen_shannon)
 
     def kullback_leibler_kernel(X, Y):
-        return product_kernel(X, Y, kullback_leibler)
+        return -product_kernel(X, Y, kullback_leibler)
 
     for i in range(3):
 
@@ -122,7 +122,7 @@ def main(args, logger):
 
         for train_index, test_index in cv.split(X, y):
             clf = SVC(
-                kernel=kullback_leibler_kernel,
+                kernel=jensen_shannon_kernel,
             )
 
             X_train, X_test = X[train_index], X[test_index]

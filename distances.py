@@ -18,6 +18,10 @@ def kullback_leibler(p, q):
     :return: Value of Kullback--Leibler divergence
     '''
 
+    # TODO: this should not be necessary
+    p = np.abs(p)
+    q = np.abs(q)
+
     p += 1e-8
     q += 1e-8
 
