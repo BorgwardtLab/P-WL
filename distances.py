@@ -1,6 +1,6 @@
 '''
-distances.py: Distance measures (not necessarily metrics) between
-probability distributions.
+Distance measures (not necessarily metrics) between probability
+distributions.
 '''
 
 
