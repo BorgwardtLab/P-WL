@@ -74,9 +74,7 @@ def main(args, logger):
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
-    print(to_probability_distribution(X, num_columns_per_iteration))
-
-    raise 'heck'
+    X = to_probability_distribution(X, num_columns_per_iteration)
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
@@ -89,33 +87,9 @@ def main(args, logger):
         accuracy_scores = []
 
         for train_index, test_index in cv.split(X, y):
-            rf_clf = RandomForestClassifier(
+            clf = RandomForestClassifier(
                 n_estimators=50,
-                class_weight='balanced' if args.balanced else None
             )
-
-            if args.grid_search:
-                pipeline = Pipeline(
-                    [
-                        ('fs', FeatureSelector(num_columns_per_iteration)),
-                        ('clf', rf_clf)
-                    ],
-                )
-
-                grid_params = {
-                    'fs__num_iterations': np.arange(0, args.num_iterations + 1),
-                    'clf__n_estimators': [10, 20, 50, 100, 150, 200],
-                }
-
-                clf = GridSearchCV(
-                        pipeline,
-                        grid_params,
-                        cv=StratifiedKFold(n_splits=10, shuffle=True),
-                        iid=False,
-                        scoring='accuracy',
-                        n_jobs=4)
-            else:
-                clf = rf_clf
 
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
@@ -139,11 +113,7 @@ def main(args, logger):
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
             logger.debug('Best classifier for this fold: {}'.format(clf))
-
-            if args.grid_search:
-                logger.debug('Best parameters for this fold: {}'.format(clf.best_params_))
-            else:
-                logger.debug('Best parameters for this fold: {}'.format(clf.get_params()))
+            logger.debug('Best parameters for this fold: {}'.format(clf.get_params()))
 
         mean_accuracies.append(np.mean(accuracy_scores))
         logger.info('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
@@ -161,20 +131,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
     )
 
     logger = logging.getLogger('P-WL [distribution]')
-
-    # Create a second stream handler for logging to `stderr`, but set
-    # its log level to be a little bit smaller such that we only have
-    # informative messages
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.INFO)
-
-    # Use the default format; since we do not adjust the logger before,
-    # this is all right.
-    stream_handler.setFormatter(logging.Formatter(logging.BASIC_FORMAT))
-    logger.addHandler(stream_handler)
 
     main(args, logger)
