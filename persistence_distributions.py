@@ -22,6 +22,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 from distances import jensen_shannon
+from distances import kullback_leibler
 
 from features import PersistentWeisfeilerLehman
 
