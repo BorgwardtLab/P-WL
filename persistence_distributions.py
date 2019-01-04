@@ -13,7 +13,6 @@ import collections
 import logging
 
 
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
@@ -21,7 +20,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from features import FeatureSelector
+from distances import jensen_shannon
+
 from features import PersistentWeisfeilerLehman
 
 from utilities import read_labels
@@ -81,6 +81,24 @@ def main(args, logger):
     cv = StratifiedKFold(n_splits=10, shuffle=True)
     mean_accuracies = []
 
+    def jensen_shannon_kernel(X, Y):
+
+        start_index = 0
+
+        K = np.array((X.shape[0], Y.shape[0]))
+
+        for iteration in sorted(num_columns_per_iteration.keys()):
+            end_index = num_columns_per_iteration[iteration]
+
+            P = X[:, start_index:end_index]
+            Q = Y[:, start_index:end_index]
+
+            K_iteration = np.array([jensen_shannon(p, q) for p, q in zip(P, Q)])
+
+            start_index += end_index
+
+        return K
+
     for i in range(10):
 
         # Contains accuracy scores for each cross validation step; the
@@ -88,8 +106,8 @@ def main(args, logger):
         accuracy_scores = []
 
         for train_index, test_index in cv.split(X, y):
-            clf = RandomForestClassifier(
-                n_estimators=50,
+            clf = SVC(
+                kernel=jensen_shannon_kernel,
             )
 
             X_train, X_test = X[train_index], X[test_index]
