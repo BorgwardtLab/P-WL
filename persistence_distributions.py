@@ -82,7 +82,7 @@ def main(args, logger):
     cv = StratifiedKFold(n_splits=3, shuffle=True)
     mean_accuracies = []
 
-    def jensen_shannon_kernel(X, Y):
+    def product_kernel(X, Y, k):
 
         # Index for the current iteration; indicates which column is
         # used as the *first* one.
@@ -95,8 +95,9 @@ def main(args, logger):
             P = X[:, start_index:end_index]
             Q = Y[:, start_index:end_index]
 
+            # TODO: can this be made more efficient?
             K_iteration = np.array(
-                [jensen_shannon(p, q) for p, q in itertools.product(P, Q)]).reshape(
+                [k(p, q) for p, q in itertools.product(P, Q)]).reshape(
                 X.shape[0], Y.shape[0]
             )
 
@@ -106,6 +107,12 @@ def main(args, logger):
 
         return K
 
+    def jensen_shannon_kernel(X, Y):
+        return product_kernel(X, Y, jensen_shannon)
+
+    def kullback_leibler_kernel(X, Y):
+        return product_kernel(X, Y, kullback_leibler)
+
     for i in range(3):
 
         # Contains accuracy scores for each cross validation step; the
@@ -114,7 +121,7 @@ def main(args, logger):
 
         for train_index, test_index in cv.split(X, y):
             clf = SVC(
-                kernel=jensen_shannon_kernel,
+                kernel=kullback_leibler_kernel,
             )
 
             X_train, X_test = X[train_index], X[test_index]
