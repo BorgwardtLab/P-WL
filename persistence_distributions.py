@@ -27,6 +27,26 @@ from features import PersistentWeisfeilerLehman
 from utilities import read_labels
 
 
+def to_probability_distribution(X, num_columns_per_iteration):
+    '''
+    Given a matrix and an index array containing the number of columns
+    per iteration, converts each row to a probability distribution, by
+    normalizing its sum accordingly.
+    '''
+
+    start_index = 0
+    for iteration in sorted(num_columns_per_iteration.keys()):
+        end_index = num_columns_per_iteration[iteration]
+
+        row_sums = np.sum(X[:, start_index:end_index], axis=1)
+
+        X[:, start_index:end_index] /= row_sums[:, None]
+
+        start_index += end_index
+
+    return X
+
+
 def main(args, logger):
 
     graphs = [ig.read(filename) for filename in args.FILES]
@@ -54,7 +74,7 @@ def main(args, logger):
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
-    print(num_columns_per_iteration)
+    print(to_probability_distribution(X, num_columns_per_iteration))
 
     raise 'heck'
 
