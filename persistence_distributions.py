@@ -10,6 +10,7 @@ import numpy as np
 
 import argparse
 import collections
+import itertools
 import logging
 
 
@@ -78,7 +79,7 @@ def main(args, logger):
     X = to_probability_distribution(X, num_columns_per_iteration)
 
     np.random.seed(42)
-    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    cv = StratifiedKFold(n_splits=3, shuffle=True)
     mean_accuracies = []
 
     def jensen_shannon_kernel(X, Y):
@@ -86,7 +87,7 @@ def main(args, logger):
         # Index for the current iteration; indicates which column is
         # used as the *first* one.
         start_index = 0
-        K = np.empty((X.shape[0], Y.shape[0]))
+        K = np.zeros((X.shape[0], Y.shape[0]))
 
         for iteration in sorted(num_columns_per_iteration.keys()):
             end_index = num_columns_per_iteration[iteration]
@@ -94,13 +95,18 @@ def main(args, logger):
             P = X[:, start_index:end_index]
             Q = Y[:, start_index:end_index]
 
-            K_iteration = np.array([jensen_shannon(p, q) for p, q in zip(P, Q)])
+            K_iteration = np.array(
+                [jensen_shannon(p, q) for p, q in itertools.product(P, Q)]).reshape(
+                X.shape[0], Y.shape[0]
+            )
+
+            K += K_iteration
 
             start_index += end_index
 
         return K
 
-    for i in range(10):
+    for i in range(3):
 
         # Contains accuracy scores for each cross validation step; the
         # means of this list will be used later on.
