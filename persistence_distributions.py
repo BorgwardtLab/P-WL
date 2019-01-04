@@ -44,6 +44,7 @@ def to_probability_distribution(X, num_columns_per_iteration):
 
         start_index += end_index
 
+    np.nan_to_num(X, copy=False)
     return X
 
 
@@ -107,9 +108,6 @@ def main(args, logger):
             clf.fit(X_train, y_train)
             y_pred = clf.predict(X_test)
 
-            importances = np.argsort(clf.feature_importances_)[::-1][:20]
-            print(min(importances), max(importances))
-
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
             logger.debug('Best classifier for this fold: {}'.format(clf))
@@ -124,7 +122,6 @@ def main(args, logger):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
-    parser.add_argument('-d', '--dataset', help='Name of data set')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
 
