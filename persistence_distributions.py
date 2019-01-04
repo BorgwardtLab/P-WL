@@ -44,19 +44,19 @@ def main(args, logger):
     assert len(graphs) == len(labels)
 
     pwl = PersistentWeisfeilerLehman(
-            use_cycle_persistence=args.use_cycle_persistence,
-            use_original_features=args.use_original_features,
-            use_label_persistence=True,
+        use_label_persistence=True,
+        store_persistence_diagrams=False,  # TODO: might need this later on?
     )
-
-    if args.use_cycle_persistence:
-        logger.info('Using cycle persistence')
 
     y = LabelEncoder().fit_transform(labels)
     X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
+
+    print(num_columns_per_iteration)
+
+    raise 'heck'
 
     np.random.seed(42)
     cv = StratifiedKFold(n_splits=10, shuffle=True)
@@ -134,23 +134,17 @@ def main(args, logger):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
-    parser.add_argument('-b', '--balanced', action='store_true', help='Make random forest classifier balanced')
     parser.add_argument('-d', '--dataset', help='Name of data set')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
-    parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
-    parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
-    parser.add_argument('-c', '--use-cycle-persistence', action='store_true', default=False, help='Indicates whether cycle persistence should be calculated or not')
-    parser.add_argument('-o', '--use-original-features', action='store_true', default=False, help='Indicates that original features should be used as well')
 
     args = parser.parse_args()
 
     logging.basicConfig(
         level=logging.DEBUG,
-        filename='{}_{:02d}.log'.format(args.dataset, args.num_iterations)
     )
 
-    logger = logging.getLogger('P-WL')
+    logger = logging.getLogger('P-WL [distribution]')
 
     # Create a second stream handler for logging to `stderr`, but set
     # its log level to be a little bit smaller such that we only have
