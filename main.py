@@ -130,9 +130,6 @@ def main(args, logger):
             clf.fit(X_train, y_train)
             y_pred = clf.predict(X_test)
 
-            importances = np.argsort(clf.feature_importances_)[::-1][:20]
-            print(min(importances), max(importances))
-
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
             logger.debug('Best classifier for this fold: {}'.format(clf))
