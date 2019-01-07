@@ -27,6 +27,7 @@ from tqdm import tqdm
 
 from features import FeatureSelector
 from features import PersistentWeisfeilerLehman
+from features import WeisfeilerLehmanSubtree
 
 from utilities import read_labels
 
@@ -57,7 +58,19 @@ def main(args, logger):
         logger.info('Using cycle persistence')
 
     y = LabelEncoder().fit_transform(labels)
-    X, num_columns_per_iteration = pwl.transform(graphs, args.num_iterations)
+
+    # This ignores *all* other feature generation methods and falls back
+    # to the original Weisfeiler--Lehman subtree kernel.
+    if args.use_subtree_features:
+
+        logger.info('Using original subtree features')
+
+        wl_subtree = WeisfeilerLehmanSubtree()
+        X, num_columns_per_iteration = \
+            wl_subtree.transform(graphs, args.num_iterations)
+    else:
+        X, num_columns_per_iteration = \
+            pwl.transform(graphs, args.num_iterations)
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
@@ -146,6 +159,10 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
     parser.add_argument('-c', '--use-cycle-persistence', action='store_true', default=False, help='Indicates whether cycle persistence should be calculated or not')
     parser.add_argument('-o', '--use-original-features', action='store_true', default=False, help='Indicates that original features should be used as well')
+    # TODO: this flag is somewhat redundant given the flag above; need
+    # to ensure that it is seen as an 'override', i.e. if this is set,
+    # *no* other ways of calculating features can be used.
+    parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
 
     args = parser.parse_args()
 
