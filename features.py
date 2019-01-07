@@ -473,11 +473,7 @@ class WeisfeilerLehmanSubtree:
             for label in graph.vs['compressed_label']:
                 x[label] += 1
 
-            X[index, :] = np.concatenate((x_infinity_norm,
-                                          x_total_persistence,
-                                          x_label_persistence,
-                                          x_original_features,
-                                          x_cycle_persistence))
+            X[index, :] = x
 
         return X
 
