@@ -411,7 +411,7 @@ class WeisfeilerLehmanSubtree:
                 num_columns_per_iteration[iteration] = \
                     X_per_iteration[-1].shape[1]
 
-        return np.concatenate(X_per_iteration, axis=1),
+        return np.concatenate(X_per_iteration, axis=1), \
                num_columns_per_iteration
 
     def get_subtree_feature_vectors(self, graphs):
