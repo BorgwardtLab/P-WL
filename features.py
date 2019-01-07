@@ -417,14 +417,14 @@ class WeisfeilerLehmanSubtree:
     def get_subtree_feature_vectors(self, graphs):
         '''
         Calculates the feature vectors of a sequence of graphs. The
-        `compressed_label` attribute is used to calculate features.
+        `label` attribute is used to calculate features.
         '''
 
         num_labels = 0
         labels = set()
 
         for graph in graphs:
-            labels.update(graph.vs['compressed_label'])
+            labels.update(graph.vs['label'])
 
         num_labels = len(labels)
 
@@ -445,7 +445,7 @@ class WeisfeilerLehmanSubtree:
             # Features, i.e. label counts, for the current graph
             x = np.zeros(num_columns)
 
-            for label in graph.vs['compressed_label']:
+            for label in graph.vs['label']:
                 x[label] += 1
 
             X[index, :] = x
