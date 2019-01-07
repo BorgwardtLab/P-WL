@@ -439,6 +439,47 @@ class WeisfeilerLehmanSubtree:
 
         return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
 
+    def get_subtree_feature_vectors(self, graphs):
+        '''
+        Calculates the feature vectors of a sequence of graphs. The
+        `compressed_label` attribute is used to calculate features.
+        '''
+
+        num_labels = 0
+        labels = set()
+
+        for graph in graphs:
+            labels.update(graph.vs['compressed_label'])
+
+        num_labels = len(labels)
+
+        # Ensures that the labels form a contiguous sequence of
+        # indices so that they can be easily mapped.
+        assert min(labels) == 0
+        assert max(labels) == num_labels - 1
+
+        # Increases readability and follows the 'persistent' feature
+        # generation method.
+        num_rows = len(graphs)
+        num_columns = num_labels
+
+        X = np.zeros((num_rows, num_columns))
+
+        for index, graph in enumerate(graphs):
+
+            # Features, i.e. label counts, for the current graph
+            x = np.zeros(num_columns)
+
+            for label in graph.vs['compressed_label']:
+                x[label] += 1
+
+            X[index, :] = np.concatenate((x_infinity_norm,
+                                          x_total_persistence,
+                                          x_label_persistence,
+                                          x_original_features,
+                                          x_cycle_persistence))
+
+        return X
 
 
 class FeatureSelector(TransformerMixin):
