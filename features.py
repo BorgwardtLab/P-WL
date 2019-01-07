@@ -381,63 +381,38 @@ class WeisfeilerLehmanSubtree:
         pass
 
     def transform(self, graphs, num_iterations):
-        wl = WeisfeilerLehman()
         
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.
+        wl = WeisfeilerLehman()
         label_dicts = wl.fit_transform(graphs, num_iterations)
 
         X_per_iteration = []
         num_columns_per_iteration = {}
 
-        if self._store_persistence_diagrams:
-            self._persistence_diagrams = collections.defaultdict(list)
-
-        # Stores the *original* labels in the original graph for
-        # subsequent forward propagation.
-        original_labels = collections.defaultdict(list)
-
         for iteration in sorted(label_dicts.keys()):
 
-            weighted_graphs = [graph.copy() for graph in graphs]
+            # Make the feature vector assignment easier for each of the
+            # 'subtree graphs'.
+            wl_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
                 labels_raw, labels_compressed = label_dicts[iteration][graph_index]
 
-                weighted_graphs[graph_index].vs['label'] = labels_raw
-                weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+                # Assign the compressed label (an integer) to the
+                # 'subtree graph' in order to generate features.
+                wl_graphs[graph_index].vs['label'] = labels_compressed
 
-                # Assign the *compressed* labels as the *original*
-                # labels of the graph in order to ensure that they
-                # are zero-indexed.
-                if iteration == 0:
-                    original_labels[graph_index] = labels_compressed
-
-                # Use labels from the *previous* iteration to assign the
-                # *original* label.
-                else:
-                    labels = original_labels[graph_index]
-                    weighted_graphs[graph_index]['original_label'] = labels
-
-                weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
-
-            X_per_iteration.append(pfg.fit_transform(weighted_graphs))
-
-            if self._store_persistence_diagrams:
-                self._persistence_diagrams[iteration] = pfg._persistence_diagrams
+            X_per_iteration.append(
+                self.get_subtree_feature_vectors(wl_graphs)
+            )
 
             if iteration not in num_columns_per_iteration:
-                num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
+                num_columns_per_iteration[iteration] = \
+                    X_per_iteration[-1].shape[1]
 
-            assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
-
-        # Store original labels only if there is something to store.
-        # Notice that these labels are *standardized*, i.e. they are
-        # zero-indexed.
-        if original_labels:
-            self._original_labels = original_labels
-
-        return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
+        return np.concatenate(X_per_iteration, axis=1),
+               num_columns_per_iteration
 
     def get_subtree_feature_vectors(self, graphs):
         '''
