@@ -68,6 +68,12 @@ def main(args, logger):
         wl_subtree = WeisfeilerLehmanSubtree()
         X, num_columns_per_iteration = \
             wl_subtree.transform(graphs, args.num_iterations)
+
+
+        sums = np.sum(X, axis=1)
+        lengths = np.array([len(graph.vs) for graph in graphs])
+
+        assert (sums == lengths * (args.num_iterations + 1)).all()
     else:
         X, num_columns_per_iteration = \
             pwl.transform(graphs, args.num_iterations)
