@@ -212,7 +212,7 @@ class PersistenceFeaturesGenerator:
             + self._use_total_persistence              \
             + self._use_label_persistence * num_labels \
             + self._use_original_features * num_labels \
-            + self._use_cycle_persistence
+            + self._use_cycle_persistence * num_labels
 
         X = np.zeros((num_rows, num_columns))
 
@@ -256,6 +256,9 @@ class PersistenceFeaturesGenerator:
                     label = graph.vs[c]['compressed_label']
                     x_original_features[label] += 1
 
+            # Cycle persistence: use the edge information, i.e. the
+            # classification gained from the persistence diagram
+            # calculation above, in order to assign weights.
             if self._use_cycle_persistence:
                 n = len(persistence_diagram)
                 m = graph.ecount()
@@ -266,15 +269,20 @@ class PersistenceFeaturesGenerator:
                 # wrong with our understanding of cycles.
                 assert num_cycles == len(edge_indices_cycles)
 
+                x_cycle_persistence = np.zeros(num_labels)
                 total_cycle_persistence = 0.0
+
                 for edge_index in edge_indices_cycles:
                     edge = graph.es[edge_index]
-                    total_cycle_persistence += edge['weight']**self._p
+                    weight = edge['weight']
 
-                if num_cycles:
-                    x_cycle_persistence = [total_cycle_persistence]
-                else:
-                    x_cycle_persistence = [0.0]
+                    total_cycle_persistence += weight**self._p
+
+                    source_label = graph.vs[edge.source]['compressed_label']
+                    target_label = graph.vs[edge.target]['compressed_label']
+
+                    x_cycle_persistence[source_label] += weight**self._p
+                    x_cycle_persistence[target_label] += weight**self._p
 
             X[index, :] = np.concatenate((x_infinity_norm,
                                           x_total_persistence,
