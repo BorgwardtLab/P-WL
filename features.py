@@ -156,6 +156,8 @@ class WeightAssigner:
 class PersistenceFeaturesGenerator:
     '''
     Creates persistence-based features of a sequence of weighted graphs.
+    This requires a choice of metric, as well as an exponent, which will
+    be used to perform persistent homology calculations.
     '''
 
     def __init__(self,
