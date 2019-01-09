@@ -305,6 +305,11 @@ class PersistenceFeaturesGenerator:
 
 
 class PersistentWeisfeilerLehman:
+    '''
+    Main class for generating persistence-based Weisfeiler--Lehman
+    features. Actually, this class should contain 'subtree' in its
+    name because it *only* handles subtree features for now.
+    '''
 
     def __init__(self,
                  use_infinity_norm=False,
