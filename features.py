@@ -33,6 +33,7 @@ class WeightAssigner:
             'canberra':  self._canberra,
             'jaccard':   self._jaccard,
             'minkowski': self._minkowski,
+            'uniform':   self._uniform,     # Not a 'real' metric
             'sorensen':  self._sorensen,
         }
 
@@ -53,7 +54,13 @@ class WeightAssigner:
             target_label = target_labels[0]
 
             weight = self._metric(source_labels[1:], target_labels[1:])
-            weight = weight + (source_label != target_label)
+
+            # For all non-uniform metrics, we want to take into account
+            # the differences between the source and target label of an
+            # edge.
+            if self._metric != self._uniform:
+                weight = weight + (source_label != target_label)
+
             edge['weight'] = weight
 
         return graph
@@ -102,6 +109,9 @@ class WeightAssigner:
     def _minkowski(self, A, B):
         a, b = self._to_vectors(A, B)
         return np.linalg.norm(a - b, ord=self._p)
+
+    def _uniform(self, A, B):
+        return 1.0
 
     def _sorensen(self, A, B):
         a, b = self._to_vectors(A, B)
