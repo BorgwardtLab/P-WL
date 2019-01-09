@@ -184,6 +184,10 @@ class PersistenceFeaturesGenerator:
         Calculates the feature vector of a sequence of graphs. The
         graphs are assumed to be weighted such that persistence is
         a suitable invariant.
+
+        :param graphs: Sequence of weighted graphs
+
+        :return:  Feature matrix
         '''
 
         num_labels = 0
@@ -207,6 +211,9 @@ class PersistenceFeaturesGenerator:
             assert min(labels) == 0
             assert max(labels) == num_labels - 1
 
+        # Calculate the space required for the feature vector matrix.
+        # This depends on the attributes selected by the client.
+
         num_rows = len(graphs)
         num_columns = self._use_infinity_norm          \
             + self._use_total_persistence              \
@@ -215,6 +222,10 @@ class PersistenceFeaturesGenerator:
             + self._use_cycle_persistence * num_labels
 
         X = np.zeros((num_rows, num_columns))
+
+        # Fill the feature matrix by calculating persistence-based
+        # features for each of the graphs, using the initial
+        # configuration.
 
         for index, graph in enumerate(graphs):
 
