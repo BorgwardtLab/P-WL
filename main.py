@@ -51,6 +51,7 @@ def main(args, logger):
     pwl = PersistentWeisfeilerLehman(
             use_cycle_persistence=args.use_cycle_persistence,
             use_original_features=args.use_original_features,
+            use_uniform_metric=args.use_uniform_metric,
             use_label_persistence=True,
     )
 
@@ -160,6 +161,7 @@ if __name__ == '__main__':
     # to ensure that it is seen as an 'override', i.e. if this is set,
     # *no* other ways of calculating features can be used.
     parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
+    parser.add_argument('-u', '--use-uniform-metric', action='store_true', default=False, help='Use uniform metric for weight assignment')
 
     args = parser.parse_args()
 
