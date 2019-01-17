@@ -82,6 +82,7 @@ if __name__ == '__main__':
         use_cycle_persistence=False,
         use_label_persistence=True,
         use_original_features=False,
+        store_persistence_diagrams=False,
         p=2.0
     )
 
