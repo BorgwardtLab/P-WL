@@ -562,6 +562,11 @@ class WeisfeilerLehmanAttributePropagation:
                     attributes_per_vertex
                 )
 
+                # Store the new attributes in the graph because the
+                # smoothing process needs to continue in subsequent
+                # iterations.
+                graph.vs[attribute] = attributes_per_vertex
+
         return attributes
 
 

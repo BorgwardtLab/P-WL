@@ -33,7 +33,11 @@ def main(args, logger):
     assert len(graphs) == len(labels)
 
     prop = WeisfeilerLehmanAttributePropagation()
-    attributes_per_iteration = prop.transform(graphs, 'degree', 1)
+    attributes_per_iteration = prop.transform(
+        graphs,
+        'degree',
+        args.num_iterations
+    )
 
     print(attributes_per_iteration)
 
