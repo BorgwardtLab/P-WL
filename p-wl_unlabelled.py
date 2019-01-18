@@ -14,6 +14,9 @@ from features import WeisfeilerLehmanAttributePropagation
 
 from utilities import read_labels
 
+from topology import assign_filtration_values
+from topology import PersistenceDiagramCalculator
+
 
 def main(args, logger):
 
@@ -38,6 +41,16 @@ def main(args, logger):
         'degree',
         args.num_iterations
     )
+
+    pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
+
+    for iteration in sorted(attributes_per_iteration.keys()):
+        for index, graph in enumerate(graphs):
+            attributes = attributes_per_iteration[iteration][index]
+            graph.vs['degree'] = attributes
+            weighted_graph = assign_filtration_values(graph, attributes)
+
+            pd, edge_indices_cycles = pdc.fit_transform(graph)
 
 
 if __name__ == '__main__':
