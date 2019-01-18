@@ -261,8 +261,19 @@ class PersistenceFeaturesGenerator:
 
                 for x, y, c in persistence_diagram:
                     label = graph.vs[c]['compressed_label']
-                    persistence = 0.01 + abs(x - y)**self._p
+                    persistence = abs(x - y)**self._p
                     x_label_persistence[label] += persistence
+
+                    # FIXME: older version of calculating label
+                    # persistence; prior to introducing $\tau$,
+                    # the baseline parameter.
+                    #persistence = 0.001 + abs(x - y)**self._p
+
+                    # FIXME: this is the old way of calculating label
+                    # persistence; it does not yet use the *baseline*
+                    # parameter of the distance.
+                    #if x_label_persistence[label] == 0:
+                    #    x_label_persistence[label] = 1e-16
 
                 if self._store_persistence_diagrams:
                     self._persistence_diagrams.append(persistence_diagram)
