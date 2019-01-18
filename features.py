@@ -534,9 +534,12 @@ class WeisfeilerLehmanAttributePropagation:
         # indexed by the iteration.
         attributes = collections.defaultdict(list)
 
-        for iteration in range(num_iterations + 1):
+        for graph in graphs:
+            attributes[0].append(np.array(graph.vs[attribute]))
+
+        for iteration in range(1, num_iterations + 1):
             for index, graph in enumerate(graphs):
-                attributes_per_vertex = np.array(graph.vs[attribute])
+                attributes_per_vertex = attributes[iteration - 1][index]
 
                 for edge in graph.es:
                     source = edge.source

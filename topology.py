@@ -230,7 +230,7 @@ class PersistenceDiagramCalculator:
             # Vertex attributes have been set, so we use them for the
             # persistence diagram creation below.
             if self._vertex_attribute:
-                vertex_weight = graph.vs[self._vertex_attribute][u]
+                vertex_weight = graph.vs[self._vertex_attribute][younger]
 
             creation = vertex_weight    # x coordinate for persistence diagram
             destruction = edge_weight   # y coordinate for persistence diagram
