@@ -166,7 +166,7 @@ class PersistenceDiagramCalculator:
 
         self._order = order
         self._unpaired_value = unpaired_value
-        self._vertex_attribute = None
+        self._vertex_attribute = vertex_attribute
 
         if self._order not in ['sublevel', 'superlevel']:
             raise RuntimeError('Unknown filtration order \"{}\"'.format(self._order))
