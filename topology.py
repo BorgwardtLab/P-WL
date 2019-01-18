@@ -147,9 +147,26 @@ class PersistenceDiagramCalculator:
     can modify the filtration order and the vertex weight assignment.
     '''
 
-    def __init__(self, order='sublevel', unpaired_value=None):
+    def __init__(self,
+                 order='sublevel',
+                 unpaired_value=None,
+                 vertex_attribute=None):
+        '''
+        Initializes a new instance of the persistence diagram
+        calculation class.
+
+        :param order: Filtration order (ignored for now)
+        :param unpaired_value: Value to use for unpaired vertices. If
+        not specified the largest weight (sublevel set filtration) is
+        used.
+        :param vertex_attribute: Graph attribute to query for vertex
+        values. If not specified, no vertex attributes will be used,
+        and each vertex will be assigned a value of zero.
+        '''
+
         self._order = order
         self._unpaired_value = unpaired_value
+        self._vertex_attribute = None
 
         if self._order not in ['sublevel', 'superlevel']:
             raise RuntimeError('Unknown filtration order \"{}\"'.format(self._order))
@@ -208,9 +225,14 @@ class PersistenceDiagramCalculator:
                 u, v = v, u
                 younger, older = older, younger
 
-            # TODO: this does not yet take into account any weights for
-            # the vertices themselves.
-            creation = 0.0              # x coordinate for persistence diagram
+            vertex_weight = 0.0
+
+            # Vertex attributes have been set, so we use them for the
+            # persistence diagram creation below.
+            if self._vertex_attribute:
+                vertex_weight = graph.vs[self._vertex_attribute][u]
+
+            creation = vertex_weight    # x coordinate for persistence diagram
             destruction = edge_weight   # y coordinate for persistence diagram
 
             uf.merge(u, v)
