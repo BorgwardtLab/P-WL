@@ -4,6 +4,7 @@ about a data set.
 '''
 
 import collections.abc
+import math
 
 import igraph as ig
 import numpy as np
@@ -61,6 +62,14 @@ class PersistenceDiagram(collections.abc.Sequence):
         '''
 
         return max([abs(x - y)**p for x, y, _ in self._pairs])
+
+    def remove_diagonal(self):
+        '''
+        Removes diagonal elements, i.e. elements for which x and
+        y coincide.
+        '''
+
+        self._pairs = [(x, y, c) for x, y, c in self._pairs if x != y]
 
     @property
     def betti(self):
@@ -295,3 +304,28 @@ def assign_filtration_values(graph, attributes, order='sublevel'):
         edge['weight'] = edge_weight
 
     return graph
+
+
+def multiscale_persistence_diagram_kernel(F, G, sigma):
+    '''
+    Calculates the multi-scale persistence diagram kernel between two
+    persistence diagrams.
+
+    :param F: First persistence diagram
+    :param G: Second persistence diagram
+    :param sigma: Smoothing parameter
+
+    :return: Kernel value
+    '''
+
+    def diff(x0, y0, x1, y1):
+        return (x0 - y0)**2 + (x1 - y1)**2
+
+    result = 0.0
+    for x, y, _ in F:
+        for a, b, _ in G:
+            result += np.exp(diff(x, y, a, b) / (8 * sigma))\
+                    - np.exp(diff(x, y, b, a) / (8 * sigma))
+
+    result /= 1 / (8 * math.pi * sigma)
+    return result
