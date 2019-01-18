@@ -15,6 +15,7 @@ from features import WeisfeilerLehmanAttributePropagation
 from utilities import read_labels
 
 from topology import assign_filtration_values
+from topology import multiscale_persistence_diagram_kernel
 from topology import PersistenceDiagramCalculator
 
 
@@ -51,6 +52,7 @@ def main(args, logger):
             weighted_graph = assign_filtration_values(graph, attributes)
 
             pd, edge_indices_cycles = pdc.fit_transform(graph)
+            multiscale_persistence_diagram_kernel(pd, pd, sigma=0.1)
 
 
 if __name__ == '__main__':
