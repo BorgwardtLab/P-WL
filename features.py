@@ -554,7 +554,7 @@ class WeisfeilerLehmanAttributePropagation:
                 # Normalize the number of attributes again using the
                 # number of neighbours of the node.
                 attributes_per_vertex = np.divide(
-                    attributes_per_vertex, graph.vs.degree()
+                    attributes_per_vertex, np.array(graph.vs.degree()) + 1
                 )
 
                 # Store the new attributes.
