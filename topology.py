@@ -187,9 +187,9 @@ class PersistenceDiagramCalculator:
         num_vertices = graph.vcount()
         uf = UnionFind(num_vertices)
 
-        edge_weights = graph.es['weight']   # All edge weights
-        edge_indices = None                 # Ordering for filtration
-        edge_indices_cycles = []            # Edge indices that create a cycle
+        edge_weights = np.array(graph.es['weight']) # All edge weights
+        edge_indices = None                         # Ordering for filtration
+        edge_indices_cycles = []                    # Edge indices that create a cycle
 
         if self._order == 'sublevel':
             edge_indices = np.argsort(edge_weights, kind='stable')
@@ -204,7 +204,7 @@ class PersistenceDiagramCalculator:
 
         # Go over all edges and optionally create new points for the
         # persistence diagram.
-        for edge_index, edge_weight in zip(edge_indices, edge_weights):
+        for edge_index, edge_weight in zip(edge_indices, edge_weights[edge_indices]):
             u, v = graph.es[edge_index].tuple
 
             # Preliminary assignment of younger and older component. We
