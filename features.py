@@ -23,8 +23,9 @@ class WeightAssigner:
     a distance metric and returns the weighted graph.
     '''
 
-    def __init__(self, metric='minkowski', p=1.0):
+    def __init__(self, metric='minkowski', p=1.0, tau=1.0):
         self._p = p
+        self._tau = tau
 
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
@@ -59,7 +60,7 @@ class WeightAssigner:
             # the differences between the source and target label of an
             # edge.
             if self._metric != self._uniform:
-                weight = weight + (source_label != target_label)
+                weight = weight + (source_label != target_label) + self._tau
 
             edge['weight'] = weight
 
