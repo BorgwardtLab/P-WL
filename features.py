@@ -539,7 +539,7 @@ class WeisfeilerLehmanAttributePropagation:
 
         for iteration in range(1, num_iterations + 1):
             for index, graph in enumerate(graphs):
-                attributes_per_vertex = attributes[iteration - 1][index]
+                attributes_per_vertex = np.array(graph.vs[attribute])
 
                 for edge in graph.es:
                     source = edge.source
