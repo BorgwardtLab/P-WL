@@ -39,8 +39,6 @@ def main(args, logger):
         args.num_iterations
     )
 
-    print(attributes_per_iteration)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -147,9 +147,8 @@ class PersistenceDiagramCalculator:
     can modify the filtration order and the vertex weight assignment.
     '''
 
-    def __init__(self, order='sublevel', fix_vertices=True, unpaired_value=None):
+    def __init__(self, order='sublevel', unpaired_value=None):
         self._order = order
-        self._fix_vertices = fix_vertices
         self._unpaired_value = unpaired_value
 
         if self._order not in ['sublevel', 'superlevel']:
