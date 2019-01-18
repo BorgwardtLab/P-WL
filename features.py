@@ -518,6 +518,53 @@ class WeisfeilerLehmanSubtree:
         return X
 
 
+class WeisfeilerLehmanAttributePropagation:
+    '''
+    Simple Weisfeiler--Lehman feature propagation class. Given a set of
+    graphs and an attribute name, this class progressively smooths them
+    by replacing attributes by their *average* in a neighbourhood.
+    '''
+
+    def __init__(self):
+        pass
+
+    def transform(self, graphs, attribute, num_iterations):
+
+        # Will contain the respective attribute values for all graphs,
+        # indexed by the iteration.
+        attributes = collections.defaultdict(list)
+
+        for iteration in range(num_iterations + 1):
+
+            # Will contain the new attribute values for the given
+            # iteration, following the indexing of the graphs.
+            attributes_per_iteration = []
+
+            for index, graph in enumerate(graphs):
+                attributes_per_vertex = np.array(graph.vs[attribute])
+
+                for edge in graph.es:
+                    source = edge.source
+                    target = edge.target
+
+                    source_attribute = graph.vs[attribute][source]
+                    target_attribute = graph.vs[attribute][target]
+
+                    # Switch the calculation here: the *source* vertex
+                    # contributes once to the *target* attribute while
+                    # the *target* vertex contributes to *source*.
+                    attributes_per_vertex[source] += target_attribute
+                    attributes_per_vertex[target] += source_attribute
+
+                # Normalize the number of attributes again using the
+                # number of neighbours of the node.
+                np.divide(attributes_per_vertex, graph.vs.degree())
+
+                # Store the new attributes.
+                attributes_per_iteration[iteration].append(
+                    attributes_per_vertex
+                )
+
 class FeatureSelector(TransformerMixin):
     def __init__(self, num_columns_per_iteration):
         self._num_columns_per_iteration = num_columns_per_iteration
