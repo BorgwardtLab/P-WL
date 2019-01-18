@@ -10,6 +10,8 @@ import argparse
 import logging
 
 
+from features import WeisfeilerLehmanAttributePropagation
+
 from utilities import read_labels
 
 
@@ -29,6 +31,11 @@ def main(args, logger):
     logger.info('Read {} graphs and {} labels'.format(len(graphs), len(labels)))
 
     assert len(graphs) == len(labels)
+
+    prop = WeisfeilerLehmanAttributePropagation()
+    attributes_per_iteration = prop.transform(graphs, 'degree', 1)
+
+    print(attributes_per_iteration)
 
 
 if __name__ == '__main__':

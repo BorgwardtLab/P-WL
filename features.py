@@ -535,11 +535,6 @@ class WeisfeilerLehmanAttributePropagation:
         attributes = collections.defaultdict(list)
 
         for iteration in range(num_iterations + 1):
-
-            # Will contain the new attribute values for the given
-            # iteration, following the indexing of the graphs.
-            attributes_per_iteration = []
-
             for index, graph in enumerate(graphs):
                 attributes_per_vertex = np.array(graph.vs[attribute])
 
@@ -558,12 +553,17 @@ class WeisfeilerLehmanAttributePropagation:
 
                 # Normalize the number of attributes again using the
                 # number of neighbours of the node.
-                np.divide(attributes_per_vertex, graph.vs.degree())
+                attributes_per_vertex = np.divide(
+                    attributes_per_vertex, graph.vs.degree()
+                )
 
                 # Store the new attributes.
-                attributes_per_iteration[iteration].append(
+                attributes[iteration].append(
                     attributes_per_vertex
                 )
+
+        return attributes
+
 
 class FeatureSelector(TransformerMixin):
     def __init__(self, num_columns_per_iteration):
