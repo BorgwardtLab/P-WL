@@ -250,9 +250,14 @@ class PersistenceDiagramCalculator:
         # are handled correctly.
         for root in uf.roots():
 
-            # TODO: again, I am ignoring the weight of vertices and
-            # forcing them to start at zero.
-            creation = 0.0
+            vertex_weight = 0.0
+
+            # Vertex attributes have been set, so we use them for the
+            # creation of the root tuple.
+            if self._vertex_attribute:
+                vertex_weight = graph.vs[self._vertex_attribute][root]
+
+            creation = vertex_weight
             destruction = unpaired_value
 
             pd.append(creation, destruction, root)
