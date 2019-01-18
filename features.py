@@ -328,7 +328,8 @@ class PersistentWeisfeilerLehman:
                  use_cycle_persistence=False,
                  use_original_features=False,
                  use_uniform_metric=False,
-                 store_persistence_diagrams=False):
+                 store_persistence_diagrams=False,
+                 p=2.0):
         '''
         TODO: describe parameters
         '''
@@ -341,6 +342,7 @@ class PersistentWeisfeilerLehman:
         self._use_uniform_metric = use_uniform_metric
         self._store_persistence_diagrams = store_persistence_diagrams
         self._original_labels = None
+        self._p = p
 
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
@@ -352,7 +354,7 @@ class PersistentWeisfeilerLehman:
         if self._use_uniform_metric:
             wa = WeightAssigner(metric='uniform')
         else:
-            wa = WeightAssigner(metric='minkowski', p=2.0)
+            wa = WeightAssigner(metric='minkowski', p=self._p)
 
         pfg = PersistenceFeaturesGenerator(
                 use_infinity_norm=self._use_infinity_norm,
@@ -361,7 +363,7 @@ class PersistentWeisfeilerLehman:
                 use_cycle_persistence=self._use_cycle_persistence,
                 use_original_features=self._use_original_features,
                 store_persistence_diagrams=self._store_persistence_diagrams,
-                p=2.0)
+                p=self._p)
 
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.
