@@ -136,8 +136,28 @@ def main(args, logger):
 
                 K_iteration[j, i] = K_iteration[i, j]
 
+        K_per_iteration.append(K_iteration)
+
         # TODO: make this configurable?
         K += 1 / (iteration + 1)**2 * K_iteration
+
+    ####################################################################
+    # Save everything!
+    ####################################################################
+
+    output_name = 
+        os.path.join(
+            args.out_dir,
+            'K_' + args.dataset
+                 + '_'
+                 + str(args.num_iterations)
+                 + '_s' + str(args.sigma)
+                 + '.npz'
+
+    np.savez(
+        output_name,
+        **{str(i): K for i, K in enumerate(K_per_iteration)}
+    )
 
     y = LabelEncoder().fit_transform(labels)
     cv = StratifiedKFold(
@@ -178,11 +198,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
     parser.add_argument('-b', '--balanced', action='store_true', help='Make random forest classifier balanced')
-    parser.add_argument('-d', '--dataset', help='Name of data set')
+    parser.add_argument('-d', '--dataset', help='Name of data set', required=True)
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-iterations', default=3, type=int, help='Number of Weisfeiler-Lehman iterations')
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
-    parser.add_argument('-g', '--grid-search', action='store_true', default=False, help='Whether to do hyperparameter grid search')
+    parser.add_argument('-s', '--sigma', type=float, default='1.0', help='Smoothing parameter')
+    parser.add_argument('-o', '--out-dir', type=str, default='.', help='Output directory')
 
     args = parser.parse_args()
 
