@@ -110,7 +110,11 @@ def main(args, logger):
         # is *not* a metric, after all.
         if parallel == 'joblib':
             evaluations = \
-                joblib.Parallel(n_jobs=8)(
+                joblib.Parallel(
+                    n_jobs=16,
+                    require='sharedmem',
+                    verbose=100,
+                    batch_size=20000)(
                     joblib.delayed(kernel)(i, j)
                         for i, j in itertools.combinations_with_replacement(range(n), 2)
                     )
