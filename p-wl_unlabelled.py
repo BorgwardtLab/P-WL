@@ -12,6 +12,10 @@ import collections
 import logging
 import itertools
 
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
 
 from features import WeisfeilerLehmanAttributePropagation
 
@@ -76,9 +80,6 @@ def main(args, logger):
         # diagonal elements of the kernel are relevant as well. This
         # is *not* a metric, after all.
         for i, j in itertools.combinations_with_replacement(range(n), 2):
-
-            #print(i, j, ':', len(persistence_diagrams[i]), len(persistence_diagrams[j]))
-
             K_iteration[i, j] = multiscale_persistence_diagram_kernel(
                 persistence_diagrams[i],
                 persistence_diagrams[j],
@@ -89,7 +90,32 @@ def main(args, logger):
 
         K += K_iteration
 
-    print(K)
+    y = LabelEncoder().fit_transform(labels)
+    cv = StratifiedKFold(
+            n_splits=3,
+            shuffle=True,
+            random_state=42
+    )
+
+    scores = []
+    for train, test in cv.split(np.zeros(len(y)), y):
+        K_train = K[train][:, train]
+        y_train = y[train]
+
+        K_test = K[test][:, train]
+        y_test = y[test]
+
+        clf = SVC(kernel='precomputed', C=1e-4)
+        clf.fit(K_train, y_train)
+
+        y_pred = clf.predict(K_test)
+        scores.append(accuracy_score(y_test, y_pred))
+
+    print('Accuracy: {:2.2f} +- {:2.2f}'.format(
+            np.mean(scores) * 100.0,
+            np.std(scores) * 100.0
+        )
+    )
 
 
 if __name__ == '__main__':
