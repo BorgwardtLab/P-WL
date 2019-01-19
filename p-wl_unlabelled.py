@@ -69,7 +69,12 @@ def main(args, logger):
             weighted_graph = assign_filtration_values(graph, attributes)
 
             pd, edge_indices_cycles = pdc.fit_transform(graph)
-            persistence_diagrams_per_iteration[iteration].append(pd)
+
+            # Store the persistence diagram as a 2D array in order to
+            # facilitate the subsequent kernel calculations.
+            persistence_diagrams_per_iteration[iteration].append(
+                np.array([(c, d) for c, d, _ in pd])
+            )
 
     # Will contain the full kernel matrix over all iterations; it is
     # composed of sums of kernel matrices for individual iterations.

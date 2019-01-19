@@ -321,15 +321,15 @@ def multiscale_persistence_diagram_kernel(F, G, sigma):
 
     def diff(tup):
         p, q = tup
-        x0, y0, _ = p
-        x1, y1, _ = q
+        x0, y0 = p
+        x1, y1 = q
 
         return (x0 - x1)**2 + (y0 - y1)**2
 
     def diff_mirrored(tup):
         p, q = tup
-        x0, y0, _ = p
-        y1, x1, _ = q   # mirror the second tuple
+        x0, y0 = p
+        y1, x1 = q   # mirror the second tuple
 
         return (x0 - x1)**2 + (y0 - y1)**2
 
