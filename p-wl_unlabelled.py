@@ -145,14 +145,14 @@ def main(args, logger):
     # Save everything!
     ####################################################################
 
-    output_name = 
-        os.path.join(
-            args.out_dir,
-            'K_' + args.dataset
-                 + '_'
-                 + str(args.num_iterations)
-                 + '_s' + str(args.sigma)
-                 + '.npz'
+    output_name = os.path.join(
+        args.out_dir,
+        'K_' + args.dataset
+             + '_'
+             + str(args.num_iterations)
+             + '_s' + str(args.sigma)
+             + '.npz'
+    )
 
     np.savez(
         output_name,
