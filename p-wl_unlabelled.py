@@ -19,6 +19,8 @@ from sklearn.svm import SVC
 
 from features import WeisfeilerLehmanAttributePropagation
 
+from kernels import PersistenceScaleSpaceKernel
+
 from utilities import read_labels
 
 from topology import assign_filtration_values
@@ -80,6 +82,10 @@ def main(args, logger):
     # composed of sums of kernel matrices for individual iterations.
     K = np.zeros((len(graphs), len(graphs)))
 
+    # Use this as the kernel for evaluating individual persistence
+    # diagrams
+    #pss = PersistenceScaleSpaceKernel(sigma=1.0)
+
     # Prepare kernel matrix _per iteration_; since this is a kernel, we
     # can just sum over individual iterations
     for iteration in sorted(persistence_diagrams_per_iteration.keys()):
@@ -120,7 +126,7 @@ def main(args, logger):
             K_test = K[test][:, train]
             y_test = y[test]
 
-            clf = SVC(kernel='precomputed', C=1e-3)
+            clf = SVC(kernel='precomputed', C=1)
             clf.fit(K_train, y_train)
 
             y_pred = clf.predict(K_test)
