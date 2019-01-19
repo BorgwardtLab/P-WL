@@ -114,7 +114,7 @@ def main(args, logger):
             K_test = K[test][:, train]
             y_test = y[test]
 
-            clf = SVC(kernel='precomputed', C=1e-2)
+            clf = SVC(kernel='precomputed', C=1e-3)
             clf.fit(K_train, y_train)
 
             y_pred = clf.predict(K_test)
