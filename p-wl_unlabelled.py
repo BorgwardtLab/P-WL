@@ -84,7 +84,9 @@ def main(args, logger):
 
     # Use this as the kernel for evaluating individual persistence
     # diagrams
-    #pss = PersistenceScaleSpaceKernel(sigma=1.0)
+    pss = PersistenceScaleSpaceKernel(
+        sigma=1.0  # TODO: make configurable
+    )
 
     # Prepare kernel matrix _per iteration_; since this is a kernel, we
     # can just sum over individual iterations
@@ -97,10 +99,9 @@ def main(args, logger):
         # diagonal elements of the kernel are relevant as well. This
         # is *not* a metric, after all.
         for i, j in itertools.combinations_with_replacement(range(n), 2):
-            K_iteration[i, j] = multiscale_persistence_diagram_kernel(
+            K_iteration[i, j] = pss.fit_transform(
                 persistence_diagrams[i],
                 persistence_diagrams[j],
-                sigma=1  # TODO: make configurable
             )
 
             K_iteration[j, i] = K_iteration[i, j]
