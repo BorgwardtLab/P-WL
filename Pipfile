@@ -9,6 +9,7 @@ pip = "==18.0"
 sklearn = "*"
 numpy = "*"
 tqdm = "*"
+joblib = "*"
 
 [dev-packages]
 matplotlib = "*"
