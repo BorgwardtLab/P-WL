@@ -94,7 +94,8 @@ def main(args, logger):
 
             K_iteration[j, i] = K_iteration[i, j]
 
-        K += K_iteration
+        # TODO: make this configurable?
+        K += 1 / (iteration + 1)**2 * K_iteration
 
     y = LabelEncoder().fit_transform(labels)
     cv = StratifiedKFold(
