@@ -7,7 +7,9 @@
 import igraph as ig
 
 import argparse
+import collections
 import logging
+import itertools
 
 
 from features import WeisfeilerLehmanAttributePropagation
@@ -45,6 +47,10 @@ def main(args, logger):
 
     pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
 
+    # Stores *all* persistence diagrams because they will be used to
+    # represent the data set later on.
+    persistence_diagrams_per_iteration = collections.defaultdict(list)
+
     for iteration in sorted(attributes_per_iteration.keys()):
         for index, graph in enumerate(graphs):
             attributes = attributes_per_iteration[iteration][index]
@@ -52,8 +58,19 @@ def main(args, logger):
             weighted_graph = assign_filtration_values(graph, attributes)
 
             pd, edge_indices_cycles = pdc.fit_transform(graph)
-            multiscale_persistence_diagram_kernel(pd, pd, sigma=0.1)
+            persistence_diagrams_per_iteration[iteration].append(pd)
 
+    # Will contain the full kernel matrix over all iterations; it is
+    # composed of sums of kernel matrices for individual iterations.
+
+    # Prepare kernel matrix _per iteration_; since this is a kernel, we
+    # can just sum over individual iterations
+    for iteration in sorted(persistence_diagrams_per_iteration.keys()):
+        persistence_diagrams = persistence_diagrams_per_iteration[iteration]
+        n = len(persistence_diagrams)
+
+        K_iteration
+        for i, j in itertools.combinations(range(n), 2):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
