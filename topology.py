@@ -5,6 +5,7 @@ about a data set.
 
 import collections.abc
 import math
+import itertools
 
 import igraph as ig
 import numpy as np
@@ -318,14 +319,37 @@ def multiscale_persistence_diagram_kernel(F, G, sigma):
     :return: Kernel value
     '''
 
-    def diff(x0, y0, x1, y1):
-        return (x0 - y0)**2 + (x1 - y1)**2
+    def diff(tup):
+        p, q = tup
+        x0, y0, _ = p
+        x1, y1, _ = q
+
+        return (x0 - x1)**2 + (y0 - y1)**2
+
+    def diff_mirrored(tup):
+        p, q = tup
+        x0, y0, _ = p
+        y1, x1, _ = q   # mirror the second tuple
+
+        return (x0 - x1)**2 + (y0 - y1)**2
 
     result = 0.0
-    for x, y, _ in F:
-        for a, b, _ in G:
-            result += np.exp(-diff(x, y, a, b) / (8 * sigma))\
-                    - np.exp(-diff(x, y, b, a) / (8 * sigma))
+
+    differences = map(diff, itertools.product(F, G))
+    differences_mirrored = map(diff_mirrored, itertools.product(F, G))
+
+    c = 8 * sigma
+    result = sum(
+        [math.exp(-a / c) - math.exp(-b / c)\
+            for a, b in zip(differences, differences_mirrored)]
+    )
+
+    # TODD: old version; remove?
+    #
+    #for x, y, _ in F:
+    #    for a, b, _ in G:
+    #        result += np.exp(-diff(x, y, a, b) / (8 * sigma))\
+    #                - np.exp(-diff(x, y, b, a) / (8 * sigma))
 
     result /= (1 / (8 * math.pi * sigma))
     return result

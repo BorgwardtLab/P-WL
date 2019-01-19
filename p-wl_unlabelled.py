@@ -76,11 +76,16 @@ def main(args, logger):
         # diagonal elements of the kernel are relevant as well. This
         # is *not* a metric, after all.
         for i, j in itertools.combinations_with_replacement(range(n), 2):
-            K_iteration += multiscale_persistence_diagram_kernel(
+
+            #print(i, j, ':', len(persistence_diagrams[i]), len(persistence_diagrams[j]))
+
+            K_iteration[i, j] = multiscale_persistence_diagram_kernel(
                 persistence_diagrams[i],
                 persistence_diagrams[j],
                 sigma=0.1  # TODO: make configurable
             )
+
+            K_iteration[j, i] = K_iteration[i, j]
 
         K += K_iteration
 
