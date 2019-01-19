@@ -351,5 +351,5 @@ def multiscale_persistence_diagram_kernel(F, G, sigma):
     #        result += np.exp(-diff(x, y, a, b) / (8 * sigma))\
     #                - np.exp(-diff(x, y, b, a) / (8 * sigma))
 
-    result /= (1 / (8 * math.pi * sigma))
+    result /= (8 * math.pi * sigma)
     return result
