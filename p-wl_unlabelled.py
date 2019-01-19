@@ -12,6 +12,7 @@ import collections
 import logging
 import itertools
 import joblib
+import os
 
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
@@ -87,8 +88,12 @@ def main(args, logger):
     # Use this as the kernel for evaluating individual persistence
     # diagrams
     pss = PersistenceScaleSpaceKernel(
-        sigma=1.0  # TODO: make configurable
+        args.sigma
     )
+
+    # Stores individual kernel matrices for each iteration such that
+    # they can be loaded from somewhere else.
+    K_per_iteration = []
 
     # Prepare kernel matrix _per iteration_; since this is a kernel, we
     # can just sum over individual iterations
@@ -111,10 +116,10 @@ def main(args, logger):
         if parallel == 'joblib':
             evaluations = \
                 joblib.Parallel(
-                    n_jobs=16,
+                    n_jobs=256,
                     require='sharedmem',
                     verbose=100,
-                    batch_size=20000)(
+                    batch_size=128)(
                     joblib.delayed(kernel)(i, j)
                         for i, j in itertools.combinations_with_replacement(range(n), 2)
                     )
