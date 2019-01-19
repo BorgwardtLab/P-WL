@@ -5,6 +5,7 @@
 
 
 import igraph as ig
+import numpy as np
 
 import argparse
 import collections
@@ -62,15 +63,29 @@ def main(args, logger):
 
     # Will contain the full kernel matrix over all iterations; it is
     # composed of sums of kernel matrices for individual iterations.
+    K = np.zeros((len(graphs), len(graphs)))
 
     # Prepare kernel matrix _per iteration_; since this is a kernel, we
     # can just sum over individual iterations
     for iteration in sorted(persistence_diagrams_per_iteration.keys()):
         persistence_diagrams = persistence_diagrams_per_iteration[iteration]
         n = len(persistence_diagrams)
+        K_iteration = np.zeros((n, n))
 
-        K_iteration
-        for i, j in itertools.combinations(range(n), 2):
+        # We need to use `combinations_with_replacement` because the
+        # diagonal elements of the kernel are relevant as well. This
+        # is *not* a metric, after all.
+        for i, j in itertools.combinations_with_replacement(range(n), 2):
+            K_iteration += multiscale_persistence_diagram_kernel(
+                persistence_diagrams[i],
+                persistence_diagrams[j],
+                sigma=0.1  # TODO: make configurable
+            )
+
+        K += K_iteration
+
+    print(K)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
