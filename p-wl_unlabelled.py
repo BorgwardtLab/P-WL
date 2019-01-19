@@ -50,7 +50,13 @@ def main(args, logger):
         args.num_iterations
     )
 
-    pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
+    # TODO: make configurable
+    use_vertex_weights = False
+
+    if use_vertex_weights:
+        pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
+    else:
+        pdc = PersistenceDiagramCalculator()
 
     # Stores *all* persistence diagrams because they will be used to
     # represent the data set later on.
@@ -83,7 +89,7 @@ def main(args, logger):
             K_iteration[i, j] = multiscale_persistence_diagram_kernel(
                 persistence_diagrams[i],
                 persistence_diagrams[j],
-                sigma=0.1  # TODO: make configurable
+                sigma=1  # TODO: make configurable
             )
 
             K_iteration[j, i] = K_iteration[i, j]
@@ -92,28 +98,33 @@ def main(args, logger):
 
     y = LabelEncoder().fit_transform(labels)
     cv = StratifiedKFold(
-            n_splits=3,
+            n_splits=10,
             shuffle=True,
-            random_state=42
     )
+    mean_scores = []
 
-    scores = []
-    for train, test in cv.split(np.zeros(len(y)), y):
-        K_train = K[train][:, train]
-        y_train = y[train]
+    np.random.seed(42)
 
-        K_test = K[test][:, train]
-        y_test = y[test]
+    for i in range(10):
+        scores = []
+        for train, test in cv.split(np.zeros(len(y)), y):
+            K_train = K[train][:, train]
+            y_train = y[train]
 
-        clf = SVC(kernel='precomputed', C=1e-4)
-        clf.fit(K_train, y_train)
+            K_test = K[test][:, train]
+            y_test = y[test]
 
-        y_pred = clf.predict(K_test)
-        scores.append(accuracy_score(y_test, y_pred))
+            clf = SVC(kernel='precomputed', C=1e-2)
+            clf.fit(K_train, y_train)
+
+            y_pred = clf.predict(K_test)
+            scores.append(accuracy_score(y_test, y_pred))
+
+        mean_scores.append(np.mean(scores))
 
     print('Accuracy: {:2.2f} +- {:2.2f}'.format(
-            np.mean(scores) * 100.0,
-            np.std(scores) * 100.0
+            np.mean(mean_scores) * 100.0,
+            np.std(mean_scores) * 100.0
         )
     )
 
