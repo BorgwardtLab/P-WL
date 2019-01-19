@@ -11,6 +11,7 @@ import argparse
 import collections
 import logging
 import itertools
+import joblib
 
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
@@ -54,6 +55,7 @@ def main(args, logger):
 
     # TODO: make configurable
     use_vertex_weights = False
+    parallel = 'joblib'
 
     if use_vertex_weights:
         pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
@@ -95,16 +97,35 @@ def main(args, logger):
         n = len(persistence_diagrams)
         K_iteration = np.zeros((n, n))
 
+        # Auxiliary function for calculating the kernel between two
+        # persistence diagrams.
+        def kernel(i, j):
+            return pss.fit_transform(
+                persistence_diagrams[i],
+                persistence_diagrams[j]
+            )
+
         # We need to use `combinations_with_replacement` because the
         # diagonal elements of the kernel are relevant as well. This
         # is *not* a metric, after all.
-        for i, j in itertools.combinations_with_replacement(range(n), 2):
-            K_iteration[i, j] = pss.fit_transform(
-                persistence_diagrams[i],
-                persistence_diagrams[j],
-            )
+        if parallel == 'joblib':
+            evaluations = \
+                joblib.Parallel(n_jobs=8)(
+                    joblib.delayed(kernel)(i, j)
+                        for i, j in itertools.combinations_with_replacement(range(n), 2)
+                    )
 
-            K_iteration[j, i] = K_iteration[i, j]
+            K_iteration[np.triu_indices(n)] = np.array(evaluations)
+            K_iteration[np.tril_indices(n)] = K_iteration.T[np.tril_indices(n)]
+
+        else:
+            for i, j in itertools.combinations_with_replacement(range(n), 2):
+                K_iteration[i, j] = pss.fit_transform(
+                    persistence_diagrams[i],
+                    persistence_diagrams[j],
+                )
+
+                K_iteration[j, i] = K_iteration[i, j]
 
         # TODO: make this configurable?
         K += 1 / (iteration + 1)**2 * K_iteration
@@ -117,6 +138,8 @@ def main(args, logger):
     mean_scores = []
 
     np.random.seed(42)
+
+    logging.info('Starting training...')
 
     for i in range(10):
         scores = []
