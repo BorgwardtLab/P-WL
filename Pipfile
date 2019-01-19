@@ -4,17 +4,23 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-igraph = "*"
 pip = "==18.0"
 sklearn = "*"
 numpy = "*"
 tqdm = "*"
 joblib = "*"
+python-igraph = "*"
+leidenalg = "*"
+graphkernels = "*"
 
 [dev-packages]
 matplotlib = "*"
 seaborn = "*"
 jupyter = "*"
+graphkernels = "*"
+networkx = "*"
+tensorflow = "*"
+keras = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"

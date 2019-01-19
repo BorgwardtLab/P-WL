@@ -78,7 +78,7 @@ def main(args, logger):
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
 
     np.random.seed(42)
-    cv = StratifiedKFold(n_splits=10, shuffle=True)
+    
     mean_accuracies = []
 
     params = ['balanced', 'num_iterations', 'filtration', 'use_cycle_persistence', 'use_original_features', 'use_subtree_features', 'use_uniform_metric'] 
@@ -91,7 +91,7 @@ def main(args, logger):
         # Contains accuracy scores for each cross validation step; the
         # means of this list will be used later on.
         accuracy_scores = []
-
+        cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=i)
         for n, indices in enumerate(cv.split(X, y)):
             entry_fold = copy.copy(entry)
             train_index = indices[0]
@@ -101,7 +101,7 @@ def main(args, logger):
                 [
                     ('fs', FeatureSelector(num_columns_per_iteration)),
                     ('clf', RandomForestClassifier(class_weight='balanced' if
-                                                   args.balanced else None))
+                                                   args.balanced else None, random_state=42))
                 ],
             )
 
