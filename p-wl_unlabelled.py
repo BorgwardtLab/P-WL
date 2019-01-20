@@ -157,6 +157,7 @@ def main(args, logger):
              + '_'
              + str(args.num_iterations)
              + '_s' + str(args.sigma)
+             + '_normalized' if args.normalize else ''
              + '.npz'
     )
 
@@ -210,6 +211,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filtration', type=str, default='sublevel', help='Filtration type')
     parser.add_argument('-s', '--sigma', type=float, default='1.0', help='Smoothing parameter')
     parser.add_argument('-o', '--out-dir', type=str, default='.', help='Output directory')
+    parser.add_argument('--normalize', action='store_true', default=False, help='Use degree normalization')
 
     args = parser.parse_args()
 
