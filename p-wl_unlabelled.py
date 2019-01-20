@@ -75,10 +75,12 @@ def main(args, logger):
 
             pd, edge_indices_cycles = pdc.fit_transform(graph)
 
+            pd_vertices = np.array([(c, d) for c, d, _ in pd])
+
             # Store the persistence diagram as a 2D array in order to
             # facilitate the subsequent kernel calculations.
             persistence_diagrams_per_iteration[iteration].append(
-                np.array([(c, d) for c, d, _ in pd])
+                pd_vertices
             )
 
     # Will contain the full kernel matrix over all iterations; it is
