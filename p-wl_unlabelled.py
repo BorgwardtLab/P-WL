@@ -69,17 +69,23 @@ def main(args, logger):
     for iteration in sorted(attributes_per_iteration.keys()):
         for index, graph in enumerate(graphs):
             attributes = attributes_per_iteration[iteration][index]
-            graph.vs['degree'] = attributes
-            weighted_graph = assign_filtration_values(graph, attributes)
+
+            # TODO: this is only used if `use_vertex_weights` is True,
+            # but right now, this flag cannot be configured anyway.
+            graph.vs['degree'] = attributes / np.max(attributes)
+
+            weighted_graph = assign_filtration_values(
+                graph,
+                attributes,
+                normalize=args.normalize
+            )
 
             pd, edge_indices_cycles = pdc.fit_transform(graph)
-
-            pd_vertices = np.array([(c, d) for c, d, _ in pd])
 
             # Store the persistence diagram as a 2D array in order to
             # facilitate the subsequent kernel calculations.
             persistence_diagrams_per_iteration[iteration].append(
-                pd_vertices
+                np.array([(c, d) for c, d, _ in pd])
             )
 
     # Will contain the full kernel matrix over all iterations; it is
