@@ -280,26 +280,36 @@ class PersistenceDiagramCalculator:
         return pd, edge_indices_cycles
 
 
-def assign_filtration_values(graph, attributes, order='sublevel'):
+def assign_filtration_values(
+    graph,
+    attributes,
+    order='sublevel',
+    normalize=False):
     '''
     Given a vertex attribute of a graph, assigns filtration values as
     edge weights to the graph edges.
 
     :param graph: Graph to modify
     :param attribute: Attribute sequence to use for the filtration
-    :param order: Order of filtration; ignored for now
+    :param order: Order of filtration
+    :param normalize: If set, normalizes according to filtration order
 
     :return: Graph with added edges
     '''
 
     selection_function = max if order == 'sublevel' else min
 
+    if normalize:
+        offset = np.max(attributes) if order == 'sublevel' else np.min(attributes)
+    else:
+        offset = 1.0
+
     for edge in graph.es:
         source = edge.source
         target = edge.target
 
-        source_weight = attributes[source]
-        target_weight = attributes[target]
+        source_weight = attributes[source] / offset
+        target_weight = attributes[target] / offset
         edge_weight = selection_function(source_weight, target_weight)
 
         edge['weight'] = edge_weight
