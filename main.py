@@ -53,6 +53,7 @@ def main(args, logger):
             use_original_features=args.use_original_features,
             use_uniform_metric=args.use_uniform_metric,
             use_label_persistence=True,
+            p=args.power
     )
 
     if args.use_cycle_persistence:
@@ -162,6 +163,7 @@ if __name__ == '__main__':
     # *no* other ways of calculating features can be used.
     parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
     parser.add_argument('-u', '--use-uniform-metric', action='store_true', default=False, help='Use uniform metric for weight assignment')
+    parser.add_argument('-p', '--power', type=float, default=2.0, help='Power parameter for metric calculations')
 
     args = parser.parse_args()
 
