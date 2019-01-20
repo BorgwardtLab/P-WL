@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     sss = StratifiedShuffleSplit(
             n_splits=1,
-            random_state=42,
+            random_state=23,
             train_size=args.num_graphs
     )
 
