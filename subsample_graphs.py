@@ -37,6 +37,8 @@ if __name__ == '__main__':
     )
 
     for train_index, _ in sss.split(range(n), y):
+        train_index = sorted(train_index)
+
         files = np.array(args.FILES)
         files = files[train_index]
 
