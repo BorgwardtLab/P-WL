@@ -144,7 +144,8 @@ def main(args, logger):
                 [
                     ('fs', FeatureSelector(num_columns_per_iteration)),
                     ('clf', RandomForestClassifier(class_weight='balanced' if
-                                                   args.balanced else None, random_state=42))
+                                                   args.balanced else None,
+                                                   random_state=42, n_jobs=4))
                 ],
             )
 
