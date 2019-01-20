@@ -8,7 +8,9 @@
 import argparse
 import os
 
-from sklearn.cross_validation import StratifiedShuffleSplit
+import numpy as np
+
+from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -28,7 +30,13 @@ if __name__ == '__main__':
     n = len(y)
 
     sss = StratifiedShuffleSplit(
-            y,
+            n_splits=1,
             random_state=42,
             train_size=args.num_graphs
     )
+
+    for train_index, _ in sss.split(range(n), y):
+        files = np.array(args.FILES)
+        files = files[train_index]
+
+        print(files)
