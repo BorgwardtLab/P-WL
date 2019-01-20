@@ -7,6 +7,7 @@
 
 import argparse
 import os
+import shutil
 
 import numpy as np
 
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)
     parser.add_argument('-n', '--num-graphs', type=int, required=True, help='Sample size')
-    parser.add_argument('-o', '--out-dir', type=str, default='.', help='Output directory')
+    parser.add_argument('-o', '--out-dir', type=str, required=True, help='Output directory')
 
     args = parser.parse_args()
     labels = read_labels(args.labels)
@@ -39,4 +40,13 @@ if __name__ == '__main__':
         files = np.array(args.FILES)
         files = files[train_index]
 
-        print(files)
+        os.makedirs(args.out_dir)
+
+        for filename in files:
+            source = filename
+            target = os.path.join(
+                args.out_dir,
+                os.path.basename(source)
+            )
+
+            shutil.copy2(source, target)
