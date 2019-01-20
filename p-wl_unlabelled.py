@@ -26,7 +26,6 @@ from kernels import PersistenceScaleSpaceKernel
 from utilities import read_labels
 
 from topology import assign_filtration_values
-from topology import multiscale_persistence_diagram_kernel
 from topology import PersistenceDiagramCalculator
 
 
