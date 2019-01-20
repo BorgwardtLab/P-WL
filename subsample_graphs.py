@@ -40,7 +40,10 @@ if __name__ == '__main__':
         files = np.array(args.FILES)
         files = files[train_index]
 
-        os.makedirs(args.out_dir)
+        try:
+            os.makedirs(args.out_dir)
+        except FileExistsError:
+            pass
 
         for filename in files:
             source = filename
@@ -50,3 +53,11 @@ if __name__ == '__main__':
             )
 
             shutil.copy2(source, target)
+
+        labels = y[train_index]
+        np.savetxt(
+            os.path.join(
+                args.out_dir,
+                'Labels.txt'
+            ), labels, fmt='%d'
+        )
