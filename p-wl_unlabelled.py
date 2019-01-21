@@ -160,7 +160,7 @@ def main(args, logger):
              + '_'
              + str(args.num_iterations)
              + '_s' + str(args.sigma)
-             + '_normalized' if args.normalize else ''
+             + ('_normalized' if args.normalize else '')
              + '.npz'
     )
 
