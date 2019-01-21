@@ -50,9 +50,7 @@ def main(args, logger):
         args.num_iterations
     )
 
-    # TODO: make configurable
-    use_vertex_weights = False
-    parallel = 'joblib'
+    use_vertex_weights = args.vertex_weights
 
     if use_vertex_weights:
         pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
@@ -67,9 +65,7 @@ def main(args, logger):
         for index, graph in enumerate(graphs):
             attributes = attributes_per_iteration[iteration][index]
 
-            # TODO: this is only used if `use_vertex_weights` is True,
-            # but right now, this flag cannot be configured anyway.
-            graph.vs['degree'] = attributes / np.max(attributes)
+            graph.vs['degree'] = attributes
 
             weighted_graph = assign_filtration_values(
                 graph,
@@ -82,6 +78,12 @@ def main(args, logger):
             # Store the persistence diagram as a 2D array in order to
             # facilitate the subsequent kernel calculations.
             persistence_diagrams_per_iteration[iteration].append(
+                np.array([(c, d) for c, d, _ in pd])
+            )
+
+
+            np.savetxt(
+                '/tmp/{:04d}_d0_h{:d}.txt'.format(index, iteration),
                 np.array([(c, d) for c, d, _ in pd])
             )
 
