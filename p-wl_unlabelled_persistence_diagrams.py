@@ -52,16 +52,28 @@ def main(args, logger):
 
     use_vertex_weights = args.vertex_weights
 
-    if use_vertex_weights:
-        pdc = PersistenceDiagramCalculator(vertex_attribute='degree')
-    else:
-        pdc = PersistenceDiagramCalculator()
-
     # Stores *all* persistence diagrams because they will be used to
     # represent the data set later on.
     persistence_diagrams_per_iteration = collections.defaultdict(list)
 
     for iteration in sorted(attributes_per_iteration.keys()):
+
+        # Determine maximum attribute value over *all* graphs and their
+        # respective filtrations.
+        max_attribute = max([np.max(attributes_per_iteration[iteration][index]) for index, _ in enumerate(graphs)])
+
+        unpaired_value = 2 * max_attribute
+
+        if use_vertex_weights:
+            pdc = PersistenceDiagramCalculator(
+                unpaired_value=unpaired_value,
+                vertex_attribute='degree',
+            )
+        else:
+            pdc = PersistenceDiagramCalculator(
+                unpaired_value=unpaired_value
+            )
+
         for index, graph in enumerate(graphs):
             attributes = attributes_per_iteration[iteration][index]
 
@@ -81,10 +93,10 @@ def main(args, logger):
                 np.array([(c, d) for c, d, _ in pd])
             )
 
-
             np.savetxt(
                 '/tmp/{:04d}_d0_h{:d}.txt'.format(index, iteration),
-                np.array([(c, d) for c, d, _ in pd])
+                np.array([(c, d) for c, d, _ in pd]),
+                fmt='%.f'
             )
 
 
