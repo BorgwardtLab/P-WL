@@ -30,6 +30,7 @@ $ docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l 
 ```
 
 The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follows:
+
 `PWL`: `main.py -n 1 -p 1 data/...`
 
 `PWL-C`: `main.py -c -n 1 -p 1 data/...`
