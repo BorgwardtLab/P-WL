@@ -26,32 +26,11 @@ $ docker start pwl-container
 #### Examples
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
-docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
+$ docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
 ```
 
-The main script allows for the following arguments:
-```
-usage: main.py [-h] [-d DATASET] -l LABELS [-n NUM_ITERATIONS] [-c] [-u]
-               [-p POWER]
-               FILES [FILES ...]
-
-positional arguments:
-  FILES                 Input graphs (in some supported format)
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -d DATASET, --dataset DATASET
-                        Name of data set
-  -l LABELS, --labels LABELS
-                        Labels file
-  -n NUM_ITERATIONS, --num-iterations NUM_ITERATIONS
-                        Number of Weisfeiler-Lehman iterations
-  -c, --use-cycle-persistence
-                        Indicates whether cycle persistence should be
-                        calculated or not
-  -u, --use-uniform-metric
-                        Use uniform metric for weight assignment
-  -p POWER, --power POWER
-                        Power parameter for metric calculations
-```
+The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follows:
+`PWL`: `main.py -n 1 -p 1 data/...`
+`PWL-C`: `main.py -c -n 1 -p 1 data/...`
+`PWL-UC`: `main.py -u -c -n 1 -p 1 data/...`
 
