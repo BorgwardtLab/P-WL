@@ -24,7 +24,7 @@ $ docker start pwl-container
 ### Running the Method
 *NOTE*: The classification accuracies reported by running this code will now align with the ones reported in the paper, as no grid search is performed.
 #### Examples
-To run `PWL-C` on `MUTAG` run with 0 WL iterations and p=1, run 
+To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
 docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
 ```
