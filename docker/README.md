@@ -22,24 +22,13 @@ $ docker start pwl-container
 ```
 
 ### Running the Method
+*NOTE*: The performances reported by running this code will now align with the ones reported in the paper, as no grid search is performed.
 #### Examples
-To run `PWL` on `MUTAG` run with 0 WL iterations and p=1, run 
+To run `PWL-C` on `MUTAG` run with 0 WL iterations and p=1, run 
 ```
-docker exec -it pwl-container python main.py -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
-
-```
-
-To run `PWL-C` on `PTC_MR` run with 2 WL iterations and p=1, run 
-```
-docker exec -it pwl-container python main.py -n 2 -p 1 data/PTC_MR/*.gml -l data/PTC_MR/Labels.txt
-
+docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
 ```
 
-To run `PWL-UC` on `PTC_FM` run with 3 WL iterations and p=1, run 
-```
-docker exec -it pwl-container python main.py -n 3 -p 1 data/PTC_FM/*.gml -l data/PTC_FM/Labels.txt
-
-```
 The main script allows for the following arguments:
 ```
 usage: main.py [-h] [-d DATASET] -l LABELS [-n NUM_ITERATIONS] [-c] [-u]
