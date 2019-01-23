@@ -23,6 +23,7 @@ $ docker start pwl-container
 
 ### Running the Method
 The main script allows for the following arguments:
+```
 usage: main.py [-h] [-d DATASET] -l LABELS [-n NUM_ITERATIONS] [-c] [-u]
                [-p POWER]
                FILES [FILES ...]
@@ -45,5 +46,6 @@ optional arguments:
                         Use uniform metric for weight assignment
   -p POWER, --power POWER
                         Power parameter for metric calculations
+```
 
 `docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt` 
