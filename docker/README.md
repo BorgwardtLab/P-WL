@@ -22,7 +22,7 @@ $ docker start pwl-container
 ```
 
 ### Running the Method
-*NOTE*: The performances reported by running this code will now align with the ones reported in the paper, as no grid search is performed.
+*NOTE*: The classification accuracies reported by running this code will now align with the ones reported in the paper, as no grid search is performed.
 #### Examples
 To run `PWL-C` on `MUTAG` run with 0 WL iterations and p=1, run 
 ```
