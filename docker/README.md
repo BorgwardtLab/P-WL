@@ -1,14 +1,14 @@
 ## "A Persistent Weisfeiler-Lehmann Procedure for Graph Classification" submitted to ICML 2019
 ### Installation Instructions for accompanying code
 
-In this docker container we provide code to run our method on five data sets (`MUTAG`, `PTC_MR`, `PTC_MM`, `PTC_FR`, `PTV_FM`). 
+In this docker container, we provide code to run our method on five data sets (`MUTAG`, `PTC_MR`, `PTC_MM`, `PTC_FR`, `PTC_FM`). 
 
 ### Docker Installation
 To run the method, you need to install Docker. You can download the installation file for your OS [here](https://www.docker.com/get-started).
 If you do not have a docker account or you don't want to create one, you can use this [link](https://download.docker.com).
 
 ### Building the Container
-To build the docker container open a command line and navigate to the folder where this `README.md` files lies and run the following command:
+To build the docker container open a terminal (command line) and navigate to the folder where this `README.md` file lies and run the following command:
 ```
 $ docker build -t pwl .
 ```
@@ -22,8 +22,11 @@ $ docker start pwl-container
 ```
 
 ### Running the Method
-*NOTE*: The classification accuracies reported by running this code will now align with the ones reported in the paper, as no grid search is performed.
+
+**NOTE**: The classification accuracies reported by running this code will not (!) align with the ones reported in the paper, as no grid search is performed. Thus, the folds used for training will be slightly different because the inner cross-validation loop is lacking. This was a deliberate decision in order to present a brief and quick working example for the review process.
+
 #### Examples
+
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
 $ docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
