@@ -59,18 +59,8 @@ def main(args, logger):
 
     y = LabelEncoder().fit_transform(labels)
 
-    # This ignores *all* other feature generation methods and falls back
-    # to the original Weisfeiler--Lehman subtree kernel.
-    if args.use_subtree_features:
-
-        logger.info('Using original subtree features')
-
-        wl_subtree = WeisfeilerLehmanSubtree()
-        X, num_columns_per_iteration = \
-            wl_subtree.transform(graphs, args.num_iterations)
-    else:
-        X, num_columns_per_iteration = \
-            pwl.transform(graphs, args.num_iterations)
+    X, num_columns_per_iteration = \
+        pwl.transform(graphs, args.num_iterations)
 
     logger.info('Finished persistent Weisfeiler-Lehman transformation')
     logger.info('Obtained ({} x {}) feature matrix'.format(X.shape[0], X.shape[1]))
@@ -87,10 +77,9 @@ def main(args, logger):
 
         for train_index, test_index in cv.split(X, y):
             clf = RandomForestClassifier(
-                n_estimators=200,
-                class_weight='balanced' if args.balanced else None,
-                max_features=None, random_state=42
-
+                n_estimators=50,
+                max_features=None,
+                random_state=42
             )
 
             X_train, X_test = X[train_index], X[test_index]
@@ -102,11 +91,6 @@ def main(args, logger):
             accuracy_scores.append(accuracy_score(y_test, y_pred))
 
             logger.debug('Best classifier for this fold: {}'.format(clf))
-
-            if args.grid_search:
-                logger.debug('Best parameters for this fold: {}'.format(clf.best_params_))
-            else:
-                logger.debug('Best parameters for this fold: {}'.format(clf.get_params()))
 
         mean_accuracies.append(np.mean(accuracy_scores))
         logger.info('  - Mean 10-fold accuracy: {:2.2f} [running mean over all folds: {:2.2f}]'.format(mean_accuracies[-1] * 100, np.mean(mean_accuracies) * 100))
