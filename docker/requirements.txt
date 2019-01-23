@@ -1,0 +1,11 @@
+-i https://pypi.org/simple
+numpy==1.16.0
+pandas==0.23.4
+pkgconfig==1.4.0
+python-dateutil==2.7.5
+python-igraph==0.7.1.post6
+pytz==2018.9
+scikit-learn==0.20.2
+scipy==1.2.0
+six==1.12.0
+sklearn==0.0
