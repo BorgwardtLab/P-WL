@@ -109,3 +109,4 @@ venv.bak/
 .DS_Store
 
 data/COLLAB/*.gml
+docker/data/*
