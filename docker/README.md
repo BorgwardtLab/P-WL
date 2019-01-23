@@ -4,7 +4,7 @@
 In this docker container we provide code to run our method on five data sets (`MUTAG`, `PTC_MR`, `PTC_MM`, `PTC_FR`, `PTV_FM`). 
 
 ### Docker Installation
-To run the method you need to install Docker. You can download the installation file for your OS [here](https://www.docker.com/get-started)
+To run the method you need to install Docker. You can download the installation file for your OS [here](https://www.docker.com/get-started).
 If you do not have a docker account or you don't want to create one, you can use this [link](https://download.docker.com).
 
 ### Building the Container
