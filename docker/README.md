@@ -14,7 +14,7 @@ $ docker build -t pwl .
 ```
 
 This might take a while as all dependencies are now being built and an image tagged as `pwl` is created. 
-Once you see the `Sucessfully built image` message, you can create and start a container named `pwl-container` via
+Once you see the `Successfully tagged pwl:latest` message, you can create and start a container named `pwl-container` via
 
 ```
 $ docker create -it --name pwl-container pwl
