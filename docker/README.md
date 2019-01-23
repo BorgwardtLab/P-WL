@@ -29,8 +29,12 @@ $ docker start pwl-container
 
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
-$ docker exec -it pwl-container python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
+$ docker exec -it pwl-container python main.py -c -n 0 \
+ -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
 ```
+
+Notice that we wrapped this command such that it fits onto the page. You
+may need to specify it in one line.
 
 The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follows:
 
