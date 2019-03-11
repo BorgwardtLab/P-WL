@@ -120,9 +120,9 @@ class WeightAssigner:
     def _kullback_leibler(self, A, B, lambda_=1.0):
         a, b = self._to_vectors(A, B)
 
-        # Ensure that the vectors are valid in the sense that they arise
-        # from the same label distribution.
-        assert np.sum(a) == np.sum(b)
+        # Ensures that entries are valid
+        a += 1
+        b += 1
 
         # Make them into valid probability distributions; `scipy` does
         # that for us as well but explicit is better than implicit.
@@ -359,6 +359,7 @@ class PersistentWeisfeilerLehman:
                  use_original_features=False,
                  use_uniform_metric=False,
                  store_persistence_diagrams=False,
+                 metric='minkowski',
                  p=2.0):
         '''
         TODO: describe parameters
@@ -372,6 +373,7 @@ class PersistentWeisfeilerLehman:
         self._use_uniform_metric = use_uniform_metric
         self._store_persistence_diagrams = store_persistence_diagrams
         self._original_labels = None
+        self._metric = metric
         self._p = p
 
     def transform(self, graphs, num_iterations):
@@ -384,7 +386,7 @@ class PersistentWeisfeilerLehman:
         if self._use_uniform_metric:
             wa = WeightAssigner(metric='uniform')
         else:
-            wa = WeightAssigner(metric='minkowski', p=self._p)
+            wa = WeightAssigner(metric=self._metric, p=self._p)
 
         pfg = PersistenceFeaturesGenerator(
                 use_infinity_norm=self._use_infinity_norm,
