@@ -34,6 +34,9 @@ from utilities import read_labels
 
 def main(args, logger):
 
+    # Read all graphs and labels; there is no direct way of checking
+    # that the labels are 'correct' for the graphs, but at least the
+    # code will check that they have the same cardinality.
     graphs = [ig.read(filename) for filename in args.FILES]
     labels = read_labels(args.labels)
 
@@ -48,11 +51,16 @@ def main(args, logger):
 
     assert len(graphs) == len(labels)
 
+    # Replace selected metric if necessary; this only applies to the
+    # uniform metric shortcut.
+    if args.use_uniform_metric:
+        args.metric = 'uniform'
+
     pwl = PersistentWeisfeilerLehman(
             use_cycle_persistence=args.use_cycle_persistence,
             use_original_features=args.use_original_features,
-            use_uniform_metric=args.use_uniform_metric,
             use_label_persistence=True,
+            metric=args.metric,
             p=args.power
     )
 
@@ -162,8 +170,28 @@ if __name__ == '__main__':
     # to ensure that it is seen as an 'override', i.e. if this is set,
     # *no* other ways of calculating features can be used.
     parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
-    parser.add_argument('-u', '--use-uniform-metric', action='store_true', default=False, help='Use uniform metric for weight assignment')
-    parser.add_argument('-p', '--power', type=float, default=2.0, help='Power parameter for metric calculations')
+
+    ####################################################################
+    # Metric selection options
+    ####################################################################
+
+    parser.add_argument(
+        '-m', '--metric',
+        type=str, default='minkowski',
+        help='Metric to use for graph weight assignment'
+    )
+
+    parser.add_argument(
+        '-u', '--use-uniform-metric',
+        action='store_true', default=False,
+        help='Use uniform metric for weight assignment'
+    )
+
+    parser.add_argument(
+        '-p', '--power',
+        type=float, default=2.0,
+        help='Power parameter for Minkowski metric calculations'
+    )
 
     args = parser.parse_args()
 

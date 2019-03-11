@@ -357,7 +357,6 @@ class PersistentWeisfeilerLehman:
                  use_label_persistence=False,
                  use_cycle_persistence=False,
                  use_original_features=False,
-                 use_uniform_metric=False,
                  store_persistence_diagrams=False,
                  metric='minkowski',
                  p=2.0):
@@ -370,7 +369,6 @@ class PersistentWeisfeilerLehman:
         self._use_label_persistence = use_label_persistence
         self._use_cycle_persistence = use_cycle_persistence
         self._use_original_features = use_original_features
-        self._use_uniform_metric = use_uniform_metric
         self._store_persistence_diagrams = store_persistence_diagrams
         self._original_labels = None
         self._metric = metric
@@ -383,10 +381,7 @@ class PersistentWeisfeilerLehman:
         # degenerates into the regular Weisfeiler--Lehman subtree,
         # also known as WL-subtree, computation. The twist is that
         # we can *also* add cycles.
-        if self._use_uniform_metric:
-            wa = WeightAssigner(metric='uniform')
-        else:
-            wa = WeightAssigner(metric=self._metric, p=self._p)
+        wa = WeightAssigner(metric=self._metric, p=self._p)
 
         pfg = PersistenceFeaturesGenerator(
                 use_infinity_norm=self._use_infinity_norm,
