@@ -12,6 +12,7 @@ joblib = "*"
 python-igraph = "*"
 leidenalg = "*"
 graphkernels = "*"
+scipy = "*"
 
 [dev-packages]
 matplotlib = "*"

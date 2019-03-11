@@ -14,6 +14,7 @@ from topology import PersistenceDiagramCalculator
 
 from weisfeiler_lehman import WeisfeilerLehman
 
+from scipy.stats import entropy
 from sklearn.base import TransformerMixin
 
 
@@ -33,6 +34,7 @@ class WeightAssigner:
             'angular': self._angular,
             'canberra': self._canberra,
             'jaccard': self._jaccard,
+            'jensen_shannon': self._jensen_shannon,
             'kullback_leibler': self._kullback_leibler,
             'minkowski': self._minkowski,
             'uniform': self._uniform,  # Not a 'real' metric
@@ -111,6 +113,24 @@ class WeightAssigner:
             return 0.0
 
         return np.sum(np.abs(a - b)) / denominator
+
+    def _jensen_shannon(self, A, B):
+        return self._kullback_leibler(A, B, lambda_=0.5)
+
+    def _kullback_leibler(self, A, B, lambda_=1.0):
+        a, b = self._to_vectors(A, B)
+
+        # Ensure that the vectors are valid in the sense that they arise
+        # from the same label distribution.
+        assert np.sum(a) == np.sum(b)
+
+        # Make them into valid probability distributions; `scipy` does
+        # that for us as well but explicit is better than implicit.
+        a /= np.sum(a)
+        b /= np.sum(b)
+
+        # Ensures that at least symmetry holds
+        return lambda_ * entropy(a, b) + lambda_ * entropy(b, a)
 
     def _minkowski(self, A, B):
         a, b = self._to_vectors(A, B)
