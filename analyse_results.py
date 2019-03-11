@@ -29,6 +29,7 @@ if __name__ == '__main__':
     for row in df.itertuples(index=True):
         data_set_name = None
 
+        l = []
         x = []
         y = []
         e = []
@@ -40,6 +41,7 @@ if __name__ == '__main__':
                 accuracy, sdev = parse_accuracy(value)
 
                 if not np.isnan(accuracy):
+                    l.append(name)
                     x.append(index)
                     y.append(accuracy)
                     e.append(sdev)
@@ -47,4 +49,5 @@ if __name__ == '__main__':
         if x:
             plt.title(data_set_name)
             plt.errorbar(x, y, e, fmt='o')
+            plt.xticks(np.arange(1, len(x) + 1), l)
             plt.show()
