@@ -201,12 +201,6 @@ if __name__ == '__main__':
         type=int, help='Number of Weisfeiler-Lehman iterations'
     )
 
-    # TODO: unused
-    parser.add_argument(
-        '-f', '--filtration', type=str, default='sublevel',
-        help='Filtration type'
-    )
-
     parser.add_argument(
         '-g', '--grid-search', action='store_true',
         default=False, help='Whether to do hyperparameter grid search'
