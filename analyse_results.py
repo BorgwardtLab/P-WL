@@ -23,16 +23,23 @@ def parse_accuracy(entry):
         return np.nan, np.nan
 
 
+def overlaps(accuracy1, sdev1, accuracy2, sdev2):
+    a = accuracy1 - sdev1, b = accuracy1 + sdev2
+    c = accuracy2 - sdev2, d = accuracy2 + sdev2
+
+    return b >= c and a <= d
+
+
 if __name__ == '__main__':
     df = pd.read_csv(sys.argv[1], index_col=0)
 
     for row in df.itertuples(index=True):
         data_set_name = None
 
-        l = []
-        x = []
-        y = []
-        e = []
+        L = []  # labels
+        x = []  # $x$ positions
+        y = []  # $y$ positions
+        e = []  # error bars
 
         for index, (name, value) in enumerate(row._asdict().items()):
             if name == 'Index':
@@ -41,13 +48,13 @@ if __name__ == '__main__':
                 accuracy, sdev = parse_accuracy(value)
 
                 if not np.isnan(accuracy):
-                    l.append(name)
-                    x.append(index)
+                    L.append(name)
+                    x.append(len(x))
                     y.append(accuracy)
                     e.append(sdev)
 
         if x:
             plt.title(data_set_name)
             plt.errorbar(x, y, e, fmt='o')
-            plt.xticks(np.arange(1, len(x) + 1), l)
+            plt.xticks(np.arange(len(x)), L)
             plt.show()
