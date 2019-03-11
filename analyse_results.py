@@ -73,6 +73,10 @@ if __name__ == '__main__':
                 for j, (c, d) in enumerate(intervals):
                     M[i, j] = overlaps(a, b, c, d)
 
+                # To make sure that there will be some variation in the
+                # matrix.
+                M[i, i] = False
+
             plt.matshow(M, cmap='binary')
             plt.title(data_set_name)
             plt.xticks(np.arange(len(x)), L)
