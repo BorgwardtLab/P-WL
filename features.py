@@ -394,10 +394,14 @@ class PersistentWeisfeilerLehman:
             weighted_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
-                labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+                labels_raw, labels_compressed = \
+                    label_dicts[iteration][graph_index]
 
-                weighted_graphs[graph_index].vs['label'] = labels_raw
-                weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+                weighted_graphs[graph_index].vs['label'] = \
+                    labels_raw
+
+                weighted_graphs[graph_index].vs['compressed_label'] = \
+                    labels_compressed
 
                 # Assign the *compressed* labels as the *original*
                 # labels of the graph in order to ensure that they
@@ -411,17 +415,23 @@ class PersistentWeisfeilerLehman:
                     labels = original_labels[graph_index]
                     weighted_graphs[graph_index]['original_label'] = labels
 
-                weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
+                weighted_graphs[graph_index] = \
+                    wa.fit_transform(weighted_graphs[graph_index])
 
             X_per_iteration.append(pfg.fit_transform(weighted_graphs))
 
             if self._store_persistence_diagrams:
-                self._persistence_diagrams[iteration] = pfg._persistence_diagrams
+                self._persistence_diagrams[iteration] = \
+                    pfg._persistence_diagrams
 
             if iteration not in num_columns_per_iteration:
-                num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
+                num_columns_per_iteration[iteration] = \
+                    X_per_iteration[-1].shape[1]
 
-            assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
+            # Make sure that we did not remove the *wrong* number of
+            # columns.
+            assert num_columns_per_iteration[iteration] == \
+                X_per_iteration[-1].shape[1]
 
         # Store original labels only if there is something to store.
         # Notice that these labels are *standardized*, i.e. they are
@@ -429,7 +439,8 @@ class PersistentWeisfeilerLehman:
         if original_labels:
             self._original_labels = original_labels
 
-        return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
+        return np.concatenate(X_per_iteration, axis=1), \
+            num_columns_per_iteration
 
 
 class WeisfeilerLehmanSubtree:
@@ -444,7 +455,7 @@ class WeisfeilerLehmanSubtree:
         pass
 
     def transform(self, graphs, num_iterations):
-        
+
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.
         wl = WeisfeilerLehman()
@@ -460,7 +471,8 @@ class WeisfeilerLehmanSubtree:
             wl_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
-                labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+                labels_raw, labels_compressed = \
+                    label_dicts[iteration][graph_index]
 
                 # Assign the compressed label (an integer) to the
                 # 'subtree graph' in order to generate features.
@@ -475,7 +487,7 @@ class WeisfeilerLehmanSubtree:
                     X_per_iteration[-1].shape[1]
 
         return np.concatenate(X_per_iteration, axis=1), \
-               num_columns_per_iteration
+            num_columns_per_iteration
 
     def get_subtree_feature_vectors(self, graphs):
         '''
