@@ -30,16 +30,21 @@ class WeightAssigner:
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
         metric_map = {
-            'angular':   self._angular,
-            'canberra':  self._canberra,
-            'jaccard':   self._jaccard,
+            'angular': self._angular,
+            'canberra': self._canberra,
+            'jaccard': self._jaccard,
+            'kullback_leibler': self._kullback_leibler,
             'minkowski': self._minkowski,
-            'uniform':   self._uniform,     # Not a 'real' metric
-            'sorensen':  self._sorensen,
+            'uniform': self._uniform,  # Not a 'real' metric
+            'sorensen': self._sorensen,
         }
 
         if metric not in metric_map:
-            raise RuntimeError('Unknown metric \"{}\" requested'.format(metric))
+            raise RuntimeError(
+                '''
+                Unknown metric \"{}\" requested
+                '''.format(metric)
+            )
 
         self._metric = metric_map[metric]
 
@@ -209,7 +214,9 @@ class PersistenceFeaturesGenerator:
         # Calculating label persistence requires us to know the number
         # of distinct labels in the set of graphs as it determines the
         # length of the created feature vector.
-        if self._use_label_persistence or self._use_original_features or self._use_cycle_persistence:
+        if self._use_label_persistence or \
+           self._use_original_features or \
+           self._use_cycle_persistence:
             labels = set()
 
             for graph in graphs:
@@ -252,10 +259,12 @@ class PersistenceFeaturesGenerator:
             persistence_diagram, edge_indices_cycles = pdc.fit_transform(graph)
 
             if self._use_infinity_norm:
-                x_infinity_norm = [persistence_diagram.infinity_norm(self._p)]
+                x_infinity_norm = \
+                    [persistence_diagram.infinity_norm(self._p)]
 
             if self._use_total_persistence:
-                x_total_persistence = [persistence_diagram.total_persistence(self._p)]
+                x_total_persistence = \
+                    [persistence_diagram.total_persistence(self._p)]
 
             if self._use_label_persistence:
                 x_label_persistence = np.zeros(num_labels)
