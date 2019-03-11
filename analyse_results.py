@@ -24,8 +24,10 @@ def parse_accuracy(entry):
 
 
 def overlaps(accuracy1, sdev1, accuracy2, sdev2):
-    a = accuracy1 - sdev1, b = accuracy1 + sdev2
-    c = accuracy2 - sdev2, d = accuracy2 + sdev2
+    a = accuracy1 - sdev1
+    b = accuracy1 + sdev2
+    c = accuracy2 - sdev2
+    d = accuracy2 + sdev2
 
     return b >= c and a <= d
 
@@ -40,6 +42,7 @@ if __name__ == '__main__':
         x = []  # $x$ positions
         y = []  # $y$ positions
         e = []  # error bars
+        intervals = []  # intervals
 
         for index, (name, value) in enumerate(row._asdict().items()):
             if name == 'Index':
@@ -52,9 +55,26 @@ if __name__ == '__main__':
                     x.append(len(x))
                     y.append(accuracy)
                     e.append(sdev)
+                    intervals.append((accuracy, sdev))
 
         if x:
+            if False:
+                plt.title(data_set_name)
+                plt.errorbar(x, y, e, fmt='o')
+                plt.xticks(np.arange(len(x)), L)
+                plt.show()
+
+            # Create pairwise overlap matrix of all methods
+
+            n = len(x)
+            M = np.zeros((n, n))
+
+            for i, (a, b) in enumerate(intervals):
+                for j, (c, d) in enumerate(intervals):
+                    M[i, j] = overlaps(a, b, c, d)
+
+            plt.matshow(M, cmap='binary')
             plt.title(data_set_name)
-            plt.errorbar(x, y, e, fmt='o')
             plt.xticks(np.arange(len(x)), L)
+            plt.yticks(np.arange(len(x)), L)
             plt.show()
