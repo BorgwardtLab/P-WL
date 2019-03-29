@@ -19,6 +19,15 @@ from features import WeightAssigner
 from itertools import cycle
 
 
+def store_matrix(index, matrix):
+    with open(f'/tmp/{index}.txt') as f:
+        n_rows, n_cols = matrix.shape
+
+        for row in n_rows:
+            for col in n_cols:
+                print(f'{row}\t{col}\t{matrix[row, col]}', file=f)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILE', help='Input graph')
@@ -58,6 +67,9 @@ if __name__ == '__main__':
     vmax = sys.float_info.min
     for matrix in matrices:
         vmax = max(vmax, np.nanmax(matrix))
+
+    for index, matrix in enumerate(matrices):
+        store_matrix(index, matrix)
 
     matrix_iterator = cycle(matrices)
     im = plt.imshow(next(matrix_iterator), animated=True, vmin=vmin, vmax=vmax)
