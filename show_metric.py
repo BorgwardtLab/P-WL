@@ -23,9 +23,10 @@ def store_matrix(index, matrix):
     with open(f'/tmp/{index}.txt', 'w') as f:
         n_rows, n_cols = matrix.shape
 
-        for row in range(n_rows):
-            for col in range(n_cols):
+        for col in range(n_cols):
+            for row in range(n_rows):
                 print(f'{row}\t{col}\t{matrix[row, col]}', file=f)
+            print('', file=f)
 
 
 if __name__ == '__main__':
