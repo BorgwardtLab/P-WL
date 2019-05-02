@@ -57,7 +57,7 @@ def main(args, logger):
     )
 
     # TODO: make configurable
-    use_vertex_weights = True
+    use_vertex_weights = False
     parallel = 'joblib'
 
     if use_vertex_weights:
