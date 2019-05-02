@@ -9,10 +9,10 @@ import collections
 import igraph as ig
 import numpy as np
 
-from .topology import PersistenceDiagram
-from .topology import PersistenceDiagramCalculator
+from topology import PersistenceDiagram
+from topology import PersistenceDiagramCalculator
 
-from .weisfeiler_lehman import WeisfeilerLehman
+from weisfeiler_lehman import WeisfeilerLehman
 
 from scipy.stats import entropy
 from sklearn.base import TransformerMixin
