@@ -137,8 +137,6 @@ def main(args, logger):
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
 
-            # TODO: need to discuss whether this is 'allowed' or smart
-            # to do; this assumes normality of the attributes.
             scaler = StandardScaler()
             X_train = scaler.fit_transform(X_train)
             X_test = scaler.transform(X_test)
