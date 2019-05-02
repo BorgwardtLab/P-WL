@@ -52,7 +52,7 @@ def main(args, logger):
     pwl = PersistentWeisfeilerLehman(
             use_cycle_persistence=args.use_cycle_persistence,
             use_original_features=args.use_original_features,
-            use_uniform_metric=args.use_uniform_metric,
+            metric=args.metric,
             use_label_persistence=True,
     )
 
@@ -81,7 +81,7 @@ def main(args, logger):
     
     mean_accuracies = []
 
-    params = ['balanced', 'num_iterations', 'filtration', 'use_cycle_persistence', 'use_original_features', 'use_subtree_features', 'use_uniform_metric'] 
+    params = ['balanced', 'num_iterations', 'filtration', 'use_cycle_persistence', 'use_original_features', 'use_subtree_features', 'metric'] 
     cv_results = []
     entry = {}
     for param in params:
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     # to ensure that it is seen as an 'override', i.e. if this is set,
     # *no* other ways of calculating features can be used.
     parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
-    parser.add_argument('-u', '--use-uniform-metric', action='store_true', default=False, help='Use uniform metric for weight assignment')
+    parser.add_argument('-m', '--metric', type=str, default='minkowski', help='Metric to use for graph weight assignment')
     parser.add_argument('-r', '--result-file',
                         default='grid_search_results/results.csv', help='File in which to store results')
 
