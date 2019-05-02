@@ -25,11 +25,11 @@ from sklearn.svm import SVC
 
 from tqdm import tqdm
 
-from features import FeatureSelector
-from features import PersistentWeisfeilerLehman
-from features import WeisfeilerLehmanSubtree
+from src.features import FeatureSelector
+from src.features import PersistentWeisfeilerLehman
+from src.features import WeisfeilerLehmanSubtree
 
-from utilities import read_labels
+from src.utilities import read_labels
 
 
 def main(args, logger):
