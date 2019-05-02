@@ -1,4 +1,4 @@
-# A persistent Weisfeiler_Lehman Procedure for Graph Classification
+# A persistent Weisfeiler Lehman Procedure for Graph Classification
 An extension of persistent homology for categorical graph labels and a Weisfeiler-Lehman inspired graph kernel using persistent homology.
 
 ![alt text][logo]
