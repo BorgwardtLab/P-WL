@@ -13,6 +13,7 @@ An extension of persistent homology for categorical graph labels and a Weisfeile
 
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
+$ cd src
 $ python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
 ```
 
