@@ -14,6 +14,7 @@ from topology import PersistenceDiagramCalculator
 
 from weisfeiler_lehman import WeisfeilerLehman
 
+from scipy.stats import entropy
 from sklearn.base import TransformerMixin
 
 
@@ -30,16 +31,22 @@ class WeightAssigner:
         # Select metric to use in the `fit_transform()` function later
         # on. All of these metrics need to support multi-sets.
         metric_map = {
-            'angular':   self._angular,
-            'canberra':  self._canberra,
-            'jaccard':   self._jaccard,
+            'angular': self._angular,
+            'canberra': self._canberra,
+            'jaccard': self._jaccard,
+            'jensen_shannon': self._jensen_shannon,
+            'kullback_leibler': self._kullback_leibler,
             'minkowski': self._minkowski,
-            'uniform':   self._uniform,     # Not a 'real' metric
-            'sorensen':  self._sorensen,
+            'uniform': self._uniform,  # Not a 'real' metric
+            'sorensen': self._sorensen,
         }
 
         if metric not in metric_map:
-            raise RuntimeError('Unknown metric \"{}\" requested'.format(metric))
+            raise RuntimeError(
+                '''
+                Unknown metric \"{}\" requested
+                '''.format(metric)
+            )
 
         self._metric = metric_map[metric]
 
@@ -106,6 +113,24 @@ class WeightAssigner:
             return 0.0
 
         return np.sum(np.abs(a - b)) / denominator
+
+    def _jensen_shannon(self, A, B):
+        return self._kullback_leibler(A, B, lambda_=0.5)
+
+    def _kullback_leibler(self, A, B, lambda_=1.0):
+        a, b = self._to_vectors(A, B)
+
+        # Ensures that entries are valid
+        a += 1
+        b += 1
+
+        # Make them into valid probability distributions; `scipy` does
+        # that for us as well but explicit is better than implicit.
+        a /= np.sum(a)
+        b /= np.sum(b)
+
+        # Ensures that at least symmetry holds
+        return lambda_ * entropy(a, b) + lambda_ * entropy(b, a)
 
     def _minkowski(self, A, B):
         a, b = self._to_vectors(A, B)
@@ -209,7 +234,9 @@ class PersistenceFeaturesGenerator:
         # Calculating label persistence requires us to know the number
         # of distinct labels in the set of graphs as it determines the
         # length of the created feature vector.
-        if self._use_label_persistence or self._use_original_features or self._use_cycle_persistence:
+        if self._use_label_persistence or \
+           self._use_original_features or \
+           self._use_cycle_persistence:
             labels = set()
 
             for graph in graphs:
@@ -252,10 +279,12 @@ class PersistenceFeaturesGenerator:
             persistence_diagram, edge_indices_cycles = pdc.fit_transform(graph)
 
             if self._use_infinity_norm:
-                x_infinity_norm = [persistence_diagram.infinity_norm(self._p)]
+                x_infinity_norm = \
+                    [persistence_diagram.infinity_norm(self._p)]
 
             if self._use_total_persistence:
-                x_total_persistence = [persistence_diagram.total_persistence(self._p)]
+                x_total_persistence = \
+                    [persistence_diagram.total_persistence(self._p)]
 
             if self._use_label_persistence:
                 x_label_persistence = np.zeros(num_labels)
@@ -264,17 +293,6 @@ class PersistenceFeaturesGenerator:
                     label = graph.vs[c]['compressed_label']
                     persistence = abs(x - y)**self._p
                     x_label_persistence[label] += persistence
-
-                    # FIXME: older version of calculating label
-                    # persistence; prior to introducing $\tau$,
-                    # the baseline parameter.
-                    #persistence = 0.001 + abs(x - y)**self._p
-
-                    # FIXME: this is the old way of calculating label
-                    # persistence; it does not yet use the *baseline*
-                    # parameter of the distance.
-                    #if x_label_persistence[label] == 0:
-                    #    x_label_persistence[label] = 1e-16
 
                 if self._store_persistence_diagrams:
                     self._persistence_diagrams.append(persistence_diagram)
@@ -339,8 +357,8 @@ class PersistentWeisfeilerLehman:
                  use_label_persistence=False,
                  use_cycle_persistence=False,
                  use_original_features=False,
-                 use_uniform_metric=False,
                  store_persistence_diagrams=False,
+                 metric='minkowski',
                  p=2.0):
         '''
         TODO: describe parameters
@@ -351,9 +369,9 @@ class PersistentWeisfeilerLehman:
         self._use_label_persistence = use_label_persistence
         self._use_cycle_persistence = use_cycle_persistence
         self._use_original_features = use_original_features
-        self._use_uniform_metric = use_uniform_metric
         self._store_persistence_diagrams = store_persistence_diagrams
         self._original_labels = None
+        self._metric = metric
         self._p = p
 
     def transform(self, graphs, num_iterations):
@@ -363,10 +381,7 @@ class PersistentWeisfeilerLehman:
         # degenerates into the regular Weisfeiler--Lehman subtree,
         # also known as WL-subtree, computation. The twist is that
         # we can *also* add cycles.
-        if self._use_uniform_metric:
-            wa = WeightAssigner(metric='uniform')
-        else:
-            wa = WeightAssigner(metric='minkowski', p=self._p)
+        wa = WeightAssigner(metric=self._metric, p=self._p)
 
         pfg = PersistenceFeaturesGenerator(
                 use_infinity_norm=self._use_infinity_norm,
@@ -396,10 +411,14 @@ class PersistentWeisfeilerLehman:
             weighted_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
-                labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+                labels_raw, labels_compressed = \
+                    label_dicts[iteration][graph_index]
 
-                weighted_graphs[graph_index].vs['label'] = labels_raw
-                weighted_graphs[graph_index].vs['compressed_label'] = labels_compressed
+                weighted_graphs[graph_index].vs['label'] = \
+                    labels_raw
+
+                weighted_graphs[graph_index].vs['compressed_label'] = \
+                    labels_compressed
 
                 # Assign the *compressed* labels as the *original*
                 # labels of the graph in order to ensure that they
@@ -413,17 +432,23 @@ class PersistentWeisfeilerLehman:
                     labels = original_labels[graph_index]
                     weighted_graphs[graph_index]['original_label'] = labels
 
-                weighted_graphs[graph_index] = wa.fit_transform(weighted_graphs[graph_index])
+                weighted_graphs[graph_index] = \
+                    wa.fit_transform(weighted_graphs[graph_index])
 
             X_per_iteration.append(pfg.fit_transform(weighted_graphs))
 
             if self._store_persistence_diagrams:
-                self._persistence_diagrams[iteration] = pfg._persistence_diagrams
+                self._persistence_diagrams[iteration] = \
+                    pfg._persistence_diagrams
 
             if iteration not in num_columns_per_iteration:
-                num_columns_per_iteration[iteration] = X_per_iteration[-1].shape[1]
+                num_columns_per_iteration[iteration] = \
+                    X_per_iteration[-1].shape[1]
 
-            assert num_columns_per_iteration[iteration] == X_per_iteration[-1].shape[1]
+            # Make sure that we did not remove the *wrong* number of
+            # columns.
+            assert num_columns_per_iteration[iteration] == \
+                X_per_iteration[-1].shape[1]
 
         # Store original labels only if there is something to store.
         # Notice that these labels are *standardized*, i.e. they are
@@ -431,7 +456,8 @@ class PersistentWeisfeilerLehman:
         if original_labels:
             self._original_labels = original_labels
 
-        return np.concatenate(X_per_iteration, axis=1), num_columns_per_iteration
+        return np.concatenate(X_per_iteration, axis=1), \
+            num_columns_per_iteration
 
 
 class WeisfeilerLehmanSubtree:
@@ -446,7 +472,7 @@ class WeisfeilerLehmanSubtree:
         pass
 
     def transform(self, graphs, num_iterations):
-        
+
         # Performs *all* steps of Weisfeiler--Lehman for the pre-defined
         # number of iterations.
         wl = WeisfeilerLehman()
@@ -462,7 +488,8 @@ class WeisfeilerLehmanSubtree:
             wl_graphs = [graph.copy() for graph in graphs]
 
             for graph_index in sorted(label_dicts[iteration].keys()):
-                labels_raw, labels_compressed = label_dicts[iteration][graph_index]
+                labels_raw, labels_compressed = \
+                    label_dicts[iteration][graph_index]
 
                 # Assign the compressed label (an integer) to the
                 # 'subtree graph' in order to generate features.
@@ -477,7 +504,7 @@ class WeisfeilerLehmanSubtree:
                     X_per_iteration[-1].shape[1]
 
         return np.concatenate(X_per_iteration, axis=1), \
-               num_columns_per_iteration
+            num_columns_per_iteration
 
     def get_subtree_feature_vectors(self, graphs):
         '''

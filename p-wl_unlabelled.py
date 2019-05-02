@@ -40,7 +40,10 @@ def main(args, logger):
         # attribute already.
         assert 'label' not in graph.vs.attributes()
 
-        graph.vs['degree'] = graph.vs.degree()
+        if not args.attribute:
+            graph.vs['degree'] = graph.vs.degree()
+        else:
+            graph.vs['degree'] = graph.vs[args.attribute]
 
     logger.info('Read {} graphs and {} labels'.format(len(graphs), len(labels)))
 
@@ -157,7 +160,7 @@ def main(args, logger):
              + '_'
              + str(args.num_iterations)
              + '_s' + str(args.sigma)
-             + '_normalized' if args.normalize else ''
+             + ('_normalized' if args.normalize else '')
              + '.npz'
     )
 
@@ -204,6 +207,7 @@ def main(args, logger):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('FILES', nargs='+', help='Input graphs (in some supported format)')
+    parser.add_argument('-a', '--attribute', type=str, help='Use attribute instead of degree')
     parser.add_argument('-b', '--balanced', action='store_true', help='Make random forest classifier balanced')
     parser.add_argument('-d', '--dataset', help='Name of data set', required=True)
     parser.add_argument('-l', '--labels', type=str, help='Labels file', required=True)

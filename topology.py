@@ -92,7 +92,12 @@ class PersistenceDiagram(collections.abc.Sequence):
         '''
 
         if value > len(self):
-            raise RuntimeError('Betti number must be less than or equal to persistence diagram cardinality')
+            raise RuntimeError(
+                '''
+                Betti number must be less than or equal to persistence
+                diagram cardinality
+                '''
+            )
 
         self._betti = value
 
@@ -179,7 +184,11 @@ class PersistenceDiagramCalculator:
         self._vertex_attribute = vertex_attribute
 
         if self._order not in ['sublevel', 'superlevel']:
-            raise RuntimeError('Unknown filtration order \"{}\"'.format(self._order))
+            raise RuntimeError(
+                '''
+                Unknown filtration order \"{}\"
+                '''.format(self._order)
+            )
 
     def fit_transform(self, graph):
         '''
@@ -197,9 +206,9 @@ class PersistenceDiagramCalculator:
         num_vertices = graph.vcount()
         uf = UnionFind(num_vertices)
 
-        edge_weights = np.array(graph.es['weight']) # All edge weights
-        edge_indices = None                         # Ordering for filtration
-        edge_indices_cycles = []                    # Edge indices that create a cycle
+        edge_weights = np.array(graph.es['weight'])   # All edge weights
+        edge_indices = None                           # Ordering for filtration
+        edge_indices_cycles = []                      # Edge indices of cycles
 
         if self._order == 'sublevel':
             edge_indices = np.argsort(edge_weights, kind='stable')
@@ -214,7 +223,8 @@ class PersistenceDiagramCalculator:
 
         # Go over all edges and optionally create new points for the
         # persistence diagram.
-        for edge_index, edge_weight in zip(edge_indices, edge_weights[edge_indices]):
+        for edge_index, edge_weight in \
+                zip(edge_indices, edge_weights[edge_indices]):
             u, v = graph.es[edge_index].tuple
 
             # Preliminary assignment of younger and older component. We
@@ -281,10 +291,10 @@ class PersistenceDiagramCalculator:
 
 
 def assign_filtration_values(
-    graph,
-    attributes,
-    order='sublevel',
-    normalize=False):
+        graph,
+        attributes,
+        order='sublevel',
+        normalize=False):
     '''
     Given a vertex attribute of a graph, assigns filtration values as
     edge weights to the graph edges.
@@ -300,7 +310,8 @@ def assign_filtration_values(
     selection_function = max if order == 'sublevel' else min
 
     if normalize:
-        offset = np.max(attributes) if order == 'sublevel' else np.min(attributes)
+        offset = np.max(attributes) if order == 'sublevel' \
+                                    else np.min(attributes)
     else:
         offset = 1.0
 
