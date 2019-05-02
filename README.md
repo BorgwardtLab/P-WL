@@ -5,11 +5,11 @@ An extension of persistent homology for categorical graph labels and a Weisfeile
 
 [logo]: https://github.com/BorgwardtLab/P-WL/blob/master/assets/flow.png "Persistence Weisfeiler Lehmann Flow"
 
-### Running the Method
+## Running the Method
 
 **NOTE**: The classification accuracies reported by running this code will not (!) align with the ones reported in the paper, as no grid search is performed. Thus, the folds used for training will be slightly different because the inner cross-validation loop is lacking.
 
-#### Examples
+## Examples
 
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
@@ -25,7 +25,7 @@ The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follo
 
 `PWL-UC`: `main.py -u -c -n 1 -p 1 data/...`
 
-#### Results
+## Results
 
 |             | D & D        | MUTAG        | NCI1         | NCI109       | PROTEINS     | PTC-MR       | PTC-FR       | PTC-MM       | PTC-FM       | 
 |-------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------| 
@@ -39,7 +39,7 @@ The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follo
 | P-WL-UC     | 78.50 ± 0.41 | 85.17 ± 0.29 | **85.62 ± 0.27** | **85.11 ± 0.30** | 75.86 ± 0.78 | **63.46 ± 1.58**| 67.02 ± 1.29 | **68.01 ± 1.04** | **65.44 ± 1.18** | 
 
 
-# Help
+## Help
 
 If you have questions concerning P-WL or you encounter problems when
 trying to build the tool under your own system, please open an issue in
@@ -47,7 +47,7 @@ trying to build the tool under your own system, please open an issue in
 describe the issue in sufficient detail in order to make it possible for
 us to help you.
 
-# Contributors
+## Contributors
 
 P-WL is developed and maintained by members of the [Machine Learning and
 Computational Biology Lab](https://www.bsse.ethz.ch/mlcb) of [Prof. Dr.
