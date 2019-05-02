@@ -7,7 +7,7 @@ An extension of persistent homology for categorical graph labels and a Weisfeile
 
 ### Running the Method
 
-**NOTE**: The classification accuracies reported by running this code will not (!) align with the ones reported in the paper, as no grid search is performed. Thus, the folds used for training will be slightly different because the inner cross-validation loop is lacking. This was a deliberate decision in order to present a brief and quick working example for the review process.
+**NOTE**: The classification accuracies reported by running this code will not (!) align with the ones reported in the paper, as no grid search is performed. Thus, the folds used for training will be slightly different because the inner cross-validation loop is lacking.
 
 #### Examples
 
