@@ -1,6 +1,6 @@
 from collections import defaultdict
 import numpy as np
-import leidenalg
+#import leidenalg
 from numpy import inf
 
 def count_triangles(graph):
@@ -63,7 +63,7 @@ def visualize_graph_stats(graphs: list, labels: list, stats: list=['num_tri',
                                                                   'edge_count',
                                                                   'vertex_count',
                                                                   'char_path',
-                                                                   'modularity']):
+                                                                   ]):
     result = defaultdict(dict)
 
     for stat in stats:

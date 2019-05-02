@@ -87,7 +87,7 @@ def main(args, logger):
             )
 
             grid_params = {
-                'clf__C': [1e-1, 1e0, 1e1]
+                'clf__C': [1e1]
             }
 
             X_train, X_test = gram_matrix[train_index][:,train_index], gram_matrix[test_index][:,train_index]
