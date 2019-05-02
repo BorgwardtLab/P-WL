@@ -37,3 +37,21 @@ The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follo
 | P-WL        | 79.34 ± 0.46 | 86.10 ± 1.37 | 85.34 ± 0.14 | 84.78 ± 0.15 | 75.31 ± 0.73 | 63.07 ± 1.68 | 67.30 ± 1.50 | **68.40 ± 1.17** | 64.47 ± 1.84 | 
 | P-WL-C      | 78.66 ± 0.32 | **90.51 ± 1.34** | 85.46 ± 0.16 | **84.96 ± 0.34** | 75.27 ± 0.38 | **64.02 ± 0.82** | 67.15 ± 1.09 | **68.57 ± 1.76** | **65.78 ± 1.22** | 
 | P-WL-UC     | 78.50 ± 0.41 | 85.17 ± 0.29 | **85.62 ± 0.27** | **85.11 ± 0.30** | 75.86 ± 0.78 | **63.46 ± 1.58**| 67.02 ± 1.29 | **68.01 ± 1.04** | **65.44 ± 1.18** | 
+
+
+# Help
+
+If you have questions concerning P-WL or you encounter problems when
+trying to build the tool under your own system, please open an issue in
+[the issue tracker](https://github.com/BorgwardtLab/P-WL/issues). Try to
+describe the issue in sufficient detail in order to make it possible for
+us to help you.
+
+# Contributors
+
+P-WL is developed and maintained by members of the [Machine Learning and
+Computational Biology Lab](https://www.bsse.ethz.ch/mlcb) of [Prof. Dr.
+Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
+
+- Bastian Rieck ([GitHub](https://github.com/Submanifold))
+- Christian Bock ([GitHub](https://github.com/chrisby))
