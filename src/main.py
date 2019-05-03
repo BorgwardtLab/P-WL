@@ -40,12 +40,20 @@ def main(args, logger):
     graphs = [ig.read(filename) for filename in args.FILES]
     labels = read_labels(args.labels)
 
-    # Set the label to be uniform over all graphs in case no labels are
-    # available. This essentially changes our iteration to degree-based
-    # checks.
+    # Simple pre-processing to ensure that all graphs are set up
+    # equally.
+    #
+    # TODO: make this into a shared function?
     for graph in graphs:
+        # Set the label to be uniform over all graphs in case no labels are
+        # available. This essentially changes our iteration to degree-based
+        # checks.
         if 'label' not in graph.vs.attributes():
             graph.vs['label'] = [0] * len(graph.vs)
+
+        # Reset edge weights if they already exist
+        if 'weight' in graph.es.attributes():
+            graph.es['weight'] = [0] * len(graph.es)
 
     logger.info(
         'Read {} graphs and {} labels'.format(len(graphs), len(labels))
@@ -63,7 +71,8 @@ def main(args, logger):
             use_original_features=args.use_original_features,
             use_label_persistence=True,
             metric=args.metric,
-            p=args.power
+            p=args.power,
+            smooth=args.smooth
     )
 
     if args.use_cycle_persistence:
@@ -223,6 +232,11 @@ if __name__ == '__main__':
             Use Weisfeiler--Lehman subtree kernel instead of topological
             features
         '''
+    )
+
+    parser.add_argument(
+        '-S', '--smooth', action='store_true', default=False,
+        help='Indicates that edge distances/weights should be smoothed'
     )
 
     ####################################################################

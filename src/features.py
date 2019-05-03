@@ -24,7 +24,7 @@ class WeightAssigner:
     a distance metric and returns the weighted graph.
     '''
 
-    def __init__(self, metric='minkowski', p=1.0, tau=1.0):
+    def __init__(self, metric='minkowski', p=1.0, tau=1.0, smooth=False):
         self._p = p
         self._tau = tau
 
@@ -49,6 +49,7 @@ class WeightAssigner:
             )
 
         self._metric = metric_map[metric]
+        self._smooth = smooth
 
     def fit_transform(self, graph):
 
@@ -69,7 +70,12 @@ class WeightAssigner:
             if self._metric != self._uniform:
                 weight = weight + (source_label != target_label) + self._tau
 
-            edge['weight'] = weight
+            # Update the edge weight if smoothing is required for the
+            # distances.
+            if self._smooth:
+                edge['weight'] += weight
+            else:
+                edge['weight'] = weight
 
         return graph
 
@@ -359,7 +365,8 @@ class PersistentWeisfeilerLehman:
                  use_original_features=False,
                  store_persistence_diagrams=False,
                  metric='minkowski',
-                 p=2.0):
+                 p=2.0,
+                 smooth=False):
         '''
         TODO: describe parameters
         '''
@@ -373,6 +380,7 @@ class PersistentWeisfeilerLehman:
         self._original_labels = None
         self._metric = metric
         self._p = p
+        self._smooth = smooth
 
     def transform(self, graphs, num_iterations):
         wl = WeisfeilerLehman()
@@ -381,7 +389,11 @@ class PersistentWeisfeilerLehman:
         # degenerates into the regular Weisfeiler--Lehman subtree,
         # also known as WL-subtree, computation. The twist is that
         # we can *also* add cycles.
-        wa = WeightAssigner(metric=self._metric, p=self._p)
+        wa = WeightAssigner(
+            metric=self._metric,
+            p=self._p,
+            smooth=self._smooth,
+        )
 
         pfg = PersistenceFeaturesGenerator(
                 use_infinity_norm=self._use_infinity_norm,
@@ -406,9 +418,12 @@ class PersistentWeisfeilerLehman:
         # subsequent forward propagation.
         original_labels = collections.defaultdict(list)
 
-        for iteration in sorted(label_dicts.keys()):
+        # It is sufficient to copy the graphs *once*; their edge weights
+        # will be reset anyway (unless 'smoothed' distances are selected
+        # by the client).
+        weighted_graphs = [graph.copy() for graph in graphs]
 
-            weighted_graphs = [graph.copy() for graph in graphs]
+        for iteration in sorted(label_dicts.keys()):
 
             for graph_index in sorted(label_dicts[iteration].keys()):
                 labels_raw, labels_compressed = \
