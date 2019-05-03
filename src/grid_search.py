@@ -180,7 +180,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--use-subtree-features', action='store_true', default=False, help='Use Weisfeiler--Lehman subtree kernel instead of topological features')
     parser.add_argument('-m', '--metric', type=str, default='minkowski', help='Metric to use for graph weight assignment')
     parser.add_argument('-r', '--result-file',
-                        default='grid_search_results/results.csv', help='File in which to store results')
+            default='../grid_search_results/results.csv', help='File in which to store results')
 
     args = parser.parse_args()
 
