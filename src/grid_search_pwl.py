@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-#
-# main.py: main script for testing Persistent Weisfeiler--Lehman graph
-# kernels.
 
 import copy
 import igraph as ig
