@@ -1,9 +1,12 @@
-# A persistent Weisfeiler Lehman Procedure for Graph Classification
-An extension of persistent homology for categorical graph labels and a Weisfeiler-Lehman inspired graph kernel using persistent homology.
+# A persistent Weisfeiler--Lehman Procedure for Graph Classification
 
-![alt text][logo]
+This repository contains code, data sets, and documentation for our ICML
+2019 paper &ldquo;A Persistent Weisfeiler–Lehman Procedure for Graph
+Classification&rdquo;.
 
-[logo]: https://github.com/BorgwardtLab/P-WL/blob/master/assets/flow.png "Persistence Weisfeiler Lehmann Flow"
+![Workflow of the persistent Weisfeiler--Lehman procedure][logo]
+
+[logo]: https://github.com/BorgwardtLab/P-WL/blob/master/assets/flow.png "Workflow of the persitent Weisfeiler--Lehman procedure"
 
 ## Running the Method
 
