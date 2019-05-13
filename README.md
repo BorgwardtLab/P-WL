@@ -1,4 +1,4 @@
-# A persistent Weisfeiler&ndash;Lehman Procedure for Graph Classification
+# A Persistent Weisfeiler&ndash;Lehman Procedure for Graph Classification
 
 This repository contains code, data sets, experiments, and documentation
 for our ICML 2019 paper &ldquo;A Persistent Weisfeiler&ndash;Lehman Procedure
