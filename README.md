@@ -1,8 +1,8 @@
 # A persistent Weisfeiler--Lehman Procedure for Graph Classification
 
-This repository contains code, data sets, and documentation for our ICML
-2019 paper &ldquo;A Persistent Weisfeiler–Lehman Procedure for Graph
-Classification&rdquo;.
+This repository contains code, data sets, experiments, and documentation
+for our ICML 2019 paper &ldquo;A Persistent Weisfeiler–Lehman Procedure
+for Graph Classification&rdquo;.
 
 ![Workflow of the persistent Weisfeiler--Lehman procedure][logo]
 
@@ -10,7 +10,10 @@ Classification&rdquo;.
 
 ## Running the Method
 
-**NOTE**: The classification accuracies reported by running this code will not (!) align with the ones reported in the paper, as no grid search is performed. Thus, the folds used for training will be slightly different because the inner cross-validation loop is lacking.
+**Warning**: The classification accuracies reported by running this code
+will not&nbsp;(!) align with the ones reported in the paper, as no grid
+search is performed. Thus, the folds used for training will be slightly
+different because there is no inner cross-validation loop.
 
 ## Examples
 
