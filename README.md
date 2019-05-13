@@ -30,6 +30,10 @@ The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follo
 
 ## Results
 
+These are the results reported in the paper. For convenience reasons, we
+summarise them here. This table will be updated as soon as other baselines
+are available.
+
 |             | D & D        | MUTAG        | NCI1         | NCI109       | PROTEINS     | PTC-MR       | PTC-FR       | PTC-MM       | PTC-FM       | 
 |-------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------|--------------| 
 | V-Hist      | 78.32 ± 0.35 | 85.96 ± 0.27 | 64.40 ± 0.07 | 63.25 ± 0.12 | 72.33 ± 0.32 | 58.31 ± 0.27 | **68.13 ± 0.23** | 66.96 ± 0.51 | 57.91 ± 0.83 | 
@@ -41,6 +45,17 @@ The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follo
 | P-WL-C      | 78.66 ± 0.32 | **90.51 ± 1.34** | 85.46 ± 0.16 | **84.96 ± 0.34** | 75.27 ± 0.38 | **64.02 ± 0.82** | 67.15 ± 1.09 | **68.57 ± 1.76** | **65.78 ± 1.22** | 
 | P-WL-UC     | 78.50 ± 0.41 | 85.17 ± 0.29 | **85.62 ± 0.27** | **85.11 ± 0.30** | 75.86 ± 0.78 | **63.46 ± 1.58**| 67.02 ± 1.29 | **68.01 ± 1.04** | **65.44 ± 1.18** | 
 
+## Additional experiments
+
+The repository contains additional experiments, which will be documented
+and extended over time:
+
+- Accuracy per iteration step of `WL` vs. `P-WL` vs. `P-WL-C`
+- Feature importance of cycle features (forthcoming)
+- Kullback&ndash;Leibler divergence and Jensen&ndash;Shannon divergence
+- Comparison with additional baselines and graph kernels&nbsp;(see also
+  the [GraphKernels repository](https://github.com/BorgwardtLab/GraphKernels)
+  for more of them)
 
 ## Help
 
