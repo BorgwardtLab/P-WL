@@ -1,8 +1,8 @@
 # A Persistent Weisfeiler&ndash;Lehman Procedure for Graph Classification
 
 This repository contains code, data sets, experiments, and documentation
-for our ICML 2019 paper &ldquo;A Persistent Weisfeiler&ndash;Lehman Procedure
-for Graph Classification&rdquo;.
+for our ICML 2019 paper
+&ldquo;[A Persistent Weisfeiler&ndash;Lehman Procedure for Graph Classification](http://proceedings.mlr.press/v97/rieck19a/rieck19a.pdf)&rdquo;.
 
 ![Workflow of the persistent Weisfeiler--Lehman procedure][logo]
 
@@ -76,3 +76,25 @@ Karsten Borgwardt](https://www.bsse.ethz.ch/mlcb/karsten.html):
 
 - Bastian Rieck ([GitHub](https://github.com/Submanifold))
 - Christian Bock ([GitHub](https://github.com/chrisby))
+
+## Citation 
+
+Please use the following BibTeX citation when using our method or
+comparing against it:
+
+  @InProceedings{Rieck19b,
+    title     = {A Persistent {W}eisfeiler--{L}ehman Procedure for Graph Classification},
+    author    = {Rieck, Bastian and Bock, Christian and Borgwardt, Karsten},
+    booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+    pages     = {5448--5458},
+    year      = {2019},
+    editor    = {Chaudhuri, Kamalika and Salakhutdinov, Ruslan},
+    volume    = {97},
+    series    = {Proceedings of Machine Learning Research},
+    address   = {Long Beach, California, USA},
+    month     = jun,
+    publisher = {PMLR},
+    pdf       = {http://proceedings.mlr.press/v97/rieck19a/rieck19a.pdf},
+    url       = {http://proceedings.mlr.press/v97/rieck19a.html},
+    abstract  = {The Weisfeiler–-Lehman graph kernel exhibits competitive performance in many graph classification tasks. However, its subtree features are not able to capture connected components and cycles, topological features known for characterising graphs. To extract such features, we leverage propagated node label information and transform unweighted graphs into metric ones. This permits us to augment the subtree features with topological information obtained using persistent homology, a concept from topological data analysis. Our method, which we formalise as a generalisation of Weisfeiler-–Lehman subtree features, exhibits favourable classification accuracy and its improvements in predictive performance are mainly driven by including cycle information.}
+  }
