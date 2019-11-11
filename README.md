@@ -20,16 +20,16 @@ different because there is no inner cross-validation loop.
 To run `PWL-C` on `MUTAG` with 0 WL iterations and p=1, run 
 ```
 $ cd src
-$ python main.py -c -n 0 -p 1 data/MUTAG/*.gml -l data/MUTAG/Labels.txt
+$ python main.py -c -n 0 -p 1 ../data/MUTAG/*.gml -l ../data/MUTAG/Labels.txt
 ```
 
 The arguments for all our methods (with `1 WL iteration` and `p=1`) are as follows:
 
-`PWL`: `main.py -n 1 -p 1 data/...`
+`PWL`: `main.py -n 1 -p 1 ../data/...`
 
-`PWL-C`: `main.py -c -n 1 -p 1 data/...`
+`PWL-C`: `main.py -c -n 1 -p 1 ../data/...`
 
-`PWL-UC`: `main.py -u -c -n 1 -p 1 data/...`
+`PWL-UC`: `main.py -u -c -n 1 -p 1 ../data/...`
 
 ## Results
 
