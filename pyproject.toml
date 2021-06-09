@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "p-wl"
+version = "0.1.0"
+description = "A Persistent Weisfeiler–Lehman Procedure for Graph Classification"
+authors = ["Christian Bock <christian.bock@bsse.ethz.ch, Bastian Rieck <bastian.rieck@bsse.ethz.ch>"]
+
+[tool.poetry.dependencies]
+python = ">=3.7.1,<3.10"
+scikit-learn = "^0.24.2"
+python-igraph = "^0.9.4"
+tqdm = "^4.61.0"
+scipy = "^1.6.3"
+pandas = "^1.2.4"
+leidenalg = "^0.8.4"
+matplotlib = "^3.4.2"
+seaborn = "^0.11.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
